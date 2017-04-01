@@ -102,11 +102,13 @@ def get_access_token():
 def db_connect():
     if (os.getenv('SERVER_SOFTWARE') and \
             os.getenv('SERVER_SOFTWARE').startswith('Google App Engine/')):
-        g.conn = mysql.connect(unix_socket='/cloudsql/'+creds['_INSTANCE_NAME'],
-                               db=creds['dbbase'],user='root')
+        g.conn = mysql.connect(unix_socket='/cloudsql'+creds['_INSTANCE_NAME'],
+                               user=creds['dbuser'],
+                               passwd=creds['dbpass'])
     else:
-        g.conn = mysql.connect(creds['dbhost'], creds['dbuser'],
-                               creds['dbpass'], creds['dbbase'])
+        g.conn = mysql.connect(host='127.0.0.1',
+                               user=creds['dbuser'],
+                               passwd=creds['dbpass'])
 
 
 
