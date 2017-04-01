@@ -1,0 +1,123 @@
+<!DOCCTYPE html>
+<html lang="en">
+
+<title>EZ Menu</title>
+
+<head>
+  <!-- Bootstrap -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- Bootstrap -->
+
+  <!-- Datatables -->
+  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css">
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
+  <script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
+    <!-- Necessary for custom column arrangin -->
+  <script type="text/javascript" src="https://cdn.datatables.net/v/dt/cr-1.3.2/datatables.min.js"></script>
+  <!-- Datatables -->
+
+  <!-- Personal overrides -->
+  <script src="/static/js/script.js"></script>
+  <link rel="stylesheet" href="/static/css/generic.css">
+  <!-- Personal overrides -->
+</head>
+
+<body>
+  
+  <div class="container-fluid"> 
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+          <ul class="nav navbar-nav pull-left left-nav" id="left-nav">
+            <li id="brand-li">
+              <a href="/">
+                <span id="green-span">EZ</span><span id="white-span">Menu</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('Products') }}" class="check-loc">
+                Products
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('Orders') }}" class="check-loc">
+                Orders
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('Listings') }}" class="check-loc">
+                Listings
+              </a>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav pull-right right-nav" id="right-nav">
+            <li>
+              <a href="{{ url_for('timeClock') }}"
+                 class="check-loc" id="currTime">
+              </a>
+            </li>
+            <li>
+              {% if session['clock_status'] == 'IN' %}
+                <a href="{{ url_for('logout') }}" id="userName"
+                   style="color: #9ec143;">
+                  {{ session['user_name'] }}
+                </a>
+              {% else %}
+                <a href="{{ url_for('logout') }}" id="userName"
+                   style="color: #FFA500;">
+                  {{ session['user_name'] }}
+                </a>
+              {% endif %}
+            </li>
+            <li id="user-pic-li">
+              <div class="circular-div">
+                {% if session['user_pic'] %}
+                  <img src="{{ session['user_pic'] }}" class="img-circle"
+                       width="45" height="45">
+                {% else %}
+                  <img src="https://storage.googleapis.com/gcoimg/assets/no-profile-pic.png"
+                       class="img-circle" width="45" height="45">
+                {% endif %}
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row">
+
+      <div class="col-sm-2 workspace" id="sidebar-col">
+  <!--  <div class="col-sm-12" id="sidebar-slide-div">
+          <span id="sidebar-slide-btn"
+                class="glyphicon glyphicon-menu-hamburger pull-right white">
+          </span>
+        </div> -->
+
+        {% block sidebar %}{% endblock %}
+
+      </div>
+
+      <div class="col-sm-10 workspace" id="content-col">
+
+        {% block content %}{% endblock %}
+
+      </div>
+
+    </div>
+  
+  </div>
+
+
+</body>
+<script src="/static/js/script.js"></script>
+
+</html>

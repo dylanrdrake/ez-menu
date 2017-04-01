@@ -1,0 +1,39 @@
+<!DOCCTYPE html>
+<html lang="en">
+
+<title>EZ Menu</title>
+
+<head>
+  <!-- Bootstrap -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- Bootstrap -->
+
+  <!-- Personal overrides -->
+  <script src="/static/js/script.js"></script>
+  <link rel="stylesheet" href="/static/css/generic.css">
+  <!-- Personal overrides -->
+</head>
+
+<body>
+  <div id="login-div">
+    {% if message == None %}
+      <p>EZ Menu requires you to be 
+      signed in to Chrome with a Google account.
+      </p>
+      <p>You will keep being returned to this page until
+      you login to Chrome with a valid google account.
+      </p>
+    {% else %}
+      <p>{{ message }}</p>
+    {% endif %}
+    <form action="/login">
+      <button type="submit" class="btn btn-success">EZ Menu</button>
+    </form>
+  </div>
+</body>
+
+</html>
