@@ -6,18 +6,11 @@ from flask import Flask,url_for,redirect,request,render_template,jsonify,g,sessi
 from flask_oauth import OAuth
 # Necessary packages
 from urllib2 import Request, urlopen, URLError
-from datetime import datetime
 import MySQLdb as mysql
 import json
-import sys
 import os
 from env_config import creds, google_auth_env
 from functools import wraps
-# Imports for Images and Google Storage
-import logging
-import cloudstorage as gcs
-import webapp2
-from google.appengine.api import app_identity, images
 
 
 

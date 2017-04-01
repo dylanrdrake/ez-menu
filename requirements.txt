@@ -4,5 +4,5 @@
 # in `lib/` subdirectory.
 #
 # Note: The `lib` directory is added to `sys.path` by `appengine_config.py`.
-Flask==0.10
-MySQL-python==1.2.5
+flask
+Flask-OAuth
