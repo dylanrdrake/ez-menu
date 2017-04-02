@@ -103,10 +103,19 @@ def db_connect():
     if (os.getenv('SERVER_SOFTWARE') and \
             os.getenv('SERVER_SOFTWARE').startswith('Google App Engine/')):
         g.conn = mysql.connect(unix_socket='/cloudsql/'+creds['_INSTANCE_NAME'],
+                               db=creds['dbbase'],
                                user=creds['dbuser'],
                                passwd=creds['dbpass'])
     else:
-        g.conn = mysql.connect(host='127.0.0.1',
+        # this is the database used when running dev_appserver.py
+        # install cloud_sql_proxy.py as described in google's docs
+        # g.conn = mysql.connect(host='127.0.0.1',
+        #                        user=creds['dbuser'],
+        #                        passwd=creds['dbpass'])
+        # OR
+        # you can just use the parameters of your cloud sql instance
+        g.conn = mysql.connect(host=creds['dbhost'],
+                               db=creds['dbbase'],
                                user=creds['dbuser'],
                                passwd=creds['dbpass'])
 
@@ -148,7 +157,25 @@ def logout(message=None):
 @app.route('/')
 @auth_check
 def index():
-    return render_template('home.html')
+    user_email = session.get('user_email')
+    user_query = """
+    SELECT MenuTitle,PublicLink,ColorScheme,ShareWith
+    FROM menus
+    WHERE Email='{0}'
+    """.format(user_email)
+    user_query_cur = g.conn.cursor()
+    user_query_cur.execute(user_query)
+    user_query_results = user_query_cur.fetchall()
+    user_query_columns = user_query_cur.description
+    user_query_cur.close()
+
+    columns = [col_data[0] for col_data in user_query_columns]
+    results = [{col: data for col,data in zip(columns,result)}\
+            for result in user_query_results]
+
+    return render_template('home.html',
+                           results=results)
+    
 
 
 
