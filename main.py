@@ -174,6 +174,16 @@ def index():
     results = [{col: data for col,data in zip(columns,result)}\
             for result in user_query_results]
 
+    if len(user_query_results) == 0:
+        create_user = """
+        INSERT INTO Users (Email)
+        VALUES ('{0}')
+        """.format(user_email)
+        create_user_cur = g.conn.cursor()
+        create_user_cur.execute(create_user)
+        create_user_cur.close()
+        g.conn.commit()
+
     return render_template('home.html',
                            results=results)
     
