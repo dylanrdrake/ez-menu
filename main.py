@@ -144,10 +144,7 @@ def login():
 @app.route('/logout')
 def logout(message=None):
     session.clear()
-    if request.args.get('message'):
-        message = request.args.get('message')
-    return redirect(url_for('login_screen',
-            message=message))
+    return redirect(url_for('login_screen'))
 
 
 
