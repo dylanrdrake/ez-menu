@@ -110,10 +110,11 @@ def db_connect():
         # this is the database used when running dev_appserver.py
         # install cloud_sql_proxy.py as described in google's docs
         # g.conn = mysql.connect(host='127.0.0.1',
+        #                        db=creds['dbbase'],
         #                        user=creds['dbuser'],
         #                        passwd=creds['dbpass'])
         # OR
-        # you can just use the parameters of your cloud sql instance
+        # you can just include the host ip of your cloud sql instance
         g.conn = mysql.connect(host=creds['dbhost'],
                                db=creds['dbbase'],
                                user=creds['dbuser'],
