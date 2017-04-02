@@ -18,16 +18,12 @@
 
 <body>
   <div id="login-div">
-    {% if message == None %}
-      <p>EZ Menu requires you to be 
-      signed in to Chrome with a Google account.
-      </p>
-      <p>You will keep being returned to this page until
-      you login to Chrome with a valid google account.
-      </p>
-    {% else %}
-      <p>{{ message }}</p>
-    {% endif %}
+    <p>EZ Menu requires you to be 
+    signed in to Chrome with a Google account.
+    </p>
+    <p>You will keep being returned to this page until
+    you login to Chrome with a valid google account.
+    </p>
     <form action="/login">
       <button type="submit" class="btn btn-success">EZ Menu</button>
     </form>
