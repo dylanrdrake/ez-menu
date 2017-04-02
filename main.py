@@ -130,10 +130,7 @@ def db_disconnect(exception):
 
 @app.route('/login_screen')
 def login_screen(message=None):
-    if request.args.get('message'):
-        message = request.args.get('message')
-    return render_template('login.html',
-            message=message)
+    return render_template('login.html')
 
 
 
@@ -159,22 +156,17 @@ def logout(message=None):
 @auth_check
 def index():
     user_email = session.get('user_email')
-    user_query = """
-    SELECT MenuTitle,PublicLink,ColorScheme,ShareWith
-    FROM menus
-    WHERE Email='{0}'
+
+    get_user = """
+    SELECT UserId FROM Users
+    WHERE Email = '{0}'
     """.format(user_email)
-    user_query_cur = g.conn.cursor()
-    user_query_cur.execute(user_query)
-    user_query_results = user_query_cur.fetchall()
-    user_query_columns = user_query_cur.description
-    user_query_cur.close()
-
-    columns = [col_data[0] for col_data in user_query_columns]
-    results = [{col: data for col,data in zip(columns,result)}\
-            for result in user_query_results]
-
-    if len(user_query_results) == 0:
+    get_user_cur = g.conn.cursor()
+    get_user_cur.execute(get_user)
+    get_user_results = get_user_cur.fetchall()
+    get_user_cur.close()
+    
+    if len(get_user_results) == 0:
         create_user = """
         INSERT INTO Users (Email)
         VALUES ('{0}')
@@ -183,6 +175,21 @@ def index():
         create_user_cur.execute(create_user)
         create_user_cur.close()
         g.conn.commit()
+
+    menu_query = """
+    SELECT MenuTitle,PublicLink,ColorScheme,ShareWith
+    FROM menus
+    WHERE Email='{0}'
+    """.format(user_email)
+    menu_query_cur = g.conn.cursor()
+    menu_query_cur.execute(menu_query)
+    menu_query_results = menu_query_cur.fetchall()
+    menu_query_columns = menu_query_cur.description
+    menu_query_cur.close()
+
+    columns = [col_data[0] for col_data in menu_query_columns]
+    results = [{col: data for col,data in zip(columns,result)}\
+            for result in menu_query_results]
 
     return render_template('home.html',
                            results=results)
