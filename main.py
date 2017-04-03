@@ -148,7 +148,6 @@ def logout(message=None):
 
 
 
-
 @app.route('/')
 @auth_check
 def index():
@@ -174,7 +173,7 @@ def index():
         g.conn.commit()
 
     menu_query = """
-    SELECT MenuTitle,PublicLink,ColorScheme,ShareWith
+    SELECT MenuId,MenuTitle,PublicLink,ColorScheme,ShareWith
     FROM menus
     WHERE Email='{0}'
     """.format(user_email)
@@ -191,6 +190,22 @@ def index():
     return render_template('home.html',
                            results=results)
     
+
+
+@app.route('/createmenu')
+@auth_check
+def createmenu():
+    user_email = session.get('user_email')
+
+    create_menu = """
+    INSERT INTO menus
+    (MenuTitle, Email, ColorScheme, ShareWith, PublicLink)
+    VALUES ({0}, {1}, {2}, {3}, {4})
+    """.format(menutitle, email, colorscheme, sharewith, publiclink)
+    create_menu_cur = g.conn.cursor()
+    create_menu_cur.execute(create_menu)
+    create_menu_cur.close()
+    g.conn.commit()
 
 
 
