@@ -215,6 +215,20 @@ def createmenu():
 
 
 
+@app.route('/previewmenu')
+@auth_check
+def previewmenu():
+    '''
+    create a storage object that does not have public-read option.
+    give every user a previewid to name the file and just keep overwriting
+        the same object.
+    or instead of creating a storage object just return raw template in
+        new tab.
+    '''
+    return
+
+
+
 @app.route('/publishmenu')
 @auth_check
 def publishmenu():
