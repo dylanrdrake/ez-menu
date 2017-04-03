@@ -5,12 +5,12 @@ from flask import Flask,url_for,redirect,request,render_template,g,session
 # Oauth imports
 from flask_oauth import OAuth
 # Necessary packages
-from urllib2 import Request, urlopen, URLError
 import MySQLdb as mysql
 import json
 import os
 from env_config import creds, google_auth_env
 from functools import wraps
+from urllib2 import Request, urlopen, URLError
 # Cloud Storage imports
 import cloudstorage as gcs
 from google.appengine.api import app_identity
@@ -50,7 +50,6 @@ def auth_check(route):
             return redirect(url_for('logout'))
 
         access_token = access_token[0]
-        from urllib2 import Request, urlopen, URLError
 
         headers = {'Authorization': 'OAuth '+access_token}
         req = Request('https://www.googleapis.com/oauth2/v1/userinfo',
@@ -224,7 +223,7 @@ def publishmenu():
     bucket_name = os.environ.get('BUCKET_NAME',
             app_identity.get_default_gcs_bucket_name())
 
-    filename = '/'+bucket_name+'/test_menu.html'
+    filename = '/'+bucket_name+'/menus/test_menu.html'
 
     with gcs.open(filename,
                   'w',
