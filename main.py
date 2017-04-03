@@ -77,6 +77,20 @@ def auth_check(route):
 
 
 
+def get_user(email):
+    get_user = """
+    SELECT UserId FROM Users
+    WHERE Email = '{0}'
+    """.format(email)
+    get_user_cur = g.conn.cursor()
+    get_user_cur.execute(get_user)
+    get_user_results = get_user_cur.fetchall()
+    get_user_cur.close()
+
+    return get_user_results
+
+
+
 @app.route(creds['REDIRECT_URI'])
 @google.authorized_handler
 def authorized(resp):
@@ -142,20 +156,6 @@ def logout(message=None):
 
 
 
-def get_user(email):
-    get_user = """
-    SELECT UserId FROM Users
-    WHERE Email = '{0}'
-    """.format(email)
-    get_user_cur = g.conn.cursor()
-    get_user_cur.execute(get_user)
-    get_user_results = get_user_cur.fetchall()
-    get_user_cur.close()
-
-    return get_user_results
- 
-
-
 @app.route('/')
 @auth_check
 def index():
@@ -219,11 +219,8 @@ def createmenu():
 @auth_check
 def previewmenu():
     '''
-    create a storage object that does not have public-read option.
-    give every user a previewid to name the file and just keep overwriting
-        the same object.
-    or instead of creating a storage object just return raw template in
-        new tab.
+    return raw template without creating storage object.
+    make sure preview link contains target="_blank" to open in new tab
     '''
     return
 
