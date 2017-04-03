@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Import the Flask Framework
-from flask import Flask,url_for,redirect,request,render_template,jsonify,g,session
+from flask import Flask,url_for,redirect,request,render_template,g,session
 # Oauth imports
 from flask_oauth import OAuth
 # Necessary packages
@@ -11,7 +11,9 @@ import json
 import os
 from env_config import creds, google_auth_env
 from functools import wraps
-
+# Cloud Storage imports
+import cloudstorage as gcs
+from google.appengine.api import app_identity
 
 
 # Note: Don't need to call run() since our application is embedded within
@@ -69,13 +71,6 @@ def auth_check(route):
         session['user_email'] = user_info['email']
         session['user_name'] = user_info['name']
         session['user_pic'] = user_info['picture']
-
-
-        if session.get('user_email') != None:
-            user_email = session.get('user_email')
-        else:
-            return redirect(url_for('logout'))
-
 
         return route(*args, **kwargs)
 
@@ -148,21 +143,28 @@ def logout(message=None):
 
 
 
+def get_user(email):
+    get_user = """
+    SELECT UserId FROM Users
+    WHERE Email = '{0}'
+    """.format(email)
+    get_user_cur = g.conn.cursor()
+    get_user_cur.execute(get_user)
+    get_user_results = get_user_cur.fetchall()
+    get_user_cur.close()
+
+    return get_user_results
+ 
+
+
 @app.route('/')
 @auth_check
 def index():
     user_email = session.get('user_email')
 
-    get_user = """
-    SELECT UserId FROM Users
-    WHERE Email = '{0}'
-    """.format(user_email)
-    get_user_cur = g.conn.cursor()
-    get_user_cur.execute(get_user)
-    get_user_results = get_user_cur.fetchall()
-    get_user_cur.close()
-    
-    if len(get_user_results) == 0:
+    user_data = get_user(user_email)
+   
+    if len(user_data) == 0:
         create_user = """
         INSERT INTO Users (Email)
         VALUES ('{0}')
@@ -173,9 +175,9 @@ def index():
         g.conn.commit()
 
     menu_query = """
-    SELECT MenuId,MenuTitle,PublicLink,ColorScheme,ShareWith
+    SELECT MenuId,MenuTitle,PublicLink,Theme,ShareWith
     FROM menus
-    WHERE Email='{0}'
+    WHERE Owner='{0}'
     """.format(user_email)
     menu_query_cur = g.conn.cursor()
     menu_query_cur.execute(menu_query)
@@ -196,16 +198,45 @@ def index():
 @auth_check
 def createmenu():
     user_email = session.get('user_email')
+    menutitle = request.form['menutitle']
+    theme = request.form['theme']
+    sharewith = request.form['sharewith']
 
     create_menu = """
     INSERT INTO menus
-    (MenuTitle, Email, ColorScheme, ShareWith, PublicLink)
+    (MenuTitle, Owner, Theme, ShareWith)
     VALUES ({0}, {1}, {2}, {3}, {4})
-    """.format(menutitle, email, colorscheme, sharewith, publiclink)
+    """.format(menutitle, user_email, theme, sharewith)
     create_menu_cur = g.conn.cursor()
     create_menu_cur.execute(create_menu)
     create_menu_cur.close()
     g.conn.commit()
+
+    return redirect(url_for('index'))
+
+
+
+@app.route('/publishmenu')
+@auth_check
+def publishmenu():
+    test_html = '<html><body>test</body></html>'
+
+    bucket_name = os.environ.get('BUCKET_NAME',
+            app_identity.get_default_gcs_bucket_name())
+
+    filename = '/'+bucket_name+'/test_menu.html'
+
+    with gcs.open(filename,
+                  'w',
+                  content_type='text/html',
+                  options={'x-goog-acl': 'public-read'}
+                  ) as new_menu:
+        new_menu.write(test_html)
+
+    return redirect(url_for('index'))
+
+    
+
 
 
 
