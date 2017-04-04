@@ -34,6 +34,7 @@ this sample.
 
         pip2.7 install -t lib/ -r requirements.txt
 
+
 1. [Add Firebase to your app.](https://firebase.google.com/docs/web/setup#add_firebase_to_your_app)
 1. Add your Firebase project ID to the backend’s `app.yaml` file as an
 environment variable.
@@ -46,7 +47,14 @@ in the Firebase console under **Auth** > **Sign-in Method** >
 [PROJECT_ID].appspot.com. Do not include "http://" before the domain name.
 
 ## Run Locally
+1. Activate env in backend/
+
+1. Install AppEngine included libaries in backend/app.yaml into virtualenv:
+
+    These will automatically be included when deploying to AppEngine 
+
 1. Add the backend host URL to `main.js`: http://localhost:8081.
+
 1. Navigate to the root directory of the application and start the development
 server with the following command:
 
