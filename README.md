@@ -28,7 +28,7 @@ this sample.
 
 1. Within a virtualenv, install the 3rd-party dependencies to the backend service:
 
-        pip install -t lib/ -r redirect.txt
+        pip install -t lib/ -r requirements.txt
 
     if you get python3 print statement error then install pip2.7 and:
 
