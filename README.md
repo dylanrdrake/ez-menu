@@ -57,3 +57,19 @@ https://backend-dot-[PROJECT_ID].appspot.com.
     might not be fully functional immediately after deployment.
 
 1. View the application live at https://[PROJECT_ID].appspot.com.
+
+
+## TODO
+1. Alert me when this menu changes:
+- Twilio docs in Google Cloud docs or Firebase messaging
+- link on published menu to app page where user can enter phone number
+- Take a look a cron jobs and how they could be utilized
+
+
+2. What are people posting ticker
+
+
+3. Colorscheme:
+    colorscheme: #11353B, #4ecdc4, #f7fff7, #ff6b6b, #ffe66d
+
+
