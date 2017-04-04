@@ -18,19 +18,11 @@ this sample.
 
         cd ez-menu/backend
 
-1. Create virtualenv in backend/:
-        
-        virtualenv env
-
-1. Activate env:
-
-        source env/bin/activate
-
-1. Within a virtualenv, install the 3rd-party dependencies to the backend service:
+1. Install the 3rd-party dependencies to the backend service:
 
         pip install -t lib/ -r requirements.txt
 
-    if you get python3 print statement error then install pip2.7 and:
+    if you get python3 print statement error, remove * in lib/, install pip2.7 and:
 
         pip2.7 install -t lib/ -r requirements.txt
 
@@ -47,11 +39,20 @@ in the Firebase console under **Auth** > **Sign-in Method** >
 [PROJECT_ID].appspot.com. Do not include "http://" before the domain name.
 
 ## Run Locally
+1. Create vitualenv in backend/:
+        
+        cd backend
+        virtualenv env
+
 1. Activate env in backend/
+        
+        source env/bin/activate
 
-1. Install AppEngine included libaries in backend/app.yaml into virtualenv:
+1. Install AppEngine included libaries listed in backend/app.yaml into virtualenv:
 
-    These will automatically be included when deploying to AppEngine 
+        pip install <package>
+
+    These will automatically be imported into the runtime when deployed to AppEngine 
 
 1. Add the backend host URL to `main.js`: http://localhost:8081.
 
