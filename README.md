@@ -26,6 +26,10 @@ this sample.
 
         pip2.7 install -t lib/ -r requirements.txt
 
+1. To access Cloud SQL:
+
+    - create file: backend/env_config.py
+
 
 1. [Add Firebase to your app.](https://firebase.google.com/docs/web/setup#add_firebase_to_your_app)
 1. Add your Firebase project ID to the backend’s `app.yaml` file as an
