@@ -43,16 +43,7 @@ in the Firebase console under **Auth** > **Sign-in Method** >
 [PROJECT_ID].appspot.com. Do not include "http://" before the domain name.
 
 ## Run Locally
-1. Create vitualenv in backend/:
-        
-        cd backend
-        virtualenv env
-
-1. Activate env in backend/
-        
-        source env/bin/activate
-
-1. Install AppEngine included libaries listed in backend/app.yaml into virtualenv:
+1. Install AppEngine included libaries listed in backend/app.yaml into your system python:
 
         pip install <package>
 

@@ -1,20 +1,18 @@
 $(function(){
-  // This is the host for the backend.
-  // TODO: When running Firenotes locally, set to http://localhost:8081. Before
-  // deploying the application to a live production environment, change to
-  // https://backend-dot-<PROJECT_ID>.appspot.com as specified in the
-  // backend's app.yaml file.
+  // local dev backendHostURL:
   var backendHostUrl = 'http://localhost:8081';
+  
+  // production backendHostURL:
   // var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyAPAEZg9AMSlE2cqC5h2_7VelZP5Md0wpc",
     authDomain: "ez-menu.firebaseapp.com",
-    databaseURL: "https://ez-menu.firebaseio.com",
     projectId: "ez-menu",
-    storageBucket: "ez-menu.appspot.com",
-    messagingSenderId: "834479782686"
+    //databaseURL: "https://ez-menu.firebaseio.com",
+    //storageBucket: "ez-menu.appspot.com",
+    //messagingSenderId: "834479782686"
   };
 
   // This is passed into the backend to authenticate the user.
@@ -65,7 +63,7 @@ $(function(){
       'signInOptions': [
         // Leave the lines as is for the providers you want to offer your users.
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
         //firebase.auth.TwitterAuthProvider.PROVIDER_ID,
         //firebase.auth.GithubAuthProvider.PROVIDER_ID,
         firebase.auth.EmailAuthProvider.PROVIDER_ID
