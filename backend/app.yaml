@@ -1,0 +1,29 @@
+runtime: python27
+api_version: 1
+threadsafe: true
+service: backend
+
+
+handlers:
+- url: /.*
+  script: main.app
+
+- url: /blobstore.*
+  script: blobstore.app
+
+
+env_variables:
+  # Replace with your Firebase project ID.
+  FIREBASE_PROJECT_ID: 'ez-menu'
+
+# AppEngine will install these automatically.
+# But, when running locally you need to install
+# these into your virtualenv and run dev_appserver.py
+# from virtualenv. Any third party libraries that
+# are not included in the AppEngine stardard 
+# environment need to be installed to backend/lib/
+# and recorded in requirements.txt when running locally
+# AND when deployed to AppEngine.
+libraries:
+- name: MySQLdb
+  version: "latest"
