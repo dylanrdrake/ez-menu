@@ -35,13 +35,6 @@ def db_connect():
                                passwd=creds['dbpass'])
     else:
         # this is the database used when running dev_appserver.py
-        # install cloud_sql_proxy.py as described in google's docs
-        # g.conn = mysql.connect(host='127.0.0.1',
-        #                        db=creds['dbbase'],
-        #                        user=creds['dbuser'],
-        #                        passwd=creds['dbpass'])
-        # OR
-        # you can just include the host ip of your cloud sql instance
         g.conn = mysql.connect(host=creds['dbhost'],
                                db=creds['dbbase'],
                                user=creds['dbuser'],
@@ -53,11 +46,8 @@ def db_disconnect(exception):
     g.conn.close()
 
 
-
-# [START add_note]
-@app.route('/menus', methods=['GET'])
-def menus():
-
+# Check Authorization
+def auth_check(request):
     # Verify Firebase auth.
     id_token = request.headers['Authorization'].split(' ').pop()
     claims = google.oauth2.id_token.verify_firebase_token(
@@ -65,12 +55,112 @@ def menus():
     if not claims:
         return 'Unauthorized', 401
 
-    user_email = claims.get('email')
+    # Update User or Create User if none exists
+    if get_user(claims.get('user_id')):
+        update_user(userid=claims.get('user_id'),
+                    provider=claims.get('firebase')['sign_in_provider'],
+                    name=claims.get('name'),
+                    email=claims.get('email'),
+                    picture=claims.get('picture'))
+    elif not get_user(claims.get('user_id')):
+        create_user(userid=claims.get('user_id'),
+                    provider=claims.get('firebase')['sign_in_provider'],
+                    name=claims.get('name'),
+                    email=claims.get('email'),
+                    picture=claims.get('picture'))
+    
+   
+    return claims.get('user_id')
 
-    print user_email
-    print claims['sub']
 
-    return
+# Query Database
+def query_db(sql_query, commit):
+    cursor = g.conn.cursor()
+    cursor.execute(sql_query)
+    raw_results = cursor.fetchall()
+    column_data = cursor.description
+    cursor.close()
+    if commit:
+        g.conn.commit()
+        return True
+
+    columns = [col[0] for col in column_data]
+    results = [{col: data for col,data in zip(columns,result)}\
+            for result in raw_results]
+
+    return results
+
+
+# Get User
+def get_user(userid):
+    user_query = """
+    SELECT * FROM Users
+    WHERE UserId = '{0}'
+    """.format(userid)
+    user_data = query_db(user_query, False)
+    return user_data
+
+
+# Create User
+def create_user(userid, provider, name=None, email=None, picture=None):
+    create_user_sql = """
+    INSERT INTO Users
+    (UserId, AuthProvider, Name, Email, Picture)
+    VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')
+    """.format(userid, provider, name, email, picture)
+    user_created = query_db(create_user_sql, True)
+    return user_created
+
+
+# Update User
+def update_user(userid, provider, name=None, email=None, picture=None):
+    update_user_sql = """
+    UPDATE Users
+    SET AuthProvider='{0}',
+        Name='{1}',
+        Email='{2}',
+        Picture='{3}'
+    WHERE UserId='{4}'
+    """.format(provider, name, email, picture, userid)
+    user_updated = query_db(update_user_sql, True)
+    return user_updated
+
+
+# Create Menu
+def create_menu(userid, title, theme, sharewith=None, published=False, menuitems=None):
+    menuid = 'random'
+    create_menu_sql = """
+    INSERT INTO menus
+    (MenuId, MenuTitle, Owner, Theme, ShareWith, Published)
+    VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')
+    """.format(menuid, title, userid, theme, sharewith, published)
+    menu_created = query_db(create_menu_sql, True)
+    return menu_created
+
+
+# Get Menu
+def get_menu(menuid):
+    menu_query = """
+    SELECT * FROM menus
+    WHERE MenuId={0}
+    """.format(menuid)
+    menu_data = query_db(menu_query, False)
+    return menu_data
+
+
+# get menus
+@app.route('/menus', methods=['GET'])
+def menus():
+    userid = auth_check(request)
+
+    menus_query = """
+    SELECT * FROM menus
+    WHERE Owner='{0}'
+    """.format(userid)
+    
+    menus_data = query_db(menus_query, False)
+
+    return jsonify(menus_data)
 
 
 

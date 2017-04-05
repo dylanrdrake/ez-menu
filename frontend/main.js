@@ -76,6 +76,10 @@ $(function(){
   }
   // [END configureFirebaseLoginWidget]
 
+
+
+
+
   // [START fetchMenus]
   // Fetch notes from the backend.
   function fetchMenus() {
@@ -86,14 +90,16 @@ $(function(){
         'Authorization': 'Bearer ' + userIdToken
       }
     }).then(function(data){
-      $('#notes-container').empty();
+      $('#menus-container').empty();
       // Iterate over user data to display user's notes from database.
       data.forEach(function(note){
-        $('#notes-container').append($('<p>').text(note.message));
+        $('#menus-container').append($('<p>').text(note.message));
       });
     });
   }
   // [END fetchMenus]
+
+
 
   // [START signOutBtn]
   // Sign out a user
@@ -108,6 +114,8 @@ $(function(){
     });
   });
   // [END signOutBtn]
+
+
 
   // [START saveNoteBtn]
   // Save a note to the backend
@@ -135,6 +143,8 @@ $(function(){
 
   });
   // [END saveNoteBtn]
+
+
 
   configureFirebaseLogin();
   configureFirebaseLoginWidget();

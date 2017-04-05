@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $(document).scrollTop(0);
+
+      var viewHeight = $(window).height();
+
+      function scroll() {
+        $('html, body').animate({scrollTop: $(window).scrollTop() + viewHeight}, 0);
+      }
+      setInterval(scroll, {{ scroll_interval }});
+
+      $(document).scroll(function() {
+        if ($(document).scrollTop() == $(document).height() - viewHeight) {
+          setTimeout(function(){
+            location.reload(true);
+          }, {{ scroll_interval }});
+        } 
+      });
+
+    });
+  </script>
+  <title>{{ menu_title }}</title>
+</head>
+
+<body>
+  <div style="height:4000px;">
+    Test page
+  </div>
+</body>
+</html>
