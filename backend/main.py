@@ -7,6 +7,7 @@ import flask_cors
 import google.auth.transport.requests
 import google.oauth2.id_token
 import requests_toolbelt.adapters.appengine
+from datetime import datetime
 # CloudSQL
 import os
 import MySQLdb as mysql
@@ -23,6 +24,7 @@ HTTP_REQUEST = google.auth.transport.requests.Request()
 app = Flask(__name__)
 # allows Ajax
 flask_cors.CORS(app)
+
 
 
 @app.before_request
@@ -44,6 +46,26 @@ def db_connect():
 @app.teardown_request
 def db_disconnect(exception):
     g.conn.close()
+
+
+
+# Query Database
+def query_db(sql_query, commit):
+    cursor = g.conn.cursor()
+    cursor.execute(sql_query)
+    raw_results = cursor.fetchall()
+    column_data = cursor.description
+    cursor.close()
+    if commit:
+        g.conn.commit()
+        return True
+
+    columns = [col[0] for col in column_data]
+    results = [{col: data for col,data in zip(columns,result)}\
+            for result in raw_results]
+
+    return results
+
 
 
 # Check Authorization
@@ -69,26 +91,8 @@ def auth_check(request):
                     email=claims.get('email'),
                     picture=claims.get('picture'))
     
-   
     return claims.get('user_id')
 
-
-# Query Database
-def query_db(sql_query, commit):
-    cursor = g.conn.cursor()
-    cursor.execute(sql_query)
-    raw_results = cursor.fetchall()
-    column_data = cursor.description
-    cursor.close()
-    if commit:
-        g.conn.commit()
-        return True
-
-    columns = [col[0] for col in column_data]
-    results = [{col: data for col,data in zip(columns,result)}\
-            for result in raw_results]
-
-    return results
 
 
 # Get User
@@ -122,30 +126,97 @@ def update_user(userid, provider, name=None, email=None, picture=None):
         Picture='{3}'
     WHERE UserId='{4}'
     """.format(provider, name, email, picture, userid)
-    user_updated = query_db(update_user_sql, True)
-    return user_updated
+    query_db(update_user_sql, True)
+    return redirect(url_for('menus'))
 
 
 # Create Menu
-def create_menu(userid, title, theme, sharewith=None, published=False, menuitems=None):
-    menuid = 'random'
+def create_menu(userid, title, theme, pageinterval, sharewith=None, menuitems=None):
+    menuid = datetime.utcnow().strftime('%y%m%d%H%M%S%f')
     create_menu_sql = """
     INSERT INTO menus
-    (MenuId, MenuTitle, Owner, Theme, ShareWith, Published)
+    (MenuId, MenuTitle, Owner, Theme, pageinterval, ShareWith)
     VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')
-    """.format(menuid, title, userid, theme, sharewith, published)
-    menu_created = query_db(create_menu_sql, True)
-    return menu_created
+    """.format(menuid, title, userid, theme, pageinterval, sharewith)
+    query_db(create_menu_sql, True)
+    return redirect(url_for('menus'))
+
+
+# Update Menu
+def update_menu(menuid, title, theme, pageinterval, sharewith=None,\
+        menuitems=None, publish=False):
+    update_menu_sql = """
+    UPDATE menus
+    SET Title='{0}',
+        Theme='{1}',
+        PageInterval='{2}',
+        ShareWith='{3}',
+    WHERE MenuId='{4}'
+    """.format(title, theme, pageinterval, sharewith, menuid)
+    query_db(update_menu_sql, True)
+
+    if publish:
+        publiclink = publish_menu(menuid)
+        update_link_sql = """
+        UPDATE menus
+        SET PublicLink='{0}'
+        WHERE MenuId='{1}'
+        """.format(publiclink, menuid)
+        query_db(update_link_sql, True)
+
+    # update items
+    
+    return redirect(url_for('menus'))
 
 
 # Get Menu
 def get_menu(menuid):
+    item_query = """
+    SELECT * FROM items
+    WHERE MenuId='{0}'
+    """.format(menuid)
+    item_data = query_db(item_query, False)
+
     menu_query = """
     SELECT * FROM menus
     WHERE MenuId={0}
     """.format(menuid)
     menu_data = query_db(menu_query, False)
-    return menu_data
+
+    menu_data['items'] = item_data
+
+    return jsonify(menu_data)
+
+
+# Publish Menu
+def publish_menu(menuid):
+    userid = auth_check(request)
+
+    menu_data = get_menu(menuid)
+
+    menuHTML = render_template('menu_template.html',
+                               menu_data=menu_data)
+
+    bucket = os.environ.get('BUCKET_NAME',
+            app_identity.get_default_gcs_bucket_name())
+
+    filename = datetime.utcnow().strftime('%y%m%d%H%M%S%f')+'.html'
+
+    object = '/'+bucket+'/menus/'+filename
+
+    write_retry_params = gcs.RetryParams(backoff_factor=1.1)
+    with gcs.open(object,
+                  'w',
+                  content_type='text/html',
+                  options={'x-goog-acl': 'public-read'},
+                  retry_params=write_retry_params) as menu_file:
+        menu_file.write(str(menuHTML))
+        menu_file.close()
+ 
+    menu_link = 'https://storage.googleapis.com/ez-menu.appspot.com/menus/'+filename
+
+    return menu_link
+
 
 
 # get menus
@@ -161,37 +232,6 @@ def menus():
     menus_data = query_db(menus_query, False)
 
     return jsonify(menus_data)
-
-
-# temp preview demo
-@app.route('/preview', methods=['GET'])
-def preview():
-    items = ['Test item 1', 'Test item 2', 'Test item 3',
-             'Test item 4', 'Test item 5', 'Test item 6']
-    
-    previewHTML = render_template('menu_template.html',
-                                  items=items,
-                                  scroll_interval=2000)
-
-    bucket_name = os.environ.get('BUCKET_NAME',
-            app_identity.get_default_gcs_bucket_name())
-
-    filename = '/'+bucket_name+'/menus/preview.html'
-    
-    write_retry_params = gcs.RetryParams(backoff_factor=1.1)
-    with gcs.open(filename,
-                  'w',
-                  content_type='text/html',
-                  options={'x-goog-acl': 'public-read'},
-                  retry_params=write_retry_params) as preview_file:
-        preview_file.write(str(previewHTML))
-        preview_file.close()
-
-    public_link = 'https://storage.googleapis.com/ez-menu.appspot.com/menus/preview.html'
-
-    return public_link
-
-
 
 
 
