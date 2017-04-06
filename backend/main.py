@@ -163,7 +163,33 @@ def menus():
     return jsonify(menus_data)
 
 
+# temp preview demo
+@app.route('/preview', methods=['GET'])
+def preview():
+    items = ['Test item 1', 'Test item 2', 'Test item 3',
+             'Test item 4', 'Test item 5', 'Test item 6']
+    
+    previewHTML = render_template('menu_template.html',
+                                  items=items,
+                                  scroll_interval=2000)
 
+    bucket_name = os.environ.get('BUCKET_NAME',
+            app_identity.get_default_gcs_bucket_name())
+
+    filename = '/'+bucket_name+'/menus/preview.html'
+    
+    write_retry_params = gcs.RetryParams(backoff_factor=1.1)
+    with gcs.open(filename,
+                  'w',
+                  content_type='text/html',
+                  options={'x-goog-acl': 'public-read'},
+                  retry_params=write_retry_params) as preview_file:
+        preview_file.write(str(previewHTML))
+        preview_file.close()
+
+    public_link = 'https://storage.googleapis.com/ez-menu.appspot.com/menus/preview.html'
+
+    return public_link
 
 
 

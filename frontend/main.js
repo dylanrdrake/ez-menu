@@ -1,9 +1,9 @@
 $(function(){
-  // local dev backendHostURL:
-  var backendHostUrl = 'http://localhost:8081';
+  //local dev backendHostURL:
+  // var backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
-  // var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
   // Initialize Firebase
   var config = {
@@ -143,6 +143,27 @@ $(function(){
 
   });
   // [END saveNoteBtn]
+
+
+  // Preview
+  var previewBtn = $('#preview');
+  previewBtn.click(function() {
+    event.preventDefault();
+    $.ajax({
+        url: backendHostUrl + '/preview',
+        headers: {
+            'Authorization': 'Bearer ' + userIdToken
+        },
+        method: 'GET',
+        success: function(previewLink){
+		    window.open(previewLink, '_blank');
+		},
+		error: function(error){
+			console.log(error);
+		}
+    });
+  });
+  // Preview
 
 
 
