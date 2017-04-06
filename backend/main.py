@@ -25,6 +25,10 @@ app = Flask(__name__)
 # allows Ajax
 flask_cors.CORS(app)
 
+# Get Storage bucket
+bucket = os.environ.get('BUCKET_NAME',
+        app_identity.get_default_gcs_bucket_name())
+
 
 
 @app.before_request
@@ -130,45 +134,82 @@ def update_user(userid, provider, name=None, email=None, picture=None):
     return redirect(url_for('menus'))
 
 
-# Create Menu
-def create_menu(userid, title, theme, pageinterval, sharewith=None, menuitems=None):
-    menuid = datetime.utcnow().strftime('%y%m%d%H%M%S%f')
-    create_menu_sql = """
-    INSERT INTO menus
-    (MenuId, MenuTitle, Owner, Theme, pageinterval, ShareWith)
-    VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')
-    """.format(menuid, title, userid, theme, pageinterval, sharewith)
-    query_db(create_menu_sql, True)
-    return redirect(url_for('menus'))
 
 
-# Update Menu
-def update_menu(menuid, title, theme, pageinterval, publish, sharewith=None, menuitems=None):
-    update_menu_sql = """
-    UPDATE menus
-    SET Title='{0}',
-        Theme='{1}',
-        PageInterval='{2}',
-        ShareWith='{3}',
-    WHERE MenuId='{4}'
-    """.format(title, theme, pageinterval, sharewith, menuid)
-    query_db(update_menu_sql, True)
+# Create Menu route
+@app.route('/createmenu', methods=['POST', 'PUT'])
+def createmenu(userid, menujson):
+    userid = auth_check(request)
+    menu = json.loads(menujson)
+    items = menu['items']
 
-    if publish:
-        publiclink = publish_menu(menuid)
+    if request.method == 'POST':
+        menu['menuid'] = datetime.utcnow().strftime('%y%m%d%H%M%S%f')
+        create_menu_sql = """
+        INSERT INTO menus
+        (MenuId, MenuTitle, Owner, Theme, PageInterval, ShareWith)
+        VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')
+        """.format(menu['menuid'], menu['title'], menu['userid'],
+                menu['theme'], menu['pageinterval'], menu['sharewith'])
+        query_db(create_menu_sql, True)
+
+        for item in items:
+            create_item_sql = """
+            INSERT INTO items
+            (MenuId, ItemTitle, ItemDesc,
+            ItemPrice, ItemCurrency, ItemOrdering)
+            VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')
+            """.format(menu['menuid'], item['itemtitle'], item['itemdesc'],
+                    item['itemprice'], item['itemcurr'], item['itemord'])
+            query_db(create_item_sql, True)
+
+    elif request.method == 'PUT':
+        update_menu_sql = """
+        UPDATE menus
+        SET Title='{0}',
+            Theme='{1}',
+            PageInterval='{2}',
+            ShareWith='{3}',
+        WHERE MenuId='{4}'
+        """.format(menu['title'], menu['theme'], menu['pageinterval'],
+                menu['sharewith'], menu['menuid'])
+        query_db(update_menu_sql, True)
+
+        for item in items:
+            update_item_sql = """
+            UPDATE items
+            SET ItemTitle='{0}',
+                ItemDesc='{1}',
+                ItemPrice='{2}',
+                ItemCurrency='{3}',
+                ItemOrdering='{4}'
+            WHERE ItemId='{5}'
+            """.format(item['itemtitle'], item['itemdesc'], item['itemprice'],
+                    item['itemcurr'], item['itemord'], item['itemid'])
+            query_db(update_item_sql, True)
+
+    if menu['publish']:
+        publiclink = publish_menu(menu['menuid'])
         update_link_sql = """
         UPDATE menus
         SET PublicLink='{0}'
         WHERE MenuId='{1}'
-        """.format(publiclink, menuid)
+        """.format(publiclink, menu['menuid'])
         query_db(update_link_sql, True)
-    if not publish:
-        # delete Storage object!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        pass
+  
+    if menu['takedown']:
+        takedown_menu(menu['menuid'])
+        takedown_link_sql = """
+        UPDATE menus
+        SET PublicLink=NULL
+        WHERE MenuId='{0}'
+        """.format(menu['menuid'])
+        query_db(takedown_link_sql, True)
 
-    # update items
-    
+
     return redirect(url_for('menus'))
+
+
 
 
 # Get Menu
@@ -192,19 +233,12 @@ def get_menu(menuid):
 
 # Publish Menu
 def publish_menu(menuid):
-    userid = auth_check(request)
-
     menu_data = get_menu(menuid)
 
     menuHTML = render_template('menu_template.html',
                                menu_data=menu_data)
 
-    bucket = os.environ.get('BUCKET_NAME',
-            app_identity.get_default_gcs_bucket_name())
-
-    filename = datetime.utcnow().strftime('%y%m%d%H%M%S%f')+'.html'
-
-    object = '/'+bucket+'/menus/'+filename
+    object = '/'+bucket+'/menus/'+menuid+'.html'
 
     write_retry_params = gcs.RetryParams(backoff_factor=1.1)
     with gcs.open(object,
@@ -219,6 +253,11 @@ def publish_menu(menuid):
 
     return menu_link
 
+
+# Take down menu
+def takedown_menu(menuid):
+    object = '/'+bucket+'/menus/'+menuid+'.html'
+    gcs.delete(object)
 
 
 # get menus
