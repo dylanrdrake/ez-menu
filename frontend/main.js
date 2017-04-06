@@ -1,9 +1,9 @@
 $(function(){
   //local dev backendHostURL:
-  //var backendHostUrl = 'http://localhost:8081';
+  var backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
-  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
   // Initialize Firebase
   var config = {
@@ -75,6 +75,7 @@ $(function(){
     ui.start('#firebaseui-auth-container', uiConfig);
   }
   // [END configureFirebaseLoginWidget]
+  // END Firebase ////////////////////
 
 
 
@@ -92,8 +93,13 @@ $(function(){
     }).then(function(data){
       $('#menus-container').empty();
       // Iterate over user data to display user's notes from database.
-      data.forEach(function(note){
-        $('#menus-container').append($('<p>').text(note.message));
+      data.forEach(function(menu){
+        $('#menus-container').append(
+          $('<div class="menu-div">').append(
+            $('<a id="'+menu.MenuId+'" class="menu-link">').text(
+              menu.MenuTitle)
+          )
+        );
       });
     });
   }

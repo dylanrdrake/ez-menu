@@ -143,8 +143,7 @@ def create_menu(userid, title, theme, pageinterval, sharewith=None, menuitems=No
 
 
 # Update Menu
-def update_menu(menuid, title, theme, pageinterval, sharewith=None,\
-        menuitems=None, publish=False):
+def update_menu(menuid, title, theme, pageinterval, publish, sharewith=None, menuitems=None):
     update_menu_sql = """
     UPDATE menus
     SET Title='{0}',
@@ -163,6 +162,9 @@ def update_menu(menuid, title, theme, pageinterval, sharewith=None,\
         WHERE MenuId='{1}'
         """.format(publiclink, menuid)
         query_db(update_link_sql, True)
+    if not publish:
+        # delete Storage object!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        pass
 
     # update items
     
