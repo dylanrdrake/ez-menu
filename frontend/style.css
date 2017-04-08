@@ -1,18 +1,46 @@
 body {
-  font-family: "helvetica", sans-serif;
-  text-align: center;
+        font-family: "helvetica", sans-serif;
+        text-align: center;
 }
 
 h3,legend {
-  font-weight: 400;
-  padding: 18px 0 15px;
-  margin: 0 0 0;
+        font-weight: 400;
+        padding: 18px 0 15px;
+        margin: 0 0 0;
 }
 
 #menu-table {
-  table-layout: fixed;
+        table-layout: fixed;
 }
 
-#menu-table th,td {
-  width: 15%;
+#menu-table th {
+        text-align: left;
+}
+
+#menu-table .menu-id-data {
+        width: 15%;
+}
+
+#menu-table .menu-title-data {
+  width: 30%;
+}
+
+#menu-table .menu-theme-data {
+  width: 10%;
+}
+
+#menu-table .menu-shared-data {
+  width: 10%;
+}
+
+#menu-table .menu-published-data {
+  width: 10%;
+}
+
+#menu-table .menu-edit-data {
+  width: 5%;
+}
+
+#menu-table .menu-publish-data {
+  width: 5%;
 }

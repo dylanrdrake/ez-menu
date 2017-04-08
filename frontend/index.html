@@ -24,27 +24,38 @@
 
   <div id="logged-in">
 
-    <h1>Welcome, <span id="user"></span>!</h1>
+    <h1>EZ Menu</h1>
     <h3>Create and publish shareable menus.</h3>
 
-    <div id="form">
-      <div class="form-group">
-        <button id="create-menu-btn">Create Menu</button>
-        <button id="sign-out-btn">Sign Out</button>
-      </div>
+    <div id="user-div">
+      <h2>Welcome, <span id="user"></span>!</h2>
+      <button id="sign-out-btn">Sign Out</button>
+    </div>
+
+    <div id="menu-btns-div">
+      <button id="create-menu-btn">Create Menu</button>
     </div>
 
     <div id="menu-table-div">
-      <table id="menu-table">
-        <tr class="header-row">
-          <th class="menu-table-field">Id</th>
-          <th class="menu-table-field">Title</th>
-          <th class="menu-table-field">Shared</th>
-          <th class="menu-table-field">Published</th>
-          <th class="menu-table-field"></th>
-          <th class="menu-table-field"></th>
-        </tr>
-      </table>
+
+      <div>
+        <table id="menu-table">
+          <thead>
+            <tr class="header-row">
+              <th class="menu-table-field">Id</th>
+              <th class="menu-table-field">Title</th>
+              <th class="menu-table-field">Theme</th>
+              <th class="menu-table-field">Shared</th>
+              <th class="menu-table-field">Published</th>
+              <th class="menu-table-field"></th>
+              <th class="menu-table-field"></th>
+            </tr>
+          </thead>
+          <tbody id="menu-table-body">
+          </tbody>
+        </table>
+      </div>
+    
     </div>
     
   </div>

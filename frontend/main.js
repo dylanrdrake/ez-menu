@@ -1,9 +1,9 @@
 $(function(){
   //local dev backendHostURL:
-  //var backendHostUrl = 'http://localhost:8081';
+  var backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
-  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
   // Initialize Firebase
   var config = {
@@ -110,7 +110,7 @@ $(function(){
           $menutr.find('.menu-theme-data').text(menu.Theme);
           $menutr.find('.menu-shared-data').text(shared);
           $menutr.find('.menu-published-data').text(published);
-          $('#menu-table').append($menutr);
+          $('#menu-table-body').append($menutr);
         });
       });
     });
@@ -139,31 +139,38 @@ $(function(){
   // Use .on because publish buttons are added
   // dynamically on page
   $('#menu-table').on('click', 'button.menu-publish-btn', function() {
-    var menuid = $(this).parent().siblings('.menu-id-data').text();
-    $.ajax({
-      url: backendHostUrl + '/menus',
-      headers: {'Authorization': 'Bearer ' + userIdToken},
-      method: 'PUT',
-      data: JSON.stringify([{'MenuId': menuid,
-                             'Publish': true}]),
-      contentType: 'application/json'
-		}).then(function() {
-      home();
-    }).then(function() {
+    if (confirm('Are you sure you want to publish this menu?')) {
+      
+      var menuid = $(this).parent().siblings('.menu-id-data').text();
       $.ajax({
         url: backendHostUrl + '/menus',
         headers: {'Authorization': 'Bearer ' + userIdToken},
-        method: 'GET',
-        data: {'MenuId': menuid},
-        contentType: 'application/json',
-        success: function(data) {
-          window.open(data.PublicLink, '_blank');
-        },
-        error: function(error) {
-          console.log(error);
-        }
+        method: 'PUT',
+        data: JSON.stringify([{'MenuId': menuid,
+                              'Publish': true}]),
+        contentType: 'application/json'
+      }).then(function() {
+        home();
+      }).then(function() {
+        $.ajax({
+          url: backendHostUrl + '/menus',
+          headers: {'Authorization': 'Bearer ' + userIdToken},
+          method: 'GET',
+          data: {'MenuId': menuid},
+          contentType: 'application/json',
+          success: function(data) {
+            window.open(data.PublicLink, '_blank');
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });
       });
-    });
+
+    } else {
+      // do nothing
+      home();
+    }
   });
   // Publish
 
