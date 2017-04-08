@@ -8,6 +8,7 @@ import google.auth.transport.requests
 import google.oauth2.id_token
 import requests_toolbelt.adapters.appengine
 from datetime import datetime
+import json
 # CloudSQL
 import os
 import MySQLdb as mysql
@@ -63,12 +64,11 @@ def query_db(sql_query, commit):
     if commit:
         g.conn.commit()
         return True
-
-    columns = [col[0] for col in column_data]
-    results = [{col: data for col,data in zip(columns,result)}\
-            for result in raw_results]
-
-    return results
+    else:
+        columns = [col[0] for col in column_data]
+        results = [{col: data for col,data in zip(columns,result)}\
+                for result in raw_results]
+        return results
 
 
 
@@ -105,7 +105,7 @@ def get_user(userid):
     SELECT * FROM Users
     WHERE UserId = '{0}'
     """.format(userid)
-    user_data = query_db(user_query, False)
+    user_data = query_db(user_query, False)[0]
     return user_data
 
 
@@ -116,8 +116,7 @@ def create_user(userid, provider, name=None, email=None, picture=None):
     (UserId, AuthProvider, Name, Email, Picture)
     VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')
     """.format(userid, provider, name, email, picture)
-    user_created = query_db(create_user_sql, True)
-    return user_created
+    query_db(create_user_sql, True)
 
 
 # Update User
@@ -131,112 +130,129 @@ def update_user(userid, provider, name=None, email=None, picture=None):
     WHERE UserId='{4}'
     """.format(provider, name, email, picture, userid)
     query_db(update_user_sql, True)
-    return redirect(url_for('menus'))
 
 
+# Create item
+def createitem(menuid, itemdata):
+    itemdata['MenuId'] = menuid
+    for item in itemdata:
+        create_item_sql = "INSERT INTO items "
+        fields = [field for field in item.iterkeys()]
+        create_item_sql += "("+(",").join(fields)+") "
+        values = ["'"+value+"'" for value in item.itervalues()]
+        create_item_sql += "VALUES ("+(",").join(values)+")"
+        query_db(create_item_sql, True)
 
 
-# Create Menu route
-@app.route('/createmenu', methods=['POST', 'PUT'])
-def createmenu(userid, menujson):
-    userid = auth_check(request)
-    menu = json.loads(menujson)
-    items = menu['items']
-
-    if request.method == 'POST':
-        menu['menuid'] = datetime.utcnow().strftime('%y%m%d%H%M%S%f')
-        create_menu_sql = """
-        INSERT INTO menus
-        (MenuId, MenuTitle, Owner, Theme, PageInterval, ShareWith)
-        VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')
-        """.format(menu['menuid'], menu['title'], menu['userid'],
-                menu['theme'], menu['pageinterval'], menu['sharewith'])
+# Create menu
+def createmenu(userid, menudata):
+    for menu in menudata:
+        menu['MenuId'] = datetime.utcnow().strftime('%y%m%d%H%M%S%f')
+        menu['Owner'] = userid
+        create_menu_sql = "INSERT INTO menus "
+        fields = [field for field in menu.iterkeys()]
+        create_menu_sql += "("+(",").join(fields)+") "
+        values = ["'"+value+"'" for value in menu.itervalues()]
+        create_menu_sql += "VALUES ("+(",").join(values)+")"
         query_db(create_menu_sql, True)
 
-        for item in items:
-            create_item_sql = """
-            INSERT INTO items
-            (MenuId, ItemTitle, ItemDesc,
-            ItemPrice, ItemCurrency, ItemOrdering)
-            VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}')
-            """.format(menu['menuid'], item['itemtitle'], item['itemdesc'],
-                    item['itemprice'], item['itemcurr'], item['itemord'])
-            query_db(create_item_sql, True)
-
-    elif request.method == 'PUT':
-        update_menu_sql = """
-        UPDATE menus
-        SET Title='{0}',
-            Theme='{1}',
-            PageInterval='{2}',
-            ShareWith='{3}',
-        WHERE MenuId='{4}'
-        """.format(menu['title'], menu['theme'], menu['pageinterval'],
-                menu['sharewith'], menu['menuid'])
-        query_db(update_menu_sql, True)
-
-        for item in items:
-            update_item_sql = """
-            UPDATE items
-            SET ItemTitle='{0}',
-                ItemDesc='{1}',
-                ItemPrice='{2}',
-                ItemCurrency='{3}',
-                ItemOrdering='{4}'
-            WHERE ItemId='{5}'
-            """.format(item['itemtitle'], item['itemdesc'], item['itemprice'],
-                    item['itemcurr'], item['itemord'], item['itemid'])
-            query_db(update_item_sql, True)
-
-    if menu['publish']:
-        publiclink = publish_menu(menu['menuid'])
-        update_link_sql = """
-        UPDATE menus
-        SET PublicLink='{0}'
-        WHERE MenuId='{1}'
-        """.format(publiclink, menu['menuid'])
-        query_db(update_link_sql, True)
-  
-    if menu['takedown']:
-        takedown_menu(menu['menuid'])
-        takedown_link_sql = """
-        UPDATE menus
-        SET PublicLink=NULL
-        WHERE MenuId='{0}'
-        """.format(menu['menuid'])
-        query_db(takedown_link_sql, True)
+        if 'Items' in menu:
+            createitem(menu['MenuId'], menu['Items'])
 
 
-    return redirect(url_for('menus'))
+# Update item
+def updateitem(itemdata):
+    for item in itemdata:
+        itemid = item.pop('ItemId')
+        update_item_sql = "UPDATE items "
+        updates = [field+"='"+value+"'" for field,value in item.iteritems()]
+        update_item_sql += "SET "+(",").join(updates)+" "
+        update_item_sql += "WHERE ItemId='"+itemid+"'" 
+        query_db(update_item_sql, True)
 
 
+# Update menu
+def updatemenu(menudata):
+    for menu in menudata:
+        menuid = menu.pop('MenuId')
+        
+        if 'Items' in menu:
+            items = menu.pop('Items')
+            updateitem(items)
+        if 'Publish' in menu:
+            publish = menu.pop('Publish')
+            publiclink = publishmenu(menuid)
+            menu['PublicLink'] = publiclink
+        if 'Takedown' in menu:
+            takedown = menu.pop('Takedown')
+            takedownmenu(menuid)
+
+        if len(menu) != 0:
+            update_menu_sql = "UPDATE menus "
+            updates = [field+"='"+value+"'" for field,value in menu.iteritems()]
+            update_menu_sql += "SET "+(",").join(updates)+" "
+            update_menu_sql += "WHERE MenuId='"+menuid+"'"
+            query_db(update_menu_sql, True)
+
+
+
+# Delete menu
+def deletemenu(menudata):
+    for menu in menudata:
+        delete_menu_sql = """
+        DELETE FROM menus WHERE MenuId='{0}'
+        """.format(menu['MenuId'])
+        query_db(delete_menu_sql, True)
+
+        delete_items_sql = """
+        DELETE FROM items WHERE MenuId='{0}'
+        """.format(menu['MenuId'])
+        query_db(delete_items_sql, True)
+
+
+# Delete item
+def deleteitem(itemdata):
+    for item in itemdata:
+        delete_item_sql = """
+        DELETE FROM items WHERE ItemId='{0}'
+        """.format(item['ItemId'])
+        query_db(delete_item_sql, True)
 
 
 # Get Menu
-def get_menu(menuid):
-    item_query = """
-    SELECT * FROM items
-    WHERE MenuId='{0}'
-    """.format(menuid)
-    item_data = query_db(item_query, False)
-
+def getmenu(menuid):
     menu_query = """
     SELECT * FROM menus
     WHERE MenuId={0}
     """.format(menuid)
-    menu_data = query_db(menu_query, False)
+    menudata = query_db(menu_query, False)[0]
 
-    menu_data['items'] = item_data
+    item_query = """
+    SELECT * FROM items
+    WHERE MenuId='{0}'
+    """.format(menuid)
+    itemdata = query_db(item_query, False)
 
-    return jsonify(menu_data)
+    menudata['Items'] = itemdata
+    return menudata
+
+
+# Get User's menus
+def getusermenus(userid):
+    menus_query = """
+    SELECT * FROM menus
+    WHERE Owner='{0}'
+    """.format(userid)
+    menusdata = query_db(menus_query, False)
+    return menusdata
 
 
 # Publish Menu
-def publish_menu(menuid):
-    menu_data = get_menu(menuid)
+def publishmenu(menuid):
+    menudata = getmenu(menuid)
 
     menuHTML = render_template('menu_template.html',
-                               menu_data=menu_data)
+                               menu_data=menudata)
 
     object = '/'+bucket+'/menus/'+menuid+'.html'
 
@@ -249,32 +265,59 @@ def publish_menu(menuid):
         menu_file.write(str(menuHTML))
         menu_file.close()
  
-    menu_link = 'https://storage.googleapis.com/ez-menu.appspot.com/menus/'+filename
+    menu_link = 'https://storage.googleapis.com/ez-menu.appspot.com/menus/'\
+            +menuid+'.html'
 
     return menu_link
 
 
 # Take down menu
-def takedown_menu(menuid):
+def takedownmenu(menuid):
     object = '/'+bucket+'/menus/'+menuid+'.html'
     gcs.delete(object)
 
+    takedown_link_sql = """
+    UPDATE menus
+    SET PublicLink=NULL
+    WHERE MenuId='{0}'
+    """.format(menuid)
+    query_db(takedown_link_sql, True)
 
-# get menus
-@app.route('/menus', methods=['GET'])
+
+# API endpoint: /menus
+@app.route('/menus', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def menus():
     userid = auth_check(request)
 
-    menus_query = """
-    SELECT * FROM menus
-    WHERE Owner='{0}'
-    """.format(userid)
-    
-    menus_data = query_db(menus_query, False)
+    if request.method == 'GET':
+        # if /menus GET request is made without
+        # data, the submitting user's menus
+        # are returned
+        if request.args:
+            menudata = getmenu(request.args.get('MenuId'))
+            return jsonify(menudata), 200
+        # a /menus GET request can be made 
+        # with specific MenuIds in the request
+        # data to get specific menus
+        else:
+            usermenus = getusermenus(userid)
+            return jsonify(usermenus), 200
 
-    return jsonify(menus_data)
+    elif request.method == 'POST':
+        createmenu(userid, json.loads(request.data))
+        return 'Menu created', 200
 
+    elif request.method == 'PUT':
+        updatemenu(json.loads(request.data))
+        return 'Menu updated', 200
 
+    elif request.method == 'DELETE':
+        deletemenu(json.loads(request.data))
+        return 'Menu deleted', 200
+
+    else:
+        return 'Bad request', 400
+ 
 
 
 

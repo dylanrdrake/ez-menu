@@ -12,13 +12,13 @@
       function scroll() {
         $('html, body').animate({scrollTop: $(window).scrollTop() + viewHeight}, 0);
       }
-      setInterval(scroll, {{ scroll_interval }});
+      setInterval(scroll, {{ menu_data["PageInterval"] }} );
 
       $(document).scroll(function() {
         if ($(document).scrollTop() == $(document).height() - viewHeight) {
           setTimeout(function(){
             location.reload(true);
-          }, {{ scroll_interval }});
+          }, {{ menu_data["PageInterval"] }} );
         } 
       });
 
@@ -26,19 +26,19 @@
   </script>
   <style>
     .item-div { 
-      height: 33vh;
+      height: 20vh;
       width: 100%;
       background-color: #171b1e;
       color: #ffffff;
     }
   </style>
-  <title>{{ menu_title }}</title>
+  <title>{{ menu_data["MenuTitle"] }}</title>
 </head>
 
 <body>
-  {% for item in items %}
+  {% for item in menu_data["Items"] %}
     <div class="item-div">
-      {{ item }}
+      {{ item["ItemTitle"] }}
     </div>
   {% endfor %}
 </body>

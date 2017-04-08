@@ -25,18 +25,27 @@
   <div id="logged-in">
 
     <h1>Welcome, <span id="user"></span>!</h1>
-    <h3>Enter a note and save it to your personal notebook</h3>
+    <h3>Create and publish shareable menus.</h3>
+
     <div id="form">
-      <form action="" method="post">
-        <div class="form-group">
-          <button id="add-note">Save note</button>
-          <button id="sign-out">Sign out</button>
-          <button id="preview">preview</button>
-        </div>
-      </form>
+      <div class="form-group">
+        <button id="create-menu-btn">Create Menu</button>
+        <button id="sign-out-btn">Sign Out</button>
+      </div>
     </div>
 
-    <div id="menus-container"></div>
+    <div id="menu-table-div">
+      <table id="menu-table">
+        <tr class="header-row">
+          <th class="menu-table-field">Id</th>
+          <th class="menu-table-field">Title</th>
+          <th class="menu-table-field">Shared</th>
+          <th class="menu-table-field">Published</th>
+          <th class="menu-table-field"></th>
+          <th class="menu-table-field"></th>
+        </tr>
+      </table>
+    </div>
     
   </div>
 

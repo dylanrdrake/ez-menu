@@ -1,9 +1,9 @@
 $(function(){
   //local dev backendHostURL:
-  var backendHostUrl = 'http://localhost:8081';
+  //var backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
-  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
   // Initialize Firebase
   var config = {
@@ -37,7 +37,7 @@ $(function(){
           userIdToken = idToken;
 
           /* Now that the user is authenicated, fetch the notes. */
-          fetchMenus();
+          home();
 
           $('#user').text(welcomeName);
           $('#logged-in').show();
@@ -81,35 +81,97 @@ $(function(){
 
 
 
-  // [START fetchMenus]
-  // Fetch notes from the backend.
-  function fetchMenus() {
+  // [START home]
+  function home() {
     $.ajax(backendHostUrl + '/menus', {
-      /* Set header for the XMLHttpRequest to get data from the web server
-      associated with userIdToken */
       headers: {
         'Authorization': 'Bearer ' + userIdToken
       }
-    }).then(function(data){
-      $('#menus-container').empty();
+    }).then(function(data) {
+      $('.menu-table-row').remove();
       // Iterate over user data to display user's notes from database.
-      data.forEach(function(menu){
-        $('#menus-container').append(
-          $('<div class="menu-div">').append(
-            $('<a id="'+menu.MenuId+'" class="menu-link">').text(
-              menu.MenuTitle)
-          )
-        );
+      data.forEach(function(menu) {
+        if (menu.SharedWith != null) {
+          var shared = 'Yes';
+        }
+        else {
+          var shared = 'No';
+        }
+        if (menu.PublicLink != null) {
+          var published = 'Yes';
+        }
+        else {
+          var published = 'No';
+        }
+        $.get('menurow.html', function(menurow) {
+          var $menutr = $(menurow);
+          $menutr.find('.menu-id-data').text(menu.MenuId);
+          $menutr.find('.menu-title-data').text(menu.MenuTitle);
+          $menutr.find('.menu-theme-data').text(menu.Theme);
+          $menutr.find('.menu-shared-data').text(shared);
+          $menutr.find('.menu-published-data').text(published);
+          $('#menu-table').append($menutr);
+        });
       });
     });
   }
-  // [END fetchMenus]
+  // [END home]
+  
+
+  // Create menu
+  var createMenuBtn = $('#create-menu-btn');
+  createMenuBtn.click(function(event) {
+    event.preventDefault();
+
+    $.ajax(backendHostUrl + '/menus', {
+      headers: {'Authorization': 'Bearer ' + userIdToken},
+      method: 'POST',
+      data: JSON.stringify([{'MenuTitle': 'Temporary Title'}]),
+      contentType: 'application/json'
+    }).then(function() {
+      home();
+    });
+  });
+  // Create menu
+
+
+  // Publish
+  // Use .on because publish buttons are added
+  // dynamically on page
+  $('#menu-table').on('click', 'button.menu-publish-btn', function() {
+    var menuid = $(this).parent().siblings('.menu-id-data').text();
+    $.ajax({
+      url: backendHostUrl + '/menus',
+      headers: {'Authorization': 'Bearer ' + userIdToken},
+      method: 'PUT',
+      data: JSON.stringify([{'MenuId': menuid,
+                             'Publish': true}]),
+      contentType: 'application/json'
+		}).then(function() {
+      home();
+    }).then(function() {
+      $.ajax({
+        url: backendHostUrl + '/menus',
+        headers: {'Authorization': 'Bearer ' + userIdToken},
+        method: 'GET',
+        data: {'MenuId': menuid},
+        contentType: 'application/json',
+        success: function(data) {
+          window.open(data.PublicLink, '_blank');
+        },
+        error: function(error) {
+          console.log(error);
+        }
+      });
+    });
+  });
+  // Publish
 
 
 
   // [START signOutBtn]
   // Sign out a user
-  var signOutBtn =$('#sign-out');
+  var signOutBtn = $('#sign-out-btn');
   signOutBtn.click(function(event) {
     event.preventDefault();
 
@@ -136,40 +198,18 @@ $(function(){
     /* Send note data to backend, storing in database with existing data
     associated with userIdToken */
     $.ajax(backendHostUrl + '/notes', {
-      headers: {
-        'Authorization': 'Bearer ' + userIdToken
-      },
+      headers: {'Authorization': 'Bearer ' + userIdToken},
       method: 'POST',
       data: JSON.stringify({'message': note}),
-      contentType : 'application/json'
-    }).then(function(){
+      contentType: 'application/json'
+    }).then(function() {
       // Refresh notebook display.
-      fetchMenus();
+      home();
     });
 
   });
   // [END saveNoteBtn]
 
-
-  // Preview
-  var previewBtn = $('#preview');
-  previewBtn.click(function() {
-    event.preventDefault();
-    $.ajax({
-        url: backendHostUrl + '/preview',
-        headers: {
-            'Authorization': 'Bearer ' + userIdToken
-        },
-        method: 'GET',
-        success: function(previewLink){
-		    window.open(previewLink, '_blank');
-		},
-		error: function(error){
-			console.log(error);
-		}
-    });
-  });
-  // Preview
 
 
 
