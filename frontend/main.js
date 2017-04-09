@@ -75,13 +75,14 @@ $(function(){
     ui.start('#firebaseui-auth-container', uiConfig);
   }
   // [END configureFirebaseLoginWidget]
-  // END Firebase ////////////////////
+  //////////////////////// END Firebase /////////////////////////
 
 
 
 
 
-  // [START home]
+  //////////////////////// [START home] //////////////////////////
+  // home
   function home() {
     $.ajax(backendHostUrl + '/menus', {
       headers: {
@@ -133,6 +134,52 @@ $(function(){
     });
   });
   // Create menu
+  
+
+  // Edit menu
+  $('#menu-table').on('click', 'button.menu-edit-btn', function() {
+    
+    var menuid = $(this).parent().siblings('.menu-id-data').text();
+    $.ajax({
+      url: backendHostUrl + '/menus',
+      headers: {'Authorization': 'Bearer ' + userIdToken},
+      method: 'GET',
+      data: {'MenuId': menuid},
+      contentType: 'application/json',
+      success: function(menu) {
+        $('#editor-items-div').empty();
+
+        $('#editor-title-input').val(menu.MenuTitle);
+        $('#editor-theme-input').val(menu.Theme);
+        $('#editor-interval-input').val(menu.PageInterval);
+
+        menu.Items.forEach(function(item) {
+          var $thisitem = $('<div>').addClass('editor-item-form');
+          $thisitem.append($('<input>').addClass('editor-item-title-input'));
+          $thisitem.append($('<input>').addClass('editor-item-desc-input'));
+          $thisitem.append($('<input>').addClass('editor-item-price-input'));
+
+          $thisitem.find(".editor-item-title-input").val(item.ItemTitle);
+          $thisitem.find(".editor-item-desc-input").val(item.ItemDesc);
+          $thisitem.find(".editor-item-price-input").val(item.ItemPrice);
+          $("#editor-form #editor-items-div").append($thisitem);
+        });
+
+        $("#editor-div").show(100);
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    });
+  });
+  // Edit menu
+
+
+  // Close editor
+  $('#editor-save-btn').click(function() {
+    $('#editor-div').hide(100);
+  });
+  // Close editor
 
 
   // Publish
@@ -192,32 +239,7 @@ $(function(){
 
 
 
-  // [START saveNoteBtn]
-  // Save a note to the backend
-  var saveNoteBtn = $('#add-note');
-  saveNoteBtn.click(function(event) {
-    event.preventDefault();
-
-    var noteField = $('#note-content');
-    var note = noteField.val();
-    noteField.val("");
-
-    /* Send note data to backend, storing in database with existing data
-    associated with userIdToken */
-    $.ajax(backendHostUrl + '/notes', {
-      headers: {'Authorization': 'Bearer ' + userIdToken},
-      method: 'POST',
-      data: JSON.stringify({'message': note}),
-      contentType: 'application/json'
-    }).then(function() {
-      // Refresh notebook display.
-      home();
-    });
-
-  });
-  // [END saveNoteBtn]
-
-
+ 
 
 
   configureFirebaseLogin();

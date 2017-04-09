@@ -44,3 +44,15 @@ h3,legend {
 #menu-table .menu-publish-data {
   width: 5%;
 }
+
+#menu-table .header-row {
+  border-bottom: 1pt solid black;
+}
+
+#editor-div {
+  border:5px solid #666;
+  padding:10px;
+  color: #ffffff;
+  background:#3A3A3A;
+  display:none;
+}
