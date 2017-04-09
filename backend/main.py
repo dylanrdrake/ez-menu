@@ -181,8 +181,6 @@ def updatemenu(menudata):
             updateitem(items)
         if 'Publish' in menu:
             publish = menu.pop('Publish')
-            publiclink = publishmenu(menuid)
-            menu['PublicLink'] = publiclink
         if 'Takedown' in menu:
             takedown = menu.pop('Takedown')
             takedownmenu(menuid)
@@ -193,6 +191,9 @@ def updatemenu(menudata):
             update_menu_sql += "SET "+(",").join(updates)+" "
             update_menu_sql += "WHERE MenuId='"+menuid+"'"
             query_db(update_menu_sql, True)
+
+        if 'publish' in locals():
+            publishmenu(menuid)
 
 
 
@@ -267,6 +268,13 @@ def publishmenu(menuid):
  
     menu_link = 'https://storage.googleapis.com/ez-menu.appspot.com/menus/'\
             +menuid+'.html'
+
+    update_data = [
+            {'MenuId': menuid,
+             'PublicLink': menu_link
+            }
+    ]
+    updatemenu(update_data)
 
     return menu_link
 

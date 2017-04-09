@@ -9,6 +9,10 @@ h3,legend {
         margin: 0 0 0;
 }
 
+#menu-btns-div {
+  align: left;
+}
+
 #menu-table {
         table-layout: fixed;
 }

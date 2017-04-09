@@ -1,6 +1,6 @@
-$(function(){
+$(function() {
   //local dev backendHostURL:
-  var backendHostUrl = 'http://localhost:8081';
+  backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
   //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
@@ -104,15 +104,24 @@ $(function(){
         else {
           var published = 'No';
         }
-        $.get('menurow.html', function(menurow) {
-          var $menutr = $(menurow);
-          $menutr.find('.menu-id-data').text(menu.MenuId);
-          $menutr.find('.menu-title-data').text(menu.MenuTitle);
-          $menutr.find('.menu-theme-data').text(menu.Theme);
-          $menutr.find('.menu-shared-data').text(shared);
-          $menutr.find('.menu-published-data').text(published);
-          $('#menu-table-body').append($menutr);
-        });
+        var $menutr = $('<tr>').addClass('menu-table-row');
+        $menutr.append($('<td>').addClass('menu-table-data menu-id-data'));
+        $menutr.append($('<td>').addClass('menu-table-data menu-title-data'));
+        $menutr.append($('<td>').addClass('menu-table-data menu-theme-data'));
+        $menutr.append($('<td>').addClass('menu-table-data menu-shared-data'));
+        $menutr.append($('<td>').addClass('menu-table-data menu-published-data'));
+        $menutr.append($('<td>').addClass('menu-table-btn menu-edit-data'));
+        $menutr.append($('<td>').addClass('menu-table-btn menu-publish-data'));
+
+        $menutr.find('.menu-id-data').text(menu.MenuId);
+        $menutr.find('.menu-title-data').text(menu.MenuTitle);
+        $menutr.find('.menu-theme-data').text(menu.Theme);
+        $menutr.find('.menu-shared-data').text(shared);
+        $menutr.find('.menu-published-data').text(published);
+        $menutr.find('.menu-edit-data').append($('<input type="button" value="edit" class="menu-edit-btn">'));
+        $menutr.find('.menu-publish-data').append($('<input type="button" value="Publish" class="menu-publish-btn">'));
+
+        $('#menu-table-body').append($menutr);
       });
     });
   }
@@ -137,8 +146,7 @@ $(function(){
   
 
   // Edit menu
-  $('#menu-table').on('click', 'button.menu-edit-btn', function() {
-    
+  $('#menu-table').on('click', '.menu-edit-btn', function() {
     var menuid = $(this).parent().siblings('.menu-id-data').text();
     $.ajax({
       url: backendHostUrl + '/menus',
@@ -147,22 +155,25 @@ $(function(){
       data: {'MenuId': menuid},
       contentType: 'application/json',
       success: function(menu) {
-        $('#editor-items-div').empty();
+        $('#item-level-data').empty();
 
+        $('#editor-id-input').val(menu.MenuId);
         $('#editor-title-input').val(menu.MenuTitle);
         $('#editor-theme-input').val(menu.Theme);
         $('#editor-interval-input').val(menu.PageInterval);
 
         menu.Items.forEach(function(item) {
-          var $thisitem = $('<div>').addClass('editor-item-form');
-          $thisitem.append($('<input>').addClass('editor-item-title-input'));
-          $thisitem.append($('<input>').addClass('editor-item-desc-input'));
-          $thisitem.append($('<input>').addClass('editor-item-price-input'));
+          var $thisitem = $('<form>').addClass('editor-item-form');
+          $thisitem.append($('<input name="ItemId" hidden>').addClass('editor-item-id-input'));
+          $thisitem.append($('<input name="ItemTitle">').addClass('editor-item-title-input'));
+          $thisitem.append($('<input name="ItemDesc">').addClass('editor-item-desc-input'));
+          $thisitem.append($('<input name="ItemPrice">').addClass('editor-item-price-input'));
 
+          $thisitem.find(".editor-item-id-input").val(item.ItemId);
           $thisitem.find(".editor-item-title-input").val(item.ItemTitle);
           $thisitem.find(".editor-item-desc-input").val(item.ItemDesc);
           $thisitem.find(".editor-item-price-input").val(item.ItemPrice);
-          $("#editor-form #editor-items-div").append($thisitem);
+          $("#item-level-data").append($thisitem);
         });
 
         $("#editor-div").show(100);
@@ -175,17 +186,50 @@ $(function(){
   // Edit menu
 
 
-  // Close editor
+  // Save menu
   $('#editor-save-btn').click(function() {
-    $('#editor-div').hide(100);
+    var menuform = $('#menu-level-data').serializeArray();
+    var menudata = {};
+    menuform.forEach(function(data) {
+      menudata[data.name] = data.value;
+    });
+
+    menudata.Items = [];
+    var itemforms = $('.editor-item-form');
+
+    itemforms.each(function(i, item) {
+      var itemform = $(item).serializeArray();
+      var itemdata = {};
+
+      itemform.forEach(function(data) {
+        itemdata[data.name] = data.value;
+      });
+    
+      menudata.Items.push(itemdata);
+    });
+    
+    $.ajax({
+      url: backendHostUrl + '/menus',
+      headers: {'Authorization': 'Bearer ' + userIdToken},
+      method: 'PUT',
+      data: JSON.stringify([menudata]),
+      contentType: 'application/json'
+    }).then(function() {
+      $('#editor-div').hide(100);
+    }).then(function() {
+      home();
+    });
+  
   });
-  // Close editor
+  // Save menu
+  
 
 
-  // Publish
+
+  // Publish menu
   // Use .on because publish buttons are added
   // dynamically on page
-  $('#menu-table').on('click', 'button.menu-publish-btn', function() {
+  $('#menu-table').on('click', '.menu-publish-btn', function() {
     if (confirm('Are you sure you want to publish this menu?')) {
       
       var menuid = $(this).parent().siblings('.menu-id-data').text();
@@ -196,8 +240,6 @@ $(function(){
         data: JSON.stringify([{'MenuId': menuid,
                               'Publish': true}]),
         contentType: 'application/json'
-      }).then(function() {
-        home();
       }).then(function() {
         $.ajax({
           url: backendHostUrl + '/menus',
@@ -212,6 +254,8 @@ $(function(){
             console.log(error);
           }
         });
+      }).then(function() {
+        home();
       });
 
     } else {
@@ -219,7 +263,7 @@ $(function(){
       home();
     }
   });
-  // Publish
+  // Publish menu
 
 
 
