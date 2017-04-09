@@ -4,25 +4,18 @@
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script>
-    $(document).on('mousemove', function() {
-      $('#auto-scroll').show(300);
-    });
+    $("#auto-scroll-btn").hide();
+    var i = null;
+    $(document).mousemove(function() {
+      clearTimeout(i);
+      $("#auto-scroll-btn").show();
+      i = setTimeout('$("#auto-scroll-btn").hide();', 3000);
+    }).mouseleave(function() {
+      clearTimeout(i);
+      $("#auto-scroll-btn").hide();  
+    });     
 
-    var timeout = null;
-
-    $(document).on('mousemove', function() {
-      if (timeout !== null) {
-        $(document.body).text('');
-        clearTimeout(timeout);
-      }
-
-      timeout = setTimeout(function() {
-        $('#auto-scroll').hide(300);
-      }, 3000);
-    });
-      
-
-    function autoScroll() {
+    $(document).ready(function() {
       $(document).scrollTop(0);
 
       var viewHeight = $(window).height();
@@ -39,7 +32,7 @@
           }, {{ menu_data["PageInterval"] }} );
         } 
       });
-    };
+    });
   </script>
 
   <style>
@@ -47,6 +40,7 @@
       position: fixed;
       background-color: #ffffff;
       color: #171b1e;
+      padding-right: 20px;
     }
     .item-div { 
       height: 20vh;
@@ -60,7 +54,7 @@
 
 <body style="background-color: #171b1e; color: #ffffff;">
   
-  <div align="right">
+  <div align="center">
     <button id="auto-scroll-btn">Auto Scroll</button>
   </div>
   
