@@ -4,7 +4,25 @@
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script>
-    $(document).ready(function() {
+    $(document).on('mousemove', function() {
+      $('#auto-scroll').show(300);
+    });
+
+    var timeout = null;
+
+    $(document).on('mousemove', function() {
+      if (timeout !== null) {
+        $(document.body).text('');
+        clearTimeout(timeout);
+      }
+
+      timeout = setTimeout(function() {
+        $('#auto-scroll').hide(300);
+      }, 3000);
+    });
+      
+
+    function autoScroll() {
       $(document).scrollTop(0);
 
       var viewHeight = $(window).height();
@@ -21,21 +39,31 @@
           }, {{ menu_data["PageInterval"] }} );
         } 
       });
-
-    });
+    };
   </script>
+
   <style>
+    #auto-scroll-btn {
+      position: fixed;
+      background-color: #ffffff;
+      color: #171b1e;
+    }
     .item-div { 
       height: 20vh;
       width: 100%;
-      background-color: #171b1e;
       color: #ffffff;
     }
   </style>
+
   <title>{{ menu_data["MenuTitle"] }}</title>
 </head>
 
-<body>
+<body style="background-color: #171b1e; color: #ffffff;">
+  
+  <div align="right">
+    <button id="auto-scroll-btn">Auto Scroll</button>
+  </div>
+  
   {% for item in menu_data["Items"] %}
     <div class="item-div">
       {{ item["ItemTitle"] }}
