@@ -4,18 +4,12 @@
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script>
-    $("#auto-scroll-btn").hide();
-    var i = null;
-    $(document).mousemove(function() {
-      clearTimeout(i);
-      $("#auto-scroll-btn").show();
-      i = setTimeout('$("#auto-scroll-btn").hide();', 3000);
-    }).mouseleave(function() {
-      clearTimeout(i);
-      $("#auto-scroll-btn").hide();  
-    });     
 
     $(document).ready(function() {
+      autoScroll();
+    });
+
+    function autoScroll () {
       $(document).scrollTop(0);
 
       var viewHeight = $(window).height();
@@ -27,20 +21,26 @@
 
       $(document).scroll(function() {
         if ($(document).scrollTop() == $(document).height() - viewHeight) {
-          setTimeout(function(){
+          setTimeout(function() {
             location.reload(true);
           }, {{ menu_data["PageInterval"] }} );
         } 
       });
-    });
+    }
+
   </script>
 
   <style>
-    #auto-scroll-btn {
+    #auto-scroll-div {
+      width: 25%;
+      height: 25%;
       position: fixed;
-      background-color: #ffffff;
-      color: #171b1e;
-      padding-right: 20px;
+    }
+    #auto-scroll-btn {
+      display: none;
+    }
+    #auto-scroll-div:hover button {
+      display: block;
     }
     .item-div { 
       height: 20vh;
@@ -54,7 +54,7 @@
 
 <body style="background-color: #171b1e; color: #ffffff;">
   
-  <div align="center">
+  <div align="center" id="auto-scroll-div">
     <button id="auto-scroll-btn">Auto Scroll</button>
   </div>
   
