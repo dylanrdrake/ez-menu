@@ -183,17 +183,19 @@ def updatemenu(menudata):
             publish = menu.pop('Publish')
         if 'Takedown' in menu:
             takedown = menu.pop('Takedown')
-            takedownmenu(menuid)
 
         if len(menu) != 0:
             update_menu_sql = "UPDATE menus "
-            updates = [field+"='"+value+"'" for field,value in menu.iteritems()]
+            updates = [field+"='"+value+"'" if value != None else field+"=NULL"\
+                    for field,value in menu.iteritems()]
             update_menu_sql += "SET "+(",").join(updates)+" "
             update_menu_sql += "WHERE MenuId='"+menuid+"'"
             query_db(update_menu_sql, True)
 
         if 'publish' in locals():
             publishmenu(menuid)
+        if 'takedown' in locals():
+            takedownmenu(menuid)
 
 
 
@@ -284,12 +286,13 @@ def takedownmenu(menuid):
     object = '/'+bucket+'/menus/'+menuid+'.html'
     gcs.delete(object)
 
-    takedown_link_sql = """
-    UPDATE menus
-    SET PublicLink=NULL
-    WHERE MenuId='{0}'
-    """.format(menuid)
-    query_db(takedown_link_sql, True)
+    update_data = [
+            {'MenuId': menuid,
+             'PublicLink': None
+            }
+    ]
+    updatemenu(update_data)
+
 
 
 # API endpoint: /menus

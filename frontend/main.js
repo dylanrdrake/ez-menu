@@ -1,9 +1,9 @@
 $(function() {
   //local dev backendHostURL:
-  backendHostUrl = 'http://localhost:8081';
+  //backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
-  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
   // Initialize Firebase
   var config = {
@@ -112,6 +112,11 @@ $(function() {
         $menutr.append($('<td>').addClass('menu-table-data menu-published-data'));
         $menutr.append($('<td>').addClass('menu-table-btn menu-edit-data'));
         $menutr.append($('<td>').addClass('menu-table-btn menu-publish-data'));
+        if (menu.PublicLink != null) {
+          $menutr.find('.menu-publish-data').append($('<input type="button" value="Takedown" class="menu-takedown-btn">'));
+        } else {
+          $menutr.find('.menu-publish-data').append($('<input type="button" value="Publish" class="menu-publish-btn">'));
+        }
 
         $menutr.find('.menu-id-data').text(menu.MenuId);
         $menutr.find('.menu-title-data').text(menu.MenuTitle);
@@ -119,8 +124,6 @@ $(function() {
         $menutr.find('.menu-shared-data').text(shared);
         $menutr.find('.menu-published-data').text(published);
         $menutr.find('.menu-edit-data').append($('<input type="button" value="edit" class="menu-edit-btn">'));
-        $menutr.find('.menu-publish-data').append($('<input type="button" value="Publish" class="menu-publish-btn">'));
-
         $('#menu-table-body').append($menutr);
       });
     });
@@ -264,6 +267,30 @@ $(function() {
     }
   });
   // Publish menu
+ 
+
+
+  // Takedown menu
+  $('#menu-table').on('click', '.menu-takedown-btn', function() {
+    if (confirm('Are you sure you want to take this menu down?')) {
+
+      var menuid = $(this).parent().siblings('.menu-id-data').text();
+      $.ajax({
+        url: backendHostUrl + '/menus',
+        headers: {'Authorization': 'Bearer ' + userIdToken},
+        method: 'PUT',
+        data: JSON.stringify([{'MenuId': menuid,
+                               'Takedown': true}]),
+        contentType: 'application/json'
+      }).then(function() {
+        home();
+      });
+    
+    } else {
+      home();
+    }
+  });
+  // Takedown menu
 
 
 
