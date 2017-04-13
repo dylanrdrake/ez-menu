@@ -80,18 +80,13 @@ https://backend-dot-[PROJECT_ID].appspot.com.
 
 2. What are people posting ticker
 
-
 3. Colorscheme:
     colorscheme: #11353B, #4ecdc4, #f7fff7, #ff6b6b, #ffe66d
 
-4. Publish/Takedown switch
+4. Cancel button on editor
 
-5. Cancel button on editor
+5. Add item button on editor
 
-6. Add item button on editor
+6. Delete item on editor
 
-7. Delete item on editor
-
-8. Delete menu button
-
-
+7. Delete menu button

@@ -2,14 +2,9 @@
 <html>
 
 <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+ 
   <script>
-
     $(document).ready(function() {
-      autoScroll();
-    });
-
-    function autoScroll () {
       $(document).scrollTop(0);
 
       var viewHeight = $(window).height();
@@ -26,11 +21,17 @@
           }, {{ menu_data["PageInterval"] }} );
         } 
       });
-    }
-
+    });
   </script>
 
   <style>
+    @font-face { 
+      font-family: chawp;
+      src: url('https://storage.googleapis.com/ez-menu.appspot.com/menufonts/chawp.ttf');
+    }
+    .item-div {
+      font-family: Arial;
+    }
     #auto-scroll-div {
       width: 25%;
       height: 25%;
@@ -55,7 +56,7 @@
 <body style="background-color: #171b1e; color: #ffffff;">
   
   <div align="center" id="auto-scroll-div">
-    <button id="auto-scroll-btn">Auto Scroll</button>
+    <button type="radio" id="auto-scroll-btn">Auto Scroll</button>
   </div>
   
   {% for item in menu_data["Items"] %}

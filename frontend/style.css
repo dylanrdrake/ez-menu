@@ -1,12 +1,12 @@
 body {
-        font-family: "helvetica", sans-serif;
-        text-align: center;
+  font-family: "helvetica", sans-serif;
+  text-align: center;
 }
 
 h3,legend {
-        font-weight: 400;
-        padding: 18px 0 15px;
-        margin: 0 0 0;
+  font-weight: 400;
+  padding: 18px 0 15px;
+  margin: 0 0 0;
 }
 
 #menu-btns-div {
@@ -14,15 +14,15 @@ h3,legend {
 }
 
 #menu-table {
-        table-layout: fixed;
+  table-layout: fixed;
 }
 
 #menu-table th {
-        text-align: left;
+  text-align: left;
 }
 
 #menu-table .menu-id-data {
-        width: 15%;
+  width: 15%;
 }
 
 #menu-table .menu-title-data {

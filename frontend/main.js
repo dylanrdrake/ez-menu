@@ -117,6 +117,7 @@ $(function() {
         } else {
           $menutr.find('.menu-publish-data').append($('<input type="button" value="Publish" class="menu-publish-btn">'));
         }
+        $menutr.append($('<td>').addClass('menu-table-btn menu-delete-data'));
 
         $menutr.find('.menu-id-data').text(menu.MenuId);
         $menutr.find('.menu-title-data').text(menu.MenuTitle);
@@ -124,6 +125,7 @@ $(function() {
         $menutr.find('.menu-shared-data').text(shared);
         $menutr.find('.menu-published-data').text(published);
         $menutr.find('.menu-edit-data').append($('<input type="button" value="edit" class="menu-edit-btn">'));
+        $menutr.find('.menu-delete-data').append($('<input type="button" value="Delete" class="menu-delete-btn">'));
         $('#menu-table-body').append($menutr);
       });
     });
@@ -179,7 +181,7 @@ $(function() {
           $("#item-level-data").append($thisitem);
         });
 
-        $("#editor-div").show(100);
+        $("#editor-div").show(300);
       },
       error: function(error) {
         console.log(error);
@@ -218,7 +220,7 @@ $(function() {
       data: JSON.stringify([menudata]),
       contentType: 'application/json'
     }).then(function() {
-      $('#editor-div').hide(100);
+      $('#editor-div').hide(300);
     }).then(function() {
       home();
     });
@@ -227,6 +229,12 @@ $(function() {
   // Save menu
   
 
+
+  // Cancel menu
+  $('#editor-cancel-btn').click(function() {
+    $('#editor-div').hide(300);
+  });
+  // Cancel menu
 
 
   // Publish menu
@@ -291,6 +299,30 @@ $(function() {
     }
   });
   // Takedown menu
+
+
+
+  // Delete menu
+  $('#menu-table').on('click', '.menu-delete-btn', function() {
+    if (confirm('Are you sure you want to delete this menu?')) {
+
+      var menuid = $(this).parent().siblings('.menu-id-data').text();
+      $.ajax({
+        url: backendHostUrl + '/menus',
+        headers: {'Authorization': 'Bearer ' + userIdToken},
+        method: 'DELETE',
+        data: JSON.stringify([{'MenuId': menuid}]),
+        contentType: 'application/json'
+      }).then(function() {
+        home();
+      });
+
+    } else {
+      home();
+    }
+  });
+  // Delete menu
+
 
 
 
