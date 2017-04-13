@@ -77,16 +77,11 @@ https://backend-dot-[PROJECT_ID].appspot.com.
 - link on published menu to app page where user can enter phone number
 - Take a look a cron jobs and how they could be utilized
 
-
 2. What are people posting ticker
 
 3. Colorscheme:
     colorscheme: #11353B, #4ecdc4, #f7fff7, #ff6b6b, #ffe66d
 
-4. Cancel button on editor
+4. Add item button on editor
 
-5. Add item button on editor
-
-6. Delete item on editor
-
-7. Delete menu button
+5. Delete item on editor

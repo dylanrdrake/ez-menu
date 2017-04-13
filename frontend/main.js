@@ -1,9 +1,9 @@
 $(function() {
   //local dev backendHostURL:
-  //backendHostUrl = 'http://localhost:8081';
+  backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
-  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
   // Initialize Firebase
   var config = {
@@ -168,11 +168,11 @@ $(function() {
         $('#editor-interval-input').val(menu.PageInterval);
 
         menu.Items.forEach(function(item) {
-          var $thisitem = $('<form>').addClass('editor-item-form');
+          var $thisitem = $('<form>').addClass('editor-item-form row');
           $thisitem.append($('<input name="ItemId" hidden>').addClass('editor-item-id-input'));
-          $thisitem.append($('<input name="ItemTitle">').addClass('editor-item-title-input'));
-          $thisitem.append($('<input name="ItemDesc">').addClass('editor-item-desc-input'));
-          $thisitem.append($('<input name="ItemPrice">').addClass('editor-item-price-input'));
+          $thisitem.append($('<div class="col-xs-3"><input name="ItemTitle" class="editor-item-title-input form-control"></div>'));
+          $thisitem.append($('<div class="col-xs-8"><input name="ItemDesc" class="editor-item-desc-input form-control"></div>'));
+          $thisitem.append($('<div class="col-xs-1"><input name="ItemPrice" class="editor-item-price-input form-control"></div>'));
 
           $thisitem.find(".editor-item-id-input").val(item.ItemId);
           $thisitem.find(".editor-item-title-input").val(item.ItemTitle);
