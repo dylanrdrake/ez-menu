@@ -134,8 +134,8 @@ def update_user(userid, provider, name=None, email=None, picture=None):
 
 # Create item
 def createitem(menuid, itemdata):
-    itemdata['MenuId'] = menuid
     for item in itemdata:
+        item['MenuId'] = menuid
         create_item_sql = "INSERT INTO items "
         fields = [field for field in item.iterkeys()]
         create_item_sql += "("+(",").join(fields)+") "
@@ -161,14 +161,19 @@ def createmenu(userid, menudata):
 
 
 # Update item
-def updateitem(itemdata):
+def updateitem(menuid, itemdata):
     for item in itemdata:
-        itemid = item.pop('ItemId')
-        update_item_sql = "UPDATE items "
-        updates = [field+"='"+value+"'" for field,value in item.iteritems()]
-        update_item_sql += "SET "+(",").join(updates)+" "
-        update_item_sql += "WHERE ItemId='"+itemid+"'" 
-        query_db(update_item_sql, True)
+        if 'DELETE' in item and item['DELETE'] == True:
+            deleteitem( [{'ItemId': item['ItemId']}] )
+        elif 'ItemId' not in item:
+            createitem(menuid, itemdata)
+        else:
+            itemid = item.pop('ItemId')
+            update_item_sql = "UPDATE items "
+            updates = [field+"='"+value+"'" for field,value in item.iteritems()]
+            update_item_sql += "SET "+(",").join(updates)+" "
+            update_item_sql += "WHERE ItemId='"+itemid+"'" 
+            query_db(update_item_sql, True)
 
 
 # Update menu
@@ -178,7 +183,7 @@ def updatemenu(menudata):
         
         if 'Items' in menu:
             items = menu.pop('Items')
-            updateitem(items)
+            updateitem(menuid, items)
         if 'Publish' in menu:
             publish = menu.pop('Publish')
         if 'Takedown' in menu:
@@ -308,8 +313,8 @@ def menus():
             menudata = getmenu(request.args.get('MenuId'))
             return jsonify(menudata), 200
         # a /menus GET request can be made 
-        # with specific MenuIds in the request
-        # data to get specific menus
+        # with a specific MenuId in the request
+        # data to get the specific menu
         else:
             usermenus = getusermenus(userid)
             return jsonify(usermenus), 200
@@ -323,8 +328,12 @@ def menus():
         return 'Menu updated', 200
 
     elif request.method == 'DELETE':
-        deletemenu(json.loads(request.data))
-        return 'Menu deleted', 200
+        if 'Items' in json.loads(request.data):
+            deleteitem(json.loads(request.data)['Items'])
+            return 'Items deleted', 200
+        else:
+            deletemenu(json.loads(request.data))
+            return 'Menus deleted', 200
 
     else:
         return 'Bad request', 400

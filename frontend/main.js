@@ -1,9 +1,9 @@
 $(function() {
   //local dev backendHostURL:
-  //backendHostUrl = 'http://localhost:8081';
+  backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
-  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
   // Initialize Firebase
   var config = {
@@ -113,9 +113,9 @@ $(function() {
         $menutr.append($('<td>').addClass('menu-table-btn menu-edit-data'));
         $menutr.append($('<td>').addClass('menu-table-btn menu-publish-data'));
         if (menu.PublicLink != null) {
-          $menutr.find('.menu-publish-data').append($('<input type="button" value="Takedown" class="menu-takedown-btn">'));
+          $menutr.find('.menu-publish-data').append($('<input type="button" value="Takedown" class="menu-takedown-btn btn-warning">'));
         } else {
-          $menutr.find('.menu-publish-data').append($('<input type="button" value="Publish" class="menu-publish-btn">'));
+          $menutr.find('.menu-publish-data').append($('<input type="button" value="Publish" class="menu-publish-btn btn-success">'));
         }
         $menutr.append($('<td>').addClass('menu-table-btn menu-delete-data'));
 
@@ -125,13 +125,14 @@ $(function() {
         $menutr.find('.menu-shared-data').text(shared);
         $menutr.find('.menu-published-data').text(published);
         $menutr.find('.menu-edit-data').append($('<input type="button" value="edit" class="menu-edit-btn">'));
-        $menutr.find('.menu-delete-data').append($('<input type="button" value="Delete" class="menu-delete-btn">'));
+        $menutr.find('.menu-delete-data').append($('<input type="button" value="Delete" class="menu-delete-btn btn-danger">'));
         $('#menu-table-body').append($menutr);
       });
     });
   }
-  // [END home]
-  
+  ///////// [END home]
+ 
+
 
   // Create menu
   var createMenuBtn = $('#create-menu-btn');
@@ -149,6 +150,7 @@ $(function() {
   });
   // Create menu
   
+
 
   // Edit menu
   $('#menu-table').on('click', '.menu-edit-btn', function() {
@@ -168,11 +170,12 @@ $(function() {
         $('#editor-interval-input').val(menu.PageInterval);
 
         menu.Items.forEach(function(item) {
-          var $thisitem = $('<form>').addClass('editor-item-form row');
-          $thisitem.append($('<input name="ItemId" hidden>').addClass('editor-item-id-input'));
+          var $thisitem = $('<form class="editor-item-form row">');
+          $thisitem.append($('<div class="col-xs-1" hidden><input name="ItemId" class="editor-item-id-input form-control"></div>'));
           $thisitem.append($('<div class="col-xs-3"><input name="ItemTitle" class="editor-item-title-input form-control"></div>'));
-          $thisitem.append($('<div class="col-xs-8"><input name="ItemDesc" class="editor-item-desc-input form-control"></div>'));
-          $thisitem.append($('<div class="col-xs-1"><input name="ItemPrice" class="editor-item-price-input form-control"></div>'));
+          $thisitem.append($('<div class="col-xs-7"><input name="ItemDesc" class="editor-item-desc-input form-control"></div>'));
+          $thisitem.append($('<div class="col-xs-1 pull-right"><input type="button" class="editor-delete-item-btn form-control btn-danger" value="Delete">'));
+          $thisitem.append($('<div class="col-xs-1 pull-right"><input name="ItemPrice" class="editor-item-price-input form-control"></div>'));
 
           $thisitem.find(".editor-item-id-input").val(item.ItemId);
           $thisitem.find(".editor-item-title-input").val(item.ItemTitle);
@@ -189,6 +192,30 @@ $(function() {
     });
   });
   // Edit menu
+  
+
+
+  // Add item
+  $('#editor-add-item-btn').click(function() {
+    var $newitem = $('<form class="editor-item-form row" id="">');
+    $newitem.append($('<div class="col-xs-3"><input name="ItemTitle" class="editor-item-title-input form-control"></div>'));
+    $newitem.append($('<div class="col-xs-7"><input name="ItemDesc" class="editor-item-desc-input form-control"></div>'));
+    $newitem.append($('<div class="col-xs-1 pull-right"><input type="button" class="editor-delete-item-btn form-control btn-danger" value="Delete">'));
+    $newitem.append($('<div class="col-xs-1 pull-right"><input name="ItemPrice" class="editor-item-price-input form-control"></div>'));
+    $("#item-level-data").append($newitem);
+  });
+  // Add item
+  
+
+  
+  // Delete item
+  $('#item-level-data').on('click', '.editor-delete-item-btn', function() {
+    event.preventDefault();
+    $(this).parent().parent().data('delete', true);
+    $(this).parent().parent().hide('slow');
+  });
+  // Delete item
+
 
 
   // Save menu
@@ -205,6 +232,10 @@ $(function() {
     itemforms.each(function(i, item) {
       var itemform = $(item).serializeArray();
       var itemdata = {};
+      
+      if ($(item).data('delete') == true) {
+        itemdata['DELETE'] = true;
+      }
 
       itemform.forEach(function(data) {
         itemdata[data.name] = data.value;
@@ -235,6 +266,7 @@ $(function() {
     $('#editor-div').hide(300);
   });
   // Cancel menu
+
 
 
   // Publish menu
@@ -339,7 +371,6 @@ $(function() {
     });
   });
   // [END signOutBtn]
-
 
 
  

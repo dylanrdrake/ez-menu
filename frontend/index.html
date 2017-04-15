@@ -41,12 +41,10 @@
 
     <div id="user-div">
       <h2>Welcome, <span id="user"></span>!</h2>
-      <button id="sign-out-btn">Sign Out</button>
+      <button id="sign-out-btn" class="btn">Sign Out</button>
     </div>
 
-    <div id="menu-btns-div" align="left">
-      <button id="create-menu-btn">Create Menu</button>
-    </div>
+    <div id="spacer-div"></div>
 
 
     <!-- Menu editor pop out -->
@@ -76,11 +74,14 @@
       <div id="item-level-data"></div>
         
       <div id="editor-save-btn-div" class="row">
-        <div class="col-xs-1 pull-right">
-          <input type="button" value="Save" id="editor-save-btn" class="form-control"></input>
+        <div class="col-xs-1 pull-left">
+          <input type="button" value="Add Item" id="editor-add-item-btn" class="form-control btn-info"></input>
         </div>
         <div class="col-xs-1 pull-right">
-          <input type="button" value="Cancel" id="editor-cancel-btn" class="form-control"></input>
+          <input type="button" value="Save" id="editor-save-btn" class="form-control btn-primary"></input>
+        </div>
+        <div class="col-xs-1 pull-right">
+          <input type="button" value="Cancel" id="editor-cancel-btn" class="form-control btn"></input>
         </div>
       </div>
     </div>
@@ -90,7 +91,7 @@
     <div id="menu-table-div">
 
       <div>
-        <table id="menu-table">
+        <table id="menu-table" align="center">
           <thead>
             <tr class="header-row">
               <th class="menu-table-field">Id</th>
@@ -109,7 +110,11 @@
       </div>
     
     </div>
-    
+
+    <div id="menu-btns-div" align="center">
+      <button id="create-menu-btn" class="btn-info">Create Menu</button>
+    </div>
+
   </div>
 
 

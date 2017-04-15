@@ -9,6 +9,10 @@ h3,legend {
   margin: 0 0 0;
 }
 
+#spacer-div {
+  height: 50px;
+}
+
 #menu-btns-div {
   align: left;
 }
@@ -46,6 +50,10 @@ h3,legend {
 }
 
 #menu-table .menu-publish-data {
+  width: 7%;
+}
+
+#menu-table .menu-delete-data {
   width: 5%;
 }
 
