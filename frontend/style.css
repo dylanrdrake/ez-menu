@@ -43,10 +43,20 @@ h3,legend {
 
 #menu-table {
   table-layout: fixed;
+  border-collapse: collapse;
 }
 
 #menu-table th {
   text-align: left;
+}
+
+#menu-table td {
+  padding-top: .5em;
+  padding-bottom: .5em;
+}
+
+#menu-table tr {
+  border-bottom: 1pt solid gray;
 }
 
 #menu-table .menu-id-data {
@@ -82,7 +92,7 @@ h3,legend {
 }
 
 #menu-table .header-row {
-  border-bottom: 1pt solid black;
+  border-bottom: 2pt solid black;
 }
 
 #editor-div {
