@@ -31,7 +31,6 @@ bucket = os.environ.get('BUCKET_NAME',
         app_identity.get_default_gcs_bucket_name())
 
 
-
 @app.before_request
 def db_connect():
     if (os.getenv('SERVER_SOFTWARE') and \
@@ -166,13 +165,13 @@ def updateitem(menuid, itemdata):
         if 'DELETE' in item and item['DELETE'] == True:
             deleteitem( [{'ItemId': item['ItemId']}] )
         elif 'ItemId' not in item:
-            createitem(menuid, itemdata)
+            createitem(menuid, [item])
         else:
             itemid = item.pop('ItemId')
             update_item_sql = "UPDATE items "
             updates = [field+"='"+value+"'" for field,value in item.iteritems()]
             update_item_sql += "SET "+(",").join(updates)+" "
-            update_item_sql += "WHERE ItemId='"+itemid+"'" 
+            update_item_sql += "WHERE ItemId='"+str(itemid)+"'" 
             query_db(update_item_sql, True)
 
 
@@ -273,7 +272,7 @@ def publishmenu(menuid):
         menu_file.write(str(menuHTML))
         menu_file.close()
  
-    menu_link = 'https://storage.googleapis.com/ez-menu.appspot.com/menus/'\
+    menu_link = 'https://storage.googleapis.com/'+bucket+'/menus/'\
             +menuid+'.html'
 
     update_data = [

@@ -4,6 +4,22 @@ $(function() {
   
   // production backendHostURL:
   //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  
+
+  // Loading gif
+  $(document).ajaxStart(function() {
+    //$('#menu-table-div').hide();
+    $('.loading').show();
+  });
+  
+  $(document).ajaxComplete(function() {
+    $('.loading').hide();
+    //$('#menu-table-div').show();
+  });
+  // Loading gif
+
+
+
 
   // Initialize Firebase
   var config = {
@@ -197,8 +213,8 @@ $(function() {
 
   // Add item
   $('#editor-add-item-btn').click(function() {
-    var $newitem = $('<form class="editor-item-form row" id="">');
-    $newitem.append($('<div class="col-xs-3"><input name="ItemTitle" class="editor-item-title-input form-control"></div>'));
+    var $newitem = $('<form class="editor-item-form row">');
+    $newitem.append($('<div class="col-xs-3"><input name="ItemTitle" class="editor-item-title-input form-control" value="Temporary Item Title"></div>'));
     $newitem.append($('<div class="col-xs-7"><input name="ItemDesc" class="editor-item-desc-input form-control"></div>'));
     $newitem.append($('<div class="col-xs-1 pull-right"><input type="button" class="editor-delete-item-btn form-control btn-danger" value="Delete">'));
     $newitem.append($('<div class="col-xs-1 pull-right"><input name="ItemPrice" class="editor-item-price-input form-control"></div>'));

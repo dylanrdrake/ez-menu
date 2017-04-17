@@ -27,10 +27,6 @@
   </script>
 
   <style>
-    @font-face { 
-      font-family: chawp;
-      src: url('https://storage.googleapis.com/ez-menu.appspot.com/menufonts/chawp.ttf');
-    }
     .item-div {
       font-family: Arial;
     }
@@ -45,10 +41,32 @@
     #auto-scroll-div:hover button {
       display: block;
     }
-    .item-div { 
+    .item-div {
       height: 20vh;
       width: 100%;
       color: #ffffff;
+    }
+    .inline {
+      display: inline-block;
+      float: left;
+    }
+    .item-title-desc-div {
+      width: 90%;
+    }
+    .item-title-div {
+      height: 5vh;
+    }
+    .item-desc-div {
+      height: 15vh;
+    }
+    .item-price-stock-div {
+      width: 10%;
+    }
+    .item-price-div {
+      height: 5vh;
+    }
+    .item-stock-div {
+      height: 15vh;
     }
   </style>
 
@@ -63,7 +81,25 @@
   
   {% for item in menu_data["Items"] %}
     <div class="item-div">
-      {{ item["ItemTitle"] }}
+      
+      <div class="item-title-desc-div inline">
+        <div class="item-title-div">
+          {{ item["ItemTitle"] }}
+        </div>
+        <div class="item-desc-div">
+          {{ item["ItemDesc"] }}
+        </div>
+      </div>
+      
+      <div class="item-price-stock-div inline">
+        <div class="item-price-div">
+          {{ item["ItemPrice"] }}
+        </div>
+        <div class="item-stock-div">
+          {{ item["ItemStock"] }}
+        </div>
+      </div>
+    
     </div>
   {% endfor %}
 </body>
