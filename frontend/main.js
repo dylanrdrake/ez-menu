@@ -131,7 +131,7 @@ $(function() {
         if (menu.PublicLink != null) {
           $menutr.find('.menu-publish-data').append($('<button type="button" class="menu-takedown-btn btn btn-warning"><span class="glyphicon glyphicon-ban-circle"></span></button>'));
         } else {
-          $menutr.find('.menu-publish-data').append($('<button type="button" class="menu-publish-btn btn btn-primary"><span>Publish</span><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></button>'));
+          $menutr.find('.menu-publish-data').append($('<button type="button" class="menu-publish-btn btn btn-primary"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></button>'));
         }
         $menutr.append($('<td>').addClass('menu-table-btn menu-delete-data'));
 
