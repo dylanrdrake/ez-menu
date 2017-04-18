@@ -4,6 +4,11 @@
 <head>
   <!-- JQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <!-- JQuery -->
+
+  <!-- Fonts -->
+  <link href='//fonts.googleapis.com/css?family=Covered By Your Grace' rel='stylesheet'>
+  <!-- Fonts -->
  
   <script>
     $(document).ready(function() {
@@ -27,6 +32,11 @@
   </script>
 
   <style>
+    body {
+      background-color: #23282D;
+      color: #fdf6ee;
+      font-family: 'Covered By Your Grace';
+    }
     .item-div {
       font-family: Arial;
     }
@@ -67,13 +77,14 @@
     }
     .item-stock-div {
       height: 15vh;
+      color: #FF4500;
     }
   </style>
 
   <title>{{ menu_data["MenuTitle"] }}</title>
 </head>
 
-<body style="background-color: #171b1e; color: #ffffff;">
+<body>
   
   <div align="center" id="auto-scroll-div">
     <button type="radio" id="auto-scroll-btn">Auto Scroll</button>
@@ -84,7 +95,7 @@
       
       <div class="item-title-desc-div inline">
         <div class="item-title-div">
-          {{ item["ItemTitle"] }}
+          <h2>{{ item["ItemTitle"] }}</h2>
         </div>
         <div class="item-desc-div">
           {{ item["ItemDesc"] }}
@@ -93,10 +104,14 @@
       
       <div class="item-price-stock-div inline">
         <div class="item-price-div">
-          {{ item["ItemPrice"] }}
+          <h2>{{ item["ItemPrice"] }}</h2>
         </div>
         <div class="item-stock-div">
-          {{ item["ItemStock"] }}
+          <h2>
+            {% if item["ItemStock"] != None %}
+              {{ item["ItemStock"] }}
+            {% endif %}
+          </h2>
         </div>
       </div>
     

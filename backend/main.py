@@ -104,7 +104,11 @@ def get_user(userid):
     SELECT * FROM Users
     WHERE UserId = '{0}'
     """.format(userid)
-    user_data = query_db(user_query, False)[0]
+    user_results = query_db(user_query, False)
+    if len(user_results) > 0:
+        user_data = user_results[0]
+    else:
+        user_data = False
     return user_data
 
 
