@@ -131,7 +131,7 @@ $(function() {
         if (menu.PublicLink != null) {
           $menutr.find('.menu-publish-data').append($('<button type="button" class="menu-takedown-btn btn btn-warning"><span class="glyphicon glyphicon-ban-circle"></span></button>'));
         } else {
-          $menutr.find('.menu-publish-data').append($('<button type="button" class="menu-publish-btn btn btn-primary"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></button>'));
+          $menutr.find('.menu-publish-data').append($('<a class="menu-publish-btn"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></a>'));
         }
         $menutr.append($('<td>').addClass('menu-table-btn menu-delete-data'));
 
@@ -140,8 +140,8 @@ $(function() {
         $menutr.find('.menu-theme-data').text(menu.Theme);
         $menutr.find('.menu-shared-data').append(shared);
         $menutr.find('.menu-published-data').append(published);
-        $menutr.find('.menu-edit-data').append($('<button type="button" class="menu-edit-btn btn btn-default" aria-label="Left Align"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'));
-        $menutr.find('.menu-delete-data').append($('<button type="button" class="menu-delete-btn btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></input>'));
+        $menutr.find('.menu-edit-data').append($('<a class="menu-edit-btn" aria-label="Left Align"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>'));
+        $menutr.find('.menu-delete-data').append($('<a class="menu-delete-btn red"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>'));
         $('#menu-table-body').append($menutr);
       });
     });
