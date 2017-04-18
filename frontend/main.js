@@ -129,7 +129,7 @@ $(function() {
         $menutr.append($('<td>').addClass('menu-table-btn menu-edit-data'));
         $menutr.append($('<td>').addClass('menu-table-btn menu-publish-data'));
         if (menu.PublicLink != null) {
-          $menutr.find('.menu-publish-data').append($('<button type="button" class="menu-takedown-btn btn btn-warning"><span class="glyphicon glyphicon-ban-circle"></span></button>'));
+          $menutr.find('.menu-publish-data').append($('<a class="menu-takedown-btn"><span class="glyphicon glyphicon-ban-circle orange"></span></a>'));
         } else {
           $menutr.find('.menu-publish-data').append($('<a class="menu-publish-btn"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></a>'));
         }
