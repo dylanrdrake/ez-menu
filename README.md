@@ -27,7 +27,7 @@ this sample.
 
 1. To access Cloud SQL:
 
-    - create file: backend/env_config.py
+    - create file: backend/env_config.py to store sensitive logins, passwords and keys. The .gitignore will block these from being pushed to Github.
 
 
 1. [Add Firebase to your app.](https://firebase.google.com/docs/web/setup#add_firebase_to_your_app)
