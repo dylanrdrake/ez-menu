@@ -183,6 +183,7 @@ $(function() {
         $('#editor-id-input').val(menu.MenuId);
         $('#editor-title-input').val(menu.MenuTitle);
         $('#editor-theme-input').val(menu.Theme);
+        $('#editor-itemsperpage-input').val(menu.ItemsPerPage);
         $('#editor-interval-input').val(menu.PageInterval);
 
         menu.Items.forEach(function(item) {

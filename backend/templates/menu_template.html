@@ -6,10 +6,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <!-- JQuery -->
 
-  <!-- Fonts -->
-  <link href='//fonts.googleapis.com/css?family=Covered By Your Grace' rel='stylesheet'>
-  <!-- Fonts -->
- 
   <script>
     $(document).ready(function() {
       $(document).scrollTop(0);
@@ -32,10 +28,11 @@
   </script>
 
   <style>
+    @import: url(https://fonts.googleapis.com/css?family=Covered\ By\ Your\ Grace);
     body {
       background-color: #23282D;
       color: #fdf6ee;
-      font-family: 'Covered By Your Grace';
+      font-family: "Covered By Your Grace";
     }
     .item-div {
       font-family: Arial;
@@ -52,7 +49,7 @@
       display: block;
     }
     .item-div {
-      height: 20vh;
+      height: {{ 100.0 / menu_data["ItemsPerPage"] }}vh;
       width: 100%;
       color: #ffffff;
     }
