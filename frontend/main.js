@@ -129,9 +129,9 @@ $(function() {
         $menutr.append($('<td>').addClass('menu-table-btn menu-edit-data'));
         $menutr.append($('<td>').addClass('menu-table-btn menu-publish-data'));
         if (menu.PublicLink != null) {
-          $menutr.find('.menu-publish-data').append($('<input type="button" value="Takedown" class="menu-takedown-btn btn btn-warning">'));
+          $menutr.find('.menu-publish-data').append($('<button type="button" class="menu-takedown-btn btn btn-warning"><span class="glyphicon glyphicon-ban-circle"></span></button>'));
         } else {
-          $menutr.find('.menu-publish-data').append($('<input type="button" value="Publish" class="menu-publish-btn btn btn-primary">'));
+          $menutr.find('.menu-publish-data').append($('<button type="button" class="menu-publish-btn btn btn-primary"><span>Publish</span><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></button>'));
         }
         $menutr.append($('<td>').addClass('menu-table-btn menu-delete-data'));
 
@@ -140,8 +140,8 @@ $(function() {
         $menutr.find('.menu-theme-data').text(menu.Theme);
         $menutr.find('.menu-shared-data').text(shared);
         $menutr.find('.menu-published-data').text(published);
-        $menutr.find('.menu-edit-data').append($('<input type="button" value="edit" class="menu-edit-btn btn btn-default">'));
-        $menutr.find('.menu-delete-data').append($('<input type="button" value="Delete" class="menu-delete-btn btn btn-danger">'));
+        $menutr.find('.menu-edit-data').append($('<button type="button" class="menu-edit-btn btn btn-default" aria-label="Left Align"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'));
+        $menutr.find('.menu-delete-data').append($('<button type="button" class="menu-delete-btn btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></input>'));
         $('#menu-table-body').append($menutr);
       });
     });
@@ -190,7 +190,7 @@ $(function() {
           $thisitem.append($('<div class="col-xs-1" hidden><input name="ItemId" class="editor-item-id-input form-control"></div>'));
           $thisitem.append($('<div class="col-xs-3"><input name="ItemTitle" class="editor-item-title-input form-control"></div>'));
           $thisitem.append($('<div class="col-xs-7"><input name="ItemDesc" class="editor-item-desc-input form-control"></div>'));
-          $thisitem.append($('<div class="col-xs-1 pull-right"><input type="button" class="editor-delete-item-btn form-control btn btn-danger" value="Delete">'));
+          $thisitem.append($('<div class="col-xs-1 pull-right"><button type="button" class="editor-delete-item-btn form-control btn btn-danger" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></div>'));
           $thisitem.append($('<div class="col-xs-1 pull-right"><input name="ItemPrice" class="editor-item-price-input form-control"></div>'));
 
           $thisitem.find(".editor-item-id-input").val(item.ItemId);
@@ -216,7 +216,7 @@ $(function() {
     var $newitem = $('<form class="editor-item-form row">');
     $newitem.append($('<div class="col-xs-3"><input name="ItemTitle" class="editor-item-title-input form-control" value="Temporary Item Title"></div>'));
     $newitem.append($('<div class="col-xs-7"><input name="ItemDesc" class="editor-item-desc-input form-control"></div>'));
-    $newitem.append($('<div class="col-xs-1 pull-right"><input type="button" class="editor-delete-item-btn form-control btn-danger" value="Delete">'));
+    $newitem.append($('<div class="col-xs-1 pull-right"><button type="button" class="editor-delete-item-btn form-control btn-danger" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'));
     $newitem.append($('<div class="col-xs-1 pull-right"><input name="ItemPrice" class="editor-item-price-input form-control"></div>'));
     $("#item-level-data").append($newitem);
   });
