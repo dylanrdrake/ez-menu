@@ -102,3 +102,11 @@ h3,legend {
   background:#3A3A3A;
   display:none;
 }
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}

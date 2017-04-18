@@ -109,16 +109,16 @@ $(function() {
       // Iterate over user data to display user's notes from database.
       data.forEach(function(menu) {
         if (menu.SharedWith != null) {
-          var shared = $('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
+          var shared = $('<span class="glyphicon glyphicon-ok green" aria-hidden="true"></span>');
         }
         else {
-          var shared = $('<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>');
+          var shared = $('<span class="glyphicon glyphicon-remove red" aria-hidden="true"></span>');
         }
         if (menu.PublicLink != null) {
-          var published = $('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
+          var published = $('<span class="glyphicon glyphicon-ok green" aria-hidden="true"></span>');
         }
         else {
-          var published = $('<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>');
+          var published = $('<span class="glyphicon glyphicon-remove red" aria-hidden="true"></span>');
         }
         var $menutr = $('<tr>').addClass('menu-table-row');
         $menutr.append($('<td>').addClass('menu-table-data menu-id-data'));
