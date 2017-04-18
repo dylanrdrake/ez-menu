@@ -72,12 +72,16 @@ https://backend-dot-[PROJECT_ID].appspot.com.
 
 
 ## TODO
-1. Alert me when this menu changes:
+1. Create sharing code.
+
+2. Create theme options and code.
+
+3. Alert me when this menu changes:
 - Twilio docs in Google Cloud docs or Firebase messaging
 - link on published menu to app page where user can enter phone number
 - Take a look a cron jobs and how they could be utilized
 
-2. What are people posting ticker
+4. What are people posting ticker
 
-3. Colorscheme:
+5. Colorscheme:
     colorscheme: #11353B, #4ecdc4, #f7fff7, #ff6b6b, #ffe66d
