@@ -109,16 +109,16 @@ $(function() {
       // Iterate over user data to display user's notes from database.
       data.forEach(function(menu) {
         if (menu.SharedWith != null) {
-          var shared = 'Yes';
+          var shared = $('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
         }
         else {
-          var shared = 'No';
+          var shared = $('<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>');
         }
         if (menu.PublicLink != null) {
-          var published = 'Yes';
+          var published = $('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>');
         }
         else {
-          var published = 'No';
+          var published = $('<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>');
         }
         var $menutr = $('<tr>').addClass('menu-table-row');
         $menutr.append($('<td>').addClass('menu-table-data menu-id-data'));
@@ -138,8 +138,8 @@ $(function() {
         $menutr.find('.menu-id-data').text(menu.MenuId);
         $menutr.find('.menu-title-data').text(menu.MenuTitle);
         $menutr.find('.menu-theme-data').text(menu.Theme);
-        $menutr.find('.menu-shared-data').text(shared);
-        $menutr.find('.menu-published-data').text(published);
+        $menutr.find('.menu-shared-data').append(shared);
+        $menutr.find('.menu-published-data').append(published);
         $menutr.find('.menu-edit-data').append($('<button type="button" class="menu-edit-btn btn btn-default" aria-label="Left Align"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'));
         $menutr.find('.menu-delete-data').append($('<button type="button" class="menu-delete-btn btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></input>'));
         $('#menu-table-body').append($menutr);
