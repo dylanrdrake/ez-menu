@@ -10,30 +10,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <!-- JQuery -->
 
-  {% if menu_data["AutoScroll"] != False %}
-  <script>
-    $(document).ready(function() {
-      $(document).scrollTop(0);
-
-      var viewHeight = $(window).height();
-
-      function scroll() {
-        $('html, body').animate({scrollTop: $(window).scrollTop() + viewHeight}, 0);
-      }
-      setInterval(scroll, {{ menu_data["PageInterval"] }} );
-
-      $(document).scroll(function() {
-        if ($(document).scrollTop() == $(document).height() - viewHeight) {
-          setTimeout(function() {
-            location.reload(true);
-          }, {{ menu_data["PageInterval"] }} );
-        } 
-      });
-    });
-  </script>
-  {% endif %}
-
-
   <style>
     body {
       background-color: #23282D;
@@ -41,17 +17,6 @@
     }
     .item-div {
       font-family: 'Shadows Into Light';
-    }
-    #auto-scroll-div {
-      width: 25%;
-      height: 25%;
-      position: fixed;
-    }
-    #auto-scroll-btn {
-      display: none;
-    }
-    #auto-scroll-div:hover button {
-      display: block;
     }
     .item-div {
       height: {{ 100.0 / menu_data["ItemsPerPage"] }}vh;
@@ -89,25 +54,21 @@
 
 <body>
   
-  <div align="center" id="auto-scroll-div">
-    <button type="radio" id="auto-scroll-btn">Auto Scroll</button>
-  </div>
-  
   {% for item in menu_data["Items"] %}
     <div class="item-div">
       
       <div class="item-title-desc-div inline">
         <div class="item-title-div">
-          <h2>{{ item["ItemTitle"] }}</h2>
+          <h1>{{ item["ItemTitle"] }}</h1>
         </div>
         <div class="item-desc-div">
-          {{ item["ItemDesc"] }}
+          <h2>{{ item["ItemDesc"] }}</h2>
         </div>
       </div>
       
       <div class="item-price-stock-div inline">
         <div class="item-price-div">
-          <h2>{{ item["ItemPrice"] }}</h2>
+          <h1>{{ item["ItemPrice"] }}</h1>
         </div>
         <div class="item-stock-div">
           <h2>
