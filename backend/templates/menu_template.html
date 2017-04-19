@@ -2,10 +2,15 @@
 <html>
 
 <head>
+  <!-- Font -->
+  <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
+  <!-- Font -->
+
   <!-- JQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <!-- JQuery -->
 
+  {% if menu_data["AutoScroll"] != None %}
   <script>
     $(document).ready(function() {
       $(document).scrollTop(0);
@@ -26,18 +31,16 @@
       });
     });
   </script>
+  {% endif %}
+
 
   <style>
-    @font-face {
-      font-family: 'sonic_comic';
-      src: url('https://storage.googleapis.com/ez-menu.appspot.com/menufonts/sonic_comic.ttf') format('ttf');
-    }
     body {
       background-color: #23282D;
       color: #fdf6ee;
     }
     .item-div {
-      font-family: 'sonic_comic';
+      font-family: 'Shadows Into Light';
     }
     #auto-scroll-div {
       width: 25%;
@@ -64,6 +67,7 @@
     }
     .item-title-div {
       height: 5vh;
+      font-weight: bold;
     }
     .item-desc-div {
       height: 15vh;
