@@ -1,9 +1,9 @@
 $(function() {
   //local dev backendHostURL:
-  backendHostUrl = 'http://localhost:8081';
+  //backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
-  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
   
 
   // Loading gif
@@ -184,7 +184,6 @@ $(function() {
         $('#editor-title-input').val(menu.MenuTitle);
         $('#editor-theme-input').val(menu.Theme);
         $('#editor-itemsperpage-input').val(menu.ItemsPerPage);
-        $('#editor-interval-input').val(menu.PageInterval);
 
         menu.Items.forEach(function(item) {
           var $thisitem = $('<form class="editor-item-form row">');
