@@ -31,6 +31,7 @@ h3,legend {
   left: 48%;
   padding: 2px;
   opacity: 1.0;
+  z-index: 100;
 }
 
 .spacer-div {

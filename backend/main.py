@@ -271,7 +271,8 @@ def publishmenu(menuid):
     with gcs.open(object,
                   'w',
                   content_type='text/html',
-                  options={'x-goog-acl': 'public-read'},
+                  options={'x-goog-acl': 'public-read',
+                           'Cache-Control': 'no-cache'},
                   retry_params=write_retry_params) as menu_file:
         menu_file.write(str(menuHTML))
         menu_file.close()
