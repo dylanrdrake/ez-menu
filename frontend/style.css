@@ -9,6 +9,22 @@ h3,legend {
   margin: 0 0 0;
 }
 
+#top-row {
+  color: #f7fff7;
+  background-color: #3A3A3A;
+}
+
+#sign-out-btn {
+  color: #f7fff7;
+  background-color: #3a3a3a;
+}
+
+#body-div {
+  padding-top: 10vh;
+  color: #3A3A3A;
+  background-color: #f7fff7;
+  height: 100%;
+}
 
 
 #loading-div {
@@ -34,12 +50,15 @@ h3,legend {
   z-index: 100;
 }
 
-.spacer-div {
-  height: 50px;
-}
 
 #menu-btns-div {
+  margin-top: 3vh;
   align: left;
+}
+
+#create-menu-btn {
+  color: #3A3A3A;
+  background-color: #f7fff7;
 }
 
 #menu-table {
@@ -97,11 +116,24 @@ h3,legend {
 }
 
 #editor-div {
-  border:5px solid #666;
-  padding:10px;
+  border-top: 1vh solid #666;
+  border-bottom: 1vh solid #666;
+  padding: 2vh;
   color: #ffffff;
-  background:#3A3A3A;
-  display:none;
+  display: none;
+  overflow: auto;
+}
+
+.font-size-4 {
+  font-size: 4vh;
+}
+
+.font-size-3 {
+  font-size: 3vh;
+}
+
+.font-size-2 {
+  font-size: 2vh;
 }
 
 .green {
@@ -114,4 +146,89 @@ h3,legend {
 
 .orange {
   color: orange;
+}
+
+.white {
+  color: #ffffff;
+}
+
+#menu-level-data {
+  padding-bottom: 5vh;
+}
+
+.sect-row {
+  border-left: 1px solid #666;
+  margin-bottom: 8vh;
+  padding-top: 3vh;
+}
+
+legend {
+  margin-bottom: 1vh;
+}
+
+.form-control {
+  color: #ffffff;
+  background-color: inherit;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+}
+
+input[type="color"] {
+}
+
+.color-input-div {
+  padding-right: 0;
+}
+
+.color-input {
+  float: left;
+}
+
+.change-color {
+  padding-left: 0;
+}
+
+#menu-title-color-input {
+  height: 7vh;
+  width: 50%;
+}
+
+#editor-title-input {
+  height: 7vh;
+  font-size: 5vh;
+}
+
+.sect-color-input {
+  width: 50%;
+  height: 5vh;
+}
+
+.sect-title-input {
+  height: 5vh;
+  font-size: 4vh;
+}
+
+.sect-items {
+  margin-top: 5vh;
+}
+
+.item-row {
+  border-left: 1px solid #666;
+}
+
+.item-data {
+  font-size: 2vh;
+}
+
+.item-title-color-input, .item-desc-color-input {
+  width: 50%;
+}
+
+.item-title-input {
+  font-weight: bold;
+}
+
+input.item-stock-input {
+  color: #f55656;
 }

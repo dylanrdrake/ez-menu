@@ -12,14 +12,14 @@
 
   <style>
     body {
-      background-color: #23282D;
+      background-color: {{ menu["MenuBkgrdColor"] }};
       color: #fdf6ee;
     }
     .item-div {
       font-family: 'Shadows Into Light';
     }
     .item-div {
-      height: {{ 100.0 / menu_data["ItemsPerPage"] }}vh;
+      height: {{ 100.0 / menu["ItemsPerPage"] }}vh;
       width: 100%;
       color: #ffffff;
     }
@@ -47,39 +47,63 @@
       height: 15vh;
       color: #FF4500;
     }
+    #menu-title {
+      color: {{ menu["MenuTitleColor"] }};
+    }
   </style>
 
-  <title>{{ menu_data["MenuTitle"] }}</title>
+  <title id="menu-title">{{ menu["MenuTitle"] }}</title>
 </head>
 
 <body>
-  
-  {% for item in menu_data["Items"] %}
-    <div class="item-div">
-      
-      <div class="item-title-desc-div inline">
-        <div class="item-title-div">
-          <h1>{{ item["ItemTitle"] }}</h1>
-        </div>
-        <div class="item-desc-div">
-          <h2>{{ item["ItemDesc"] }}</h2>
-        </div>
+
+  {% for sect in menu["Sections"] %}
+
+    <div class = "section-div">
+
+      <div class="section-title-div"
+          style="color:{{ sect['SectionTitleColor'] }};">
+        <h1>
+          {{ sect["SectionTitle"] }}
+        </h1>
       </div>
-      
-      <div class="item-price-stock-div inline">
-        <div class="item-price-div">
-          <h1>{{ item["ItemPrice"] }}</h1>
-        </div>
-        <div class="item-stock-div">
-          <h2>
-            {% if item["ItemStock"] != None %}
-              {{ item["ItemStock"] }}
-            {% endif %}
-          </h2>
-        </div>
-      </div>
+
+      <div class="item-list-div">
     
+        {% for item in sect["Items"] %}
+          <div class="item-div">
+            
+            <div class="item-title-desc-div inline">
+              <div class="item-title-div"
+                   style="color:{{ item['ItemTitleColor'] }};">
+                <h1>{{ item["ItemTitle"] }}</h1>
+              </div>
+              <div class="item-desc-div"
+                   style="color:{{ item['ItemDescColor'] }};">
+                <h2>{{ item["ItemDesc"] }}</h2>
+              </div>
+            </div>
+            
+            <div class="item-price-stock-div inline">
+              <div class="item-price-div">
+                <h1>{{ item["ItemPrice"] }}</h1>
+              </div>
+              <div class="item-stock-div">
+                <h2>
+                  {% if item["ItemStock"] != None %}
+                    {{ item["ItemStock"] }}
+                  {% endif %}
+                </h2>
+              </div>
+            </div>
+          
+          </div>
+        {% endfor %}
+
+      </div>
+
     </div>
+    
   {% endfor %}
 </body>
 </html>

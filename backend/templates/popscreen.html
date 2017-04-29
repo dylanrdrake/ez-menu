@@ -23,6 +23,7 @@
       font-size: 5vh;
       text-align: center;
       border-bottom: solid 1px gray;
+      padding-bottom: 2vh;
     }
     .section-div {
       width: 33%;
@@ -37,6 +38,9 @@
       font-weight: bold;
       text-align: center;
     }
+    .item-list-div {
+      padding-top: 2vh;
+    }
     .item-div {
       height: 5vh;
       width: 100%;
@@ -48,292 +52,104 @@
       display: inline-block;
       float: left;
     }
-    .item-title-desc-div {
-      width: 90%;
+    .item-title-div {
+      width: auto;
+      font-size: 2vh;
       padding-left: 1%;
     }
-    .item-title-div {
-      font-size: 2vh;
-      font-weight: bold;
+    .item-title {
+    }
+    .item-title-stock-price-div {
+      width: 100%;
     }
     .item-desc-div {
+      width: 100%;
       font-size: 2vh;
       overflow: hidden;
+      padding-left: 1%;
     }
-    .item-price-stock-div {
-      width: 8%;
+    .item-desc {
     }
     .item-price-div {
       height: 50%;
+      width: 10%;
       font-size: 2vh;
-      font-weight: bold;
+      float: right !important;
+    }
+    .item-price {
+      padding-left: 1%;
     }
     .item-stock-div {
       height: 50%;
+      width: auto;
       color: #FF4500;
       font-weight: bold;
       overflow: hidden;
+      padding-left: 1%;
+    }
+    .item-stock {
     }
   </style>
 
-  <title>Pop Brothers - Gulfport</title>
+  <title>{{ menu["MenuTitle"] }}</title>
 </head>
 
 <body>
 
-  <div class="menu-title-div">Pop Brothers - Gulfport Menu</div>
+  <div class="menu-title-div"
+       style="color:{{ menu['MenuTitleColor'] }}">
+    {{ menu["MenuTitle"] }}
+  </div>
+
+  {% for sect in menu["Sections"] %}
 
   <div class="section-div">   
   
-    <div class="section-title-div" style="color:#36ff58;">Fruit & Herbs</div>
-  
-    <div class="item-div">
-      
-      <div class="item-title-desc-div inline">
-        <div class="item-title-div">
-          <div style="color:#63dcff;">Strawberry Basil</div>
-        </div>
-        <div class="item-desc-div">
-          <div></div>
-        </div>
-      </div>
-      
-      <div class="item-price-stock-div inline">
-        <div class="item-price-div">
-          <div>3.00</div>
-        </div>
-        <div class="item-stock-div">
-          <h2>
-            
-          </h2>
-        </div>
-      </div>
-    
+    <div class="section-title-div"
+         style="color:{{ sect['SectionTitleColor'] }};">
+      {{ sect["SectionTitle"] }}
     </div>
-  
-    <div class="item-div">
-      
-      <div class="item-title-desc-div inline">
-        <div class="item-title-div">
-          <div style="color:#63dcff;">Pistachio, Milk &amp; Honey</div>
-        </div>
-        <div class="item-desc-div">
-          <div></div>
-        </div>
-      </div>
-      
-      <div class="item-price-stock-div inline">
-        <div class="item-price-div">
-          <div>4.00</div>
-        </div>
-        <div class="item-stock-div">
-          <div>
-            
+
+    <div class="item-list-div">
+
+      {% for item in sect["Items"] %}
+    
+      <div class="item-div">
+        
+        <div class="item-title-stock-price-div">
+          <div class="item-title-div inline">
+            <div style="color:{{ item['ItemTitleColor'] }};" class="item-title">
+              {{ item["ItemTitle"] }}
+            </div>
+          </div>
+          
+          <div class="item-stock-div inline">
+            <div class="item-stock">
+              {{ item["ItemStock"] }}
+            </div>
+          </div>
+
+          <div class="item-price-div inline">
+            <div class="item-price">
+              {{ item["ItemPrice"] }}
+            </div>
           </div>
         </div>
-      </div>
-    
-    </div>
-  
-    <div class="item-div">
-      
-      <div class="item-title-desc-div inline">
-        <div class="item-title-div">
-          <div style="color:#63dcff;">Mango Chile Lime</div>
-        </div>
+
         <div class="item-desc-div">
-          <div></div>
-        </div>
-      </div>
-      
-      <div class="item-price-stock-div inline">
-        <div class="item-price-div">
-          <div>3.00</div>
-        </div>
-        <div class="item-stock-div">
-          <div>
-            
+          <div style="color:{{ item['ItemDescColor'] }};" class="item-desc">
           </div>
         </div>
+      
       </div>
-    
+
+      {% endfor %}
+
     </div>
     
   </div>
-  
-  <div class="section-div">
-  
-    <div class="section-title-div" style="color:#ff7c36;">Cream</div>
-  
-    <div class="item-div">
-      
-      <div class="item-title-desc-div inline">
-        <div class="item-title-div" style="color:#fff852">
-          <div>Orange Mint</div>
-        </div>
-        <div class="item-desc-div">
-          <div></div>
-        </div>
-      </div>
-      
-      <div class="item-price-stock-div inline">
-        <div class="item-price-div">
-          <div>3.00</div>
-        </div>
-        <div class="item-stock-div">
-          <div>Out</div>
-        </div>
-      </div>
-    
-    </div>
-  
-    <div class="item-div">
-      
-      <div class="item-title-desc-div inline">
-        <div class="item-title-div" style="color:#fff852">
-          <div>Elvis Presley</div>
-        </div>
-        <div class="item-desc-div">
-          <div></div>
-        </div>
-      </div>
-      
-      <div class="item-price-stock-div inline">
-        <div class="item-price-div">
-          <div>4.00</div>
-        </div>
-        <div class="item-stock-div">
-          <div>
-            
-          </div>
-        </div>
-      </div>
-    
-    </div>
-  
-    <div class="item-div">
-      
-      <div class="item-title-desc-div inline">
-        <div class="item-title-div" style="color:#fff852">
-          <div>Oreo Cheesecake</div>
-        </div>
-        <div class="item-desc-div">
-          <div></div>
-        </div>
-      </div>
-      
-      <div class="item-price-stock-div inline">
-        <div class="item-price-div">
-          <div>4.00</div>
-        </div>
-        <div class="item-stock-div">
-          <div>
-            
-          </div>
-        </div>
-      </div>
-    
-    </div>
-    
-  </div>
-  
-  <div class="section-div">
-  
-    <div class="section-title-div" style="color:#ee66f6">Indulgent</div>
-  
-    <div class="item-div">
-      
-      <div class="item-title-desc-div inline">
-        <div class="item-title-div" style="color:#36ff58;">
-          <div>Chi-Chi Rodriguez</div>
-        </div>
-        <div class="item-desc-div">
-          <div></div>
-        </div>
-      </div>
-      
-      <div class="item-price-stock-div inline">
-        <div class="item-price-div">
-          <div>3.00</div>
-        </div>
-        <div class="item-stock-div">
-          <div>
-            
-          </div>
-        </div>
-      </div>
-    
-    </div>
-  
-    <div class="item-div">
-      
-      <div class="item-title-desc-div inline">
-        <div class="item-title-div" style="color:#36ff58;">
-          <div>Cucumber Lime Jalepeno</div>
-        </div>
-        <div class="item-desc-div">
-          <div></div>
-        </div>
-      </div>
-      
-      <div class="item-price-stock-div inline">
-        <div class="item-price-div">
-          <div>3.00</div>
-        </div>
-        <div class="item-stock-div">
-          <div>
-            
-          </div>
-        </div>
-      </div>
-    
-    </div>
-  
-    <div class="item-div">
-      
-      <div class="item-title-desc-div inline">
-        <div class="item-title-div" style="color:#36ff58;">
-          <div>Temporary Item Title</div>
-        </div>
-        <div class="item-desc-div">
-          <div></div>
-        </div>
-      </div>
-      
-      <div class="item-price-stock-div inline">
-        <div class="item-price-div">
-          <div>3.00</div>
-        </div>
-        <div class="item-stock-div">
-          <div>Out</div>
-        </div>
-      </div>
-    
-    </div>
-  
-    <div class="item-div">
-      
-      <div class="item-title-desc-div inline">
-        <div class="item-title-div" style="color:#36ff58;">
-          <div>Temporary Item Title</div>
-        </div>
-        <div class="item-desc-div">
-          <div></div>
-        </div>
-      </div>
-      
-      <div class="item-price-stock-div inline">
-        <div class="item-price-div">
-          <div>4.00</div>
-        </div>
-        <div class="item-stock-div">
-          <div></div>
-        </div>
-      </div>
-    
-    </div>
-    
-  </div>
-  
+
+  {% endfor %}
+ 
 </body>
 </html>

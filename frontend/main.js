@@ -77,7 +77,7 @@ $(function() {
     var uiConfig = {
       'signInSuccessUrl': '/',
       'signInOptions': [
-        // Leave the lines as is for the providers you want to offer your users.
+        // Add Authentication providers.
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         firebase.auth.FacebookAuthProvider.PROVIDER_ID,
         firebase.auth.TwitterAuthProvider.PROVIDER_ID,
@@ -131,7 +131,7 @@ $(function() {
         if (menu.PublicLink != null) {
           $menutr.find('.menu-publish-data').append($('<a class="menu-takedown-btn"><span class="glyphicon glyphicon-ban-circle orange"></span></a>'));
         } else {
-          $menutr.find('.menu-publish-data').append($('<a class="menu-publish-btn"><span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></a>'));
+          $menutr.find('.menu-publish-data').append($('<a class="menu-publish-btn"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span></a>'));
         }
         $menutr.append($('<td>').addClass('menu-table-btn menu-delete-data'));
 
@@ -158,7 +158,7 @@ $(function() {
     $.ajax(backendHostUrl + '/menus', {
       headers: {'Authorization': 'Bearer ' + userIdToken},
       method: 'POST',
-      data: JSON.stringify([{'MenuTitle': 'Temporary Title'}]),
+      data: JSON.stringify([{'MenuTitle': 'No Title'}]),
       contentType: 'application/json'
     }).then(function() {
       home();
@@ -168,9 +168,10 @@ $(function() {
   
 
 
-  // Edit menu
+  /////////////// Edit menu ///////////////////////////////////
   $('#menu-table').on('click', '.menu-edit-btn', function() {
     var menuid = $(this).parent().siblings('.menu-id-data').text();
+
     $.ajax({
       url: backendHostUrl + '/menus',
       headers: {'Authorization': 'Bearer ' + userIdToken},
@@ -178,93 +179,198 @@ $(function() {
       data: {'MenuId': menuid},
       contentType: 'application/json',
       success: function(menu) {
-        $('#item-level-data').empty();
-
+        $('.added').remove();
         $('#editor-id-input').val(menu.MenuId);
         $('#editor-title-input').val(menu.MenuTitle);
-        $('#editor-theme-input').val(menu.Theme);
-        $('#editor-itemsperpage-input').val(menu.ItemsPerPage);
+        $('#editor-title-input').css('color',menu.MenuTitleColor);
+        $('#menu-title-color-input').val(menu.MenuTitleColor);
+        $('#editor-div').css('background-color',menu.MenuBkgrdColor);
+        $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor);
 
-        menu.Items.forEach(function(item) {
-          var $thisitem = $('<form class="editor-item-form row">');
-          $thisitem.append($('<div class="col-xs-1" hidden><input name="ItemId" class="editor-item-id-input form-control"></div>'));
-          $thisitem.append($('<div class="col-xs-3"><input name="ItemTitle" class="editor-item-title-input form-control"></div>'));
-          $thisitem.append($('<div class="col-xs-7"><input name="ItemDesc" class="editor-item-desc-input form-control"></div>'));
-          $thisitem.append($('<div class="col-xs-1 pull-right"><button type="button" class="editor-delete-item-btn form-control btn btn-danger" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></div>'));
-          $thisitem.append($('<div class="col-xs-1 pull-right"><input name="ItemPrice" class="editor-item-price-input form-control"></div>'));
+        var $section_temp = $('#SectionTemplate').clone();
+        var $itemrow_temp = $('#ItemTemplate').clone();
+        $section_temp.find('#ItemTemplate').remove();
+        $section_temp.removeAttr('hidden');
+        
+        menu.Sections.forEach(function(sect) {
+          var $section = $section_temp.clone();
+          $section.removeAttr('id');
+          $section.addClass('added');
+          $section.find('.sect-id-input').val(sect.SectionId);
+          $section.find('.sect-title-input').val(sect.SectionTitle);
+          $section.find('.sect-title-input').css('color',sect.SectionTitleColor);
+          $section.find('.sect-color-input').val(sect.SectionTitleColor);
+          
+          sect.Items.forEach(function(item) {
+            var $itemrow = $itemrow_temp.clone();
+            $itemrow.removeAttr('id');
+            $itemrow.find('.item-id-input').val(item.ItemId);
+            $itemrow.find('.item-title-input').val(item.ItemTitle);
+            $itemrow.find('.item-title-input').css('color',item.ItemTitleColor);
+            $itemrow.find('.item-title-color-input').val(item.ItemTitleColor);
+            $itemrow.find('.item-stock-input').val(item.ItemStock);
+            $itemrow.find('.item-price-input').val(item.ItemPrice);
+            $itemrow.find('.item-desc-input').val(item.ItemDesc);
+            $itemrow.find('.item-desc-input').css('color',item.ItemDescColor);
+            $itemrow.find('.item-desc-color-input').val(item.ItemDescColor);
+            $section.find('.add-item-btn-row').before($itemrow);
+          });
 
-          $thisitem.find(".editor-item-id-input").val(item.ItemId);
-          $thisitem.find(".editor-item-title-input").val(item.ItemTitle);
-          $thisitem.find(".editor-item-desc-input").val(item.ItemDesc);
-          $thisitem.find(".editor-item-price-input").val(item.ItemPrice);
-          $("#item-level-data").append($thisitem);
+          $('#add-sect-div').before($section);
+          
         });
 
-        $("#editor-div").show(300);
       },
       error: function(error) {
         console.log(error);
       }
     });
+
+    $.ajax({
+      url: backendHostUrl + '/users',
+      headers: {'Authorization': 'Bearer ' + userIdToken},
+      method: 'GET',
+      contentType: 'application/json',
+      success: function(user) {
+        user.Templates.forEach(function(template) {
+          $('#template-select').append($('<option>'+template.TemplateName+'</option>').attr('id', template.TemplateId).addClass('added'));
+        });
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    });
+    
+    $("#editor-div").show(300);
+
   });
-  // Edit menu
+  ///////////////// Edit menu ////////////////////////////////
   
+
+
+  // Update Menu title legend
+  //$('#editor-title-input').on('change', function() {
+  //  var menutitleinput = $(this).val();
+  //  $('#menu-title-legend').text(menutitleinput);
+  //});
+  // Update Menu title legend
+  
+
+
+  // Update Section title legend
+  //$('#sections-div').on('change', '.sect-title-input', function() {
+  //  var secttitleinput = $(this).val();
+  //  $(this).parent().parent().parent().find('.sect-title-legend').text(secttitleinput);
+  //  $(this).parent().parent().parent().parent().siblings('.sect-items').find('legend').text(secttitleinput+' - Items');
+  //});
+  // Update Section title legend
+
+
+  // Update background color
+  $('#editor-div').on('change', '#menu-bkgrd-color-input', function() {
+    var newbgcolor = $(this).val();
+    $('#editor-div').css('background-color',newbgcolor);
+  });
+
+
+  // Update text input colors
+  $('#editor-div').on('change', '.color-input', function() {
+    var newcolor = $(this).val();
+    var change_color = $(this).parent().siblings().find('.change-color');
+    change_color.css('color', newcolor);
+  });
+  //
+
 
 
   // Add item
-  $('#editor-add-item-btn').click(function() {
-    var $newitem = $('<form class="editor-item-form row">');
-    $newitem.append($('<div class="col-xs-3"><input name="ItemTitle" class="editor-item-title-input form-control" value="Temporary Item Title"></div>'));
-    $newitem.append($('<div class="col-xs-7"><input name="ItemDesc" class="editor-item-desc-input form-control"></div>'));
-    $newitem.append($('<div class="col-xs-1 pull-right"><button type="button" class="editor-delete-item-btn form-control btn-danger" aria-label="Left Align"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'));
-    $newitem.append($('<div class="col-xs-1 pull-right"><input name="ItemPrice" class="editor-item-price-input form-control"></div>'));
-    $("#item-level-data").append($newitem);
-  });
-  // Add item
-  
-
-  
-  // Delete item
-  $('#item-level-data').on('click', '.editor-delete-item-btn', function() {
+  $(document).on('click', '.add-item-btn', function() {
     event.preventDefault();
-    $(this).parent().parent().data('delete', true);
-    $(this).parent().parent().hide('slow');
+    var newitem = $('#ItemTemplate').clone();
+    $(this).parent().parent().before(newitem);
+  });
+  // Add item
+  
+
+  
+  // Delete item
+  $(document).on('click', '.delete-item-btn', function() {
+    event.preventDefault();
+    $(this).parent().parent().parent().find('.item-delete-input').val(true);
+    $(this).parent().parent().parent().hide('slow');
   });
   // Delete item
+
+
+
+  // Add section
+  $(document).on('click', '.add-sect-btn', function() {
+    event.preventDefault();
+    var newsect = $('#SectionTemplate').clone();
+    newsect.removeAttr('hidden');
+    newsect.addClass('added');
+    $(this).parent().parent().before(newsect);
+  });
+  // Add section
+
+
+  // Delete section
+  $(document).on('click', '.delete-sect-btn', function() {
+    event.preventDefault();
+    if (confirm('Are you sure you want to delete this Section?')) {
+      $(this).parent().parent().parent().find('.sect-delete-input').val(true);
+      $(this).parent().parent().parent().parent().hide('slow');
+    }
+  });
+  // Delete section
 
 
 
   // Save menu
   $('#editor-save-btn').click(function() {
-    var menuform = $('#menu-level-data').serializeArray();
-    var menudata = {};
-    menuform.forEach(function(data) {
-      menudata[data.name] = data.value;
-    });
-
-    menudata.Items = [];
-    var itemforms = $('.editor-item-form');
-
-    itemforms.each(function(i, item) {
-      var itemform = $(item).serializeArray();
-      var itemdata = {};
-      
-      if ($(item).data('delete') == true) {
-        itemdata['DELETE'] = true;
+    var menudict = {};
+    $('#editor-div').find('.menu-data').each(function(i ,menudata) {
+     
+      if ($(menudata).attr('name') == 'Template') {
+        menudict['Template'] = $(menudata).attr('id');
+        return true;
       }
 
-      itemform.forEach(function(data) {
-        itemdata[data.name] = data.value;
+      menudict[$(menudata).attr('name')] = $(menudata).val();
+
+      menudict['Sections'] = [];
+      
+      $('#editor-div').find('.sect-row.added').each(function(i, sect) {
+        var sectdict = {};
+      
+        $(sect).find('.sect-data').each(function(i, sectdata) {
+          sectdict[$(sectdata).attr('name')] = $(sectdata).val();
+        });
+
+        sectdict['Items'] = [];
+
+        $(sect).find('.item-row').each(function(i, item) {
+          var itemdict = {};
+
+          $(item).find('.item-data').each(function(i, itemdata) {
+            itemdict[$(itemdata).attr('name')] = $(itemdata).val();
+          });
+
+          sectdict['Items'].push(itemdict);
+        });
+        
+        menudict['Sections'].push(sectdict);
       });
-    
-      menudata.Items.push(itemdata);
+
     });
+
+    //console.log(menudict);
     
     $.ajax({
       url: backendHostUrl + '/menus',
       headers: {'Authorization': 'Bearer ' + userIdToken},
       method: 'PUT',
-      data: JSON.stringify([menudata]),
+      data: JSON.stringify([menudict]),
       contentType: 'application/json'
     }).then(function() {
       $('#editor-div').hide(300);
