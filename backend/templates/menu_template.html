@@ -14,12 +14,22 @@
     body {
       background-color: {{ menu["MenuBkgrdColor"] }};
       color: #fdf6ee;
-    }
-    .item-div {
       font-family: 'Shadows Into Light';
     }
+    .section-div {
+      margin-top: 5vh;
+      border-bottom: 1px solid #ffffff;
+    }
+    .section-title-div {
+      width: 100%;
+      text-align: center;
+      font-size: 6vh;
+      font-weight: bold;
+    }
+    .item-list-div {
+      border-top: 1px solid #ffffff;
+    }
     .item-div {
-      height: {{ 100.0 / menu["ItemsPerPage"] }}vh;
       width: 100%;
       color: #ffffff;
     }
@@ -33,29 +43,44 @@
     .item-title-div {
       height: 5vh;
       font-weight: bold;
+      font-size: 4vh;
     }
     .item-desc-div {
-      height: 15vh;
+      height: 10vh;
+      font-size: 3vh;
     }
     .item-price-stock-div {
       width: 10%;
     }
     .item-price-div {
       height: 5vh;
+      font-size: 4vh;
     }
     .item-stock-div {
-      height: 15vh;
+      height: 10vh;
+      font-size: 5vh;
       color: #FF4500;
     }
+    #menu-title-div {
+      width: 100%;
+    }
     #menu-title {
+      width: 100%;
+      text-align: center;
       color: {{ menu["MenuTitleColor"] }};
+      font-size: 8vh;
+      font-weight: bold;
     }
   </style>
 
-  <title id="menu-title">{{ menu["MenuTitle"] }}</title>
+  <title>{{ menu["MenuTitle"] }}</title>
 </head>
 
 <body>
+
+  <div id="menu-title-div">
+    <div id="menu-title">{{ menu["MenuTitle"] }}</div>
+  </div>
 
   {% for sect in menu["Sections"] %}
 
@@ -63,9 +88,9 @@
 
       <div class="section-title-div"
           style="color:{{ sect['SectionTitleColor'] }};">
-        <h1>
+        <div>
           {{ sect["SectionTitle"] }}
-        </h1>
+        </div>
       </div>
 
       <div class="item-list-div">
@@ -76,24 +101,22 @@
             <div class="item-title-desc-div inline">
               <div class="item-title-div"
                    style="color:{{ item['ItemTitleColor'] }};">
-                <h1>{{ item["ItemTitle"] }}</h1>
+                {{ item["ItemTitle"] }}
               </div>
               <div class="item-desc-div"
                    style="color:{{ item['ItemDescColor'] }};">
-                <h2>{{ item["ItemDesc"] }}</h2>
+                {{ item["ItemDesc"] }}
               </div>
             </div>
             
             <div class="item-price-stock-div inline">
               <div class="item-price-div">
-                <h1>{{ item["ItemPrice"] }}</h1>
+                {{ item["ItemPrice"] }}
               </div>
               <div class="item-stock-div">
-                <h2>
                   {% if item["ItemStock"] != None %}
                     {{ item["ItemStock"] }}
                   {% endif %}
-                </h2>
               </div>
             </div>
           
