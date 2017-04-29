@@ -87,6 +87,6 @@ https://backend-dot-[PROJECT_ID].appspot.com.
 
 6. Sign out btn, template selector, shadow behind top-row, menu table style, automatically update public menu when saved, style the color selectors more closely to the text inputs
 
-7. Kiosks: put code on back of pi. Enter code in menu table (register kiosk). Get pi to hit api for menu link then open fullscreen browser
+7. Kiosks: put code on back of pi. Enter code in menu table (register kiosk). Get pi to open chrome to api endpoint that returns rendered menu template.
 
 8. Load menus via Ajax direct from db instead of hosting on storage? Don't require auth when hitting /menus GET with menuid (has to be public).
