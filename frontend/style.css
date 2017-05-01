@@ -17,8 +17,6 @@ h3,legend {
 }
 
 #sign-out-btn {
-  color: #f7fff7;
-  background-color: #3a3a3a;
 }
 
 #body-div {
@@ -156,6 +154,11 @@ h3,legend {
 
 #menu-level-data {
   padding-bottom: 5vh;
+}
+
+.temp-option {
+  color: #ffffff;
+  background-color: #000000;
 }
 
 .sect-row {

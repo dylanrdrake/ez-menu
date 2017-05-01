@@ -233,7 +233,7 @@ $(function() {
       contentType: 'application/json',
       success: function(user) {
         user.Templates.forEach(function(template) {
-          $('#template-select').append($('<option>'+template.TemplateName+'</option>').attr('id', template.TemplateId).addClass('added'));
+          $('#template-select').append($('<option>'+template.TemplateName+'</option>').attr('id', template.TemplateId).addClass('added temp-option'));
         });
       },
       error: function(error) {
