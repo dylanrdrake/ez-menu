@@ -3,10 +3,13 @@ body {
   text-align: center;
 }
 
-h3,legend {
+.site-title {
+  font-family: "Baloo";
+}
+
+.site-subtitle {
   font-weight: 400;
-  padding: 18px 0 15px;
-  margin: 0 0 0;
+  font-size: 2vh;
 }
 
 #top-row {
