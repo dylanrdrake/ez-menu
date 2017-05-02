@@ -369,11 +369,25 @@ def getusertemplates(userid):
 
 
 
+# Get template
+def gettemplate(tempid):
+    temp_query = """
+    SELECT * FROM templates
+    WHERE TemplateId={0}
+    """.format(tempid)
+    tempdata = query_db(temp_query, False)[0]
+
+    return tempdata
+
+
+
 # Publish Menu
 def publishmenu(menuid):
     menudata = getmenu(menuid)
 
-    menuHTML = render_template('menu_template.html',
+    tempdata = gettemplate(menudata['Template'])
+
+    menuHTML = render_template(tempdata['TemplateFile'],
                                menu=menudata)
 
     object = '/'+bucket+'/menus/'+menuid+'.html'

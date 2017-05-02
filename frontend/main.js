@@ -170,8 +170,24 @@ $(function() {
 
   /////////////// Edit menu ///////////////////////////////////
   $('#menu-table').on('click', '.menu-edit-btn', function() {
+    $('.added').remove();
     var menuid = $(this).parent().siblings('.menu-id-data').text();
 
+    $.ajax({
+      url: backendHostUrl + '/users',
+      headers: {'Authorization': 'Bearer ' + userIdToken},
+      method: 'GET',
+      contentType: 'application/json',
+      success: function(user) {
+        user.Templates.forEach(function(template) {
+          $('#template-select').append($('<option>'+template.TemplateName+'</option>').attr('id', template.TemplateId).addClass('added temp-option'));
+        });
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    });
+ 
     $.ajax({
       url: backendHostUrl + '/menus',
       headers: {'Authorization': 'Bearer ' + userIdToken},
@@ -179,13 +195,19 @@ $(function() {
       data: {'MenuId': menuid},
       contentType: 'application/json',
       success: function(menu) {
-        $('.added').remove();
         $('#editor-id-input').val(menu.MenuId);
         $('#editor-title-input').val(menu.MenuTitle);
         $('#editor-title-input').css('color',menu.MenuTitleColor);
         $('#menu-title-color-input').val(menu.MenuTitleColor);
         $('#editor-div').css('background-color',menu.MenuBkgrdColor);
         $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor);
+
+        $('.temp-option').each(function(i, tempopt) {
+          if (tempopt.id == String(menu.Template)) {
+            $(tempopt).attr('selected','selected');
+            return true;
+          }
+        });
 
         var $section_temp = $('#SectionTemplate').clone();
         var $itemrow_temp = $('#ItemTemplate').clone();
@@ -226,21 +248,7 @@ $(function() {
       }
     });
 
-    $.ajax({
-      url: backendHostUrl + '/users',
-      headers: {'Authorization': 'Bearer ' + userIdToken},
-      method: 'GET',
-      contentType: 'application/json',
-      success: function(user) {
-        user.Templates.forEach(function(template) {
-          $('#template-select').append($('<option>'+template.TemplateName+'</option>').attr('id', template.TemplateId).addClass('added temp-option'));
-        });
-      },
-      error: function(error) {
-        console.log(error);
-      }
-    });
-    
+   
     $("#editor-div").show(300);
 
   });
@@ -280,7 +288,6 @@ $(function() {
     change_color.css('color', newcolor);
   });
   //
-
 
 
   // Add item
@@ -332,7 +339,7 @@ $(function() {
     $('#editor-div').find('.menu-data').each(function(i ,menudata) {
      
       if ($(menudata).attr('name') == 'Template') {
-        menudict['Template'] = $(menudata).attr('id');
+        menudict['Template'] = $(menudata).children(':selected').attr('id');
         return true;
       }
 
