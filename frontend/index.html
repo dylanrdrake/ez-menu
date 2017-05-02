@@ -53,7 +53,7 @@
         </div>
         <div class="col-xs-12 site-subtitle">
           <div class="pull-left">
-            Create and publish shareable menus.
+            Create and publish shareable menus
           </div>
         </div>
       </div>
@@ -84,25 +84,26 @@
         <div class="row">
           <div class="col-xs-1 menu-title-color-div color-input-div">
             <input type="color" id="menu-title-color-input"
-                   class="form-control menu-data color-input menu-title-color-input"
+            class="form-control menu-data color-input menu-title-color-input"
                    name="MenuTitleColor">
           </div>
           
           <div class="col-xs-8 menu-title-input-div change-color">
             <input type="text" id="editor-title-input"
-                    class="form-control change-color menu-data" name="MenuTitle"
+                    class="form-control change-color menu-data"
+                    name="MenuTitle"
                     placeholder="Menu Title">
             </input>
           </div>
 
           <div class="col-xs-2">
-            <select class="form-control menu-data" id="template-select"
+            <select class="form-control menu-data invert" id="template-select"
                     name="Template">
             </select> 
           </div>
 
           <div class="col-xs-1">
-            <label for="MenuBkgrdColor">Background</label>
+            <label for="MenuBkgrdColor" class="invert">Background</label>
             <input type="color" id="menu-bkgrd-color-input"
                    class="form-control menu-data" name="MenuBkgrdColor">
             </input>
@@ -140,12 +141,12 @@
               </div>
               <div class="col-xs-2 pull-right">
                 <button type="button"
-                        class="btn btn-danger delete-sect-btn form-control"
+                    class="btn btn-danger delete-sect-btn form-control"
                         aria-label="Left Align">
-                  <span class="glyphicon glyphicon-trash"
+                  <span class="glyphicon glyphicon-trash invert"
                         aria-hidden="true">
                   </span>
-                  <span> Delete Section</span>
+                  <span class="invert"> Delete Section</span>
                 </button>                
               </div>
             </div>
@@ -183,18 +184,18 @@
                 </div>
                 <div class="col-xs-1 item-price-div">
                   <input type="text"
-                          class="form-control item-data item-price-input"
+                          class="form-control item-data item-price-input invert"
                           name="ItemPrice" placeholder="0.00">
                   </input>
                 </div>
                 <div class="col-xs-2 pull-right">
                   <button type="button"
-                          class="btn btn-danger delete-item-btn form-control"
+                    class="btn btn-danger delete-item-btn form-control"
                           aria-label="Left Align">
-                    <span class="glyphicon glyphicon-trash"
+                    <span class="glyphicon glyphicon-trash invert"
                           aria-hidden="true">
                     </span>
-                    <span> Delete Item</span>
+                    <span class="invert"> Delete Item</span>
                   </button>                
                 </div>
               </div>
@@ -219,10 +220,10 @@
                 <button type="button"
                         class="btn btn-info add-item-btn form-control"
                         aria-label="Left Align">
-                  <span class="glyphicon glyphicon-plus"
+                  <span class="glyphicon glyphicon-plus invert"
                         aria-hidden="true">
                   </span>
-                  <span> Add Item</span>
+                  <span class="invert"> Add Item</span>
                 </button>                
               </div>
             </div>
@@ -235,10 +236,10 @@
             <button type="button"
                     class="btn btn-info add-sect-btn form-control"
                     aria-label="Left Align">
-              <span class="glyphicon glyphicon-plus"
+              <span class="glyphicon glyphicon-plus invert"
                     aria-hidden="true">
               </span>
-              <span> Add Section</span>
+              <span class="invert"> Add Section</span>
             </button>                
           </div>
         </div>
@@ -250,15 +251,15 @@
         <div class="col-xs-12">
           <div class="col-xs-1 col-xs-offset-10">
             <button type="button" id="editor-cancel-btn"
-                    class="form-control btn" aria-label="Left Align">
-              <span class="glyphicon glyphicon-ban-circle" aria-hidden="true">
-              </span>
+                    class="form-control btn btn-warning">
+              <span class="invert">Cancel</span>
             </button>
           </div>
           <div class="col-xs-1">
-            <input type="button" value="Save" id="editor-save-btn"
-                  class="form-control btn btn-primary">
-            </input>
+            <button type="button" id="editor-save-btn"
+                   class="form-control btn btn-primary">
+              <span class="invert">Save</span>
+            </button>
           </div>
         </div>
       </div>
@@ -280,7 +281,6 @@
               <tr class="header-row">
                 <th class="menu-table-field">Id</th>
                 <th class="menu-table-field">Title</th>
-                <th class="menu-table-field">Theme</th>
                 <th class="menu-table-field">Shared</th>
                 <th class="menu-table-field">Published</th>
                 <th class="menu-table-field"></th>

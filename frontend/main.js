@@ -123,25 +123,23 @@ $(function() {
         var $menutr = $('<tr>').addClass('menu-table-row');
         $menutr.append($('<td>').addClass('menu-table-data menu-id-data'));
         $menutr.append($('<td>').addClass('menu-table-data menu-title-data'));
-        $menutr.append($('<td>').addClass('menu-table-data menu-theme-data'));
         $menutr.append($('<td>').addClass('menu-table-data menu-shared-data'));
         $menutr.append($('<td>').addClass('menu-table-data menu-published-data'));
         $menutr.append($('<td>').addClass('menu-table-btn menu-edit-data'));
         $menutr.append($('<td>').addClass('menu-table-btn menu-publish-data'));
         if (menu.PublicLink != null) {
-          $menutr.find('.menu-publish-data').append($('<a class="menu-takedown-btn"><span class="glyphicon glyphicon-ban-circle orange"></span></a>'));
+          $menutr.find('.menu-publish-data').append($('<button type="button" class="menu-takedown-btn btn-lg form-control"><span class="glyphicon glyphicon-ban-circle orange"></span></button>'));
         } else {
-          $menutr.find('.menu-publish-data').append($('<a class="menu-publish-btn"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span></a>'));
+          $menutr.find('.menu-publish-data').append($('<button type="button" class="menu-publish-btn btn-lg form-control"><span class="glyphicon glyphicon-globe blue" aria-hidden="true"></span></button>'));
         }
         $menutr.append($('<td>').addClass('menu-table-btn menu-delete-data'));
 
         $menutr.find('.menu-id-data').text(menu.MenuId);
         $menutr.find('.menu-title-data').text(menu.MenuTitle);
-        $menutr.find('.menu-theme-data').text(menu.Theme);
         $menutr.find('.menu-shared-data').append(shared);
         $menutr.find('.menu-published-data').append(published);
-        $menutr.find('.menu-edit-data').append($('<a class="menu-edit-btn" aria-label="Left Align"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>'));
-        $menutr.find('.menu-delete-data').append($('<a class="menu-delete-btn red"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>'));
+        $menutr.find('.menu-edit-data').append($('<button type="button" class="menu-edit-btn btn-lg form-control" aria-label="Left Align"><span class="glyphicon glyphicon-pencil blue" aria-hidden="true"></span></button>'));
+        $menutr.find('.menu-delete-data').append($('<button type="button" class="menu-delete-btn btn-lg form-control"><span class="glyphicon glyphicon-trash red" aria-hidden="true"></span></button>'));
         $('#menu-table-body').append($menutr);
       });
     });
@@ -197,10 +195,8 @@ $(function() {
       success: function(menu) {
         $('#editor-id-input').val(menu.MenuId);
         $('#editor-title-input').val(menu.MenuTitle);
-        $('#editor-title-input').css('color',menu.MenuTitleColor);
-        $('#menu-title-color-input').val(menu.MenuTitleColor);
-        $('#editor-div').css('background-color',menu.MenuBkgrdColor);
-        $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor);
+        $('#menu-title-color-input').val(menu.MenuTitleColor).change();
+        $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor).change();
 
         $('.temp-option').each(function(i, tempopt) {
           if (tempopt.id == String(menu.Template)) {
@@ -255,30 +251,46 @@ $(function() {
   ///////////////// Edit menu ////////////////////////////////
   
 
-
-  // Update Menu title legend
-  //$('#editor-title-input').on('change', function() {
-  //  var menutitleinput = $(this).val();
-  //  $('#menu-title-legend').text(menutitleinput);
-  //});
-  // Update Menu title legend
   
+  // Invert color
+  function invertColor(hex, bw) {
+    if (hex.indexOf('#') === 0) {
+      hex = hex.slice(1);
+    }
+    // convert 3-digit hex to 6-digits.
+    if (hex.length === 3) {
+      hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+    if (hex.length !== 6) {
+      throw new Error('Invalid HEX color.');
+    }
+    var r = parseInt(hex.slice(0, 2), 16),
+      g = parseInt(hex.slice(2, 4), 16),
+      b = parseInt(hex.slice(4, 6), 16);
+    if (bw) {
+      // http://stackoverflow.com/a/3943023/112731
+      return (r * 0.299 + g * 0.587 + b * 0.114) > 186
+          ? '#000000'
+          : '#FFFFFF';
+    }
+    // invert color components
+    r = (255 - r).toString(16);
+    g = (255 - g).toString(16);
+    b = (255 - b).toString(16);
+    // pad each with zeros and return
+    return "#" + padZero(r) + padZero(g) + padZero(b);
+  }
+  //
 
-
-  // Update Section title legend
-  //$('#sections-div').on('change', '.sect-title-input', function() {
-  //  var secttitleinput = $(this).val();
-  //  $(this).parent().parent().parent().find('.sect-title-legend').text(secttitleinput);
-  //  $(this).parent().parent().parent().parent().siblings('.sect-items').find('legend').text(secttitleinput+' - Items');
-  //});
-  // Update Section title legend
 
 
   // Update background color
   $('#editor-div').on('change', '#menu-bkgrd-color-input', function() {
     var newbgcolor = $(this).val();
     $('#editor-div').css('background-color',newbgcolor);
+    $('#editor-div .invert').css('color',invertColor(newbgcolor,true));
   });
+  //
 
 
   // Update text input colors
