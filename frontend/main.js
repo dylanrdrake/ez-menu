@@ -9,7 +9,7 @@ $(function() {
   // Loading
   $(document).ajaxStart(function() {
     var time = 0;
-    var bkgdcolor = $('#top-row').css('color');
+    var bkgdcolor = $('#top-row').css('background-color');
     $('.title-char').each(function(i, titlechar) {
       var charcolor = $(titlechar).css('color');
       $(titlechar).css('color',bkgdcolor);
