@@ -6,17 +6,20 @@ $(function() {
   var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
   
 
-  // Loading gif
+  // Loading
   $(document).ajaxStart(function() {
-    //$('#menu-table-div').hide();
-    $('.loading').show();
+    var time = 0;
+    var bkgdcolor = $('#top-row').css('color');
+    $('.title-char').each(function(i, titlechar) {
+      var charcolor = $(titlechar).css('color');
+      $(titlechar).css('color',bkgdcolor);
+      setTimeout(function() {
+        $(titlechar).css('color', charcolor);
+      }, time);
+      time += 20;
+    });
   });
-  
-  $(document).ajaxComplete(function() {
-    $('.loading').hide();
-    //$('#menu-table-div').show();
-  });
-  // Loading gif
+  // Loading
 
 
 
@@ -100,6 +103,8 @@ $(function() {
   //////////////////////// [START home] //////////////////////////
   // home
   function home() {
+    $(document).scrollTop(0);
+
     $.ajax(backendHostUrl + '/menus', {
       headers: {
         'Authorization': 'Bearer ' + userIdToken
@@ -402,11 +407,12 @@ $(function() {
   
 
 
-  // Cancel menu
+  // Cancel editor
   $('#editor-cancel-btn').click(function() {
     $('#editor-div').hide(300);
+    home();
   });
-  // Cancel menu
+  // Cancel editor
 
 
 
