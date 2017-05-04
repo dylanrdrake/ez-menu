@@ -1,15 +1,15 @@
 $(function() {
   //local dev backendHostURL:
-  //backendHostUrl = 'http://localhost:8081';
+  backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
-  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
   
 
   // Loading
   $(document).ajaxStart(function() {
     var time = 0;
-    var bkgdcolor = $('#top-row').css('background-color');
+    var bkgdcolor = $('#top-row').css('color');
     $('.title-char').each(function(i, titlechar) {
       var charcolor = $(titlechar).css('color');
       $(titlechar).css('color',bkgdcolor);
