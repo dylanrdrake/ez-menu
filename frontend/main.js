@@ -1,29 +1,39 @@
 $(function() {
   //local dev backendHostURL:
-  backendHostUrl = 'http://localhost:8081';
+  //backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
-  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
   
+
 
   // Loading
   $(document).ajaxStart(function() {
-    var time = 0;
-    var bkgdcolor = $('#top-row').css('color');
-    $('.title-char').each(function(i, titlechar) {
-      var charcolor = $(titlechar).css('color');
-      $(titlechar).css('color',bkgdcolor);
-      setTimeout(function() {
-        $(titlechar).css('color', charcolor);
-      }, time);
-      time += 20;
+ 
+    function loadStart() {
+      var time = 0;
+      var bkdgcolor = $('#top-row').css('color');
+      $('.title-char').each(function(i, titlechar) {
+        var charcolor = $(titlechar).css('color');
+        $(titlechar).css('color',bkdgcolor);
+        setTimeout(function() {
+          $(titlechar).css('color', charcolor);
+        }, time);
+        time += 30;
+      });
+    };
+
+    var loadInterval = setInterval(function() { loadStart() }, 300);
+
+    $(document).ajaxStop(function() {
+      clearInterval(loadInterval);
     });
+  
   });
   // Loading
 
 
-
-
+  
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyAPAEZg9AMSlE2cqC5h2_7VelZP5Md0wpc",
@@ -467,7 +477,7 @@ $(function() {
         headers: {'Authorization': 'Bearer ' + userIdToken},
         method: 'PUT',
         data: JSON.stringify([{'MenuId': menuid,
-                               'Takedown': true}]),
+                               'Publish': false}]),
         contentType: 'application/json'
       }).then(function() {
         home();

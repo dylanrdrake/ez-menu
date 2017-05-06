@@ -245,27 +245,30 @@ def updatesect(menuid, sectdata):
 def updatemenu(menudata):
     for menu in menudata:
         menuid = menu.pop('MenuId')
+        menudata = getmenu(menuid)
         
         if 'Sections' in menu:
             sects = menu.pop('Sections')
             updatesect(menuid, sects)
-        if 'Publish' in menu:
-            publish = menu.pop('Publish')
-        if 'Takedown' in menu:
-            takedown = menu.pop('Takedown')
 
+        if 'Publish' in menu and menu['Publish'] == True:
+            menu['PublicLink'] = publishmenu(menuid)
+            menu['Publish'] = 'true'
+        elif 'Publish' in menu and menu['Publish'] == False:
+            takedownmenu(menuid)
+            menu['PublicLink'] = None
+            menu['Publish'] = 'false'
+        elif menudata['Publish'] == 'true':
+            menu['PublicLink'] = publishmenu(menuid)
+            menu['Publish'] = 'true'
+        
         if len(menu) != 0:
             update_menu_sql = "UPDATE menus "
-            updates = [field+"='"+value+"'" if value != None else field+"=NULL"\
-                    for field,value in menu.iteritems()]
+            updates = [field+"='"+value+"'" if value != None else\
+                    field+"=NULL" for field,value in menu.iteritems()]
             update_menu_sql += "SET "+(",").join(updates)+" "
             update_menu_sql += "WHERE MenuId='"+menuid+"'"
             query_db(update_menu_sql, True)
-
-        if 'publish' in locals():
-            publishmenu(menuid)
-        if 'takedown' in locals():
-            takedownmenu(menuid)
 
 
 
@@ -405,13 +408,6 @@ def publishmenu(menuid):
     menu_link = 'https://storage.googleapis.com/'+bucket+'/menus/'\
             +menuid+'.html'
 
-    update_data = [
-            {'MenuId': menuid,
-             'PublicLink': menu_link
-            }
-    ]
-    updatemenu(update_data)
-
     return menu_link
 
 
@@ -419,13 +415,6 @@ def publishmenu(menuid):
 def takedownmenu(menuid):
     object = '/'+bucket+'/menus/'+menuid+'.html'
     gcs.delete(object)
-
-    update_data = [
-            {'MenuId': menuid,
-             'PublicLink': None
-            }
-    ]
-    updatemenu(update_data)
 
 
 
