@@ -85,7 +85,7 @@ https://backend-dot-[PROJECT_ID].appspot.com.
 5. Colorscheme:
     colorscheme: #11353B, #4ecdc4, #f7fff7, #ff6b6b, #ffe66d
 
-6. shadow behind top-row, menu table style, automatically update public menu when saved, style the color selectors more closely to the text inputs
+6. shadow behind top-row, menu table style, style the color selectors as circles, Get Link/Make Public buttons(chain/globe glyphs).
 
 7. Kiosks: put code on back of pi. Set up local network site on pi that user can enter in wifi password. Have Set up Kiosk feature in web UI.
 
