@@ -129,24 +129,20 @@ $(function() {
         else {
           var shared = $('<span class="glyphicon glyphicon-remove red" aria-hidden="true"></span>');
         }
+        
         if (menu.PublicLink != null) {
-          var published = $('<span class="glyphicon glyphicon-ok green" aria-hidden="true"></span>');
+          var published = $('<span class="glyphicon glyphicon-ok green" aria-hidden="true"></span><button type="button" class="basic-btn btn-lg get-pub-link-btn"><span class="glyphicon glyphicon-link blue"></span></button><button type="button" class="basic-btn btn-lg menu-takedown-btn"><span class="glyphicon glyphicon-ban-circle orange"></span></button>');
         }
         else {
-          var published = $('<span class="glyphicon glyphicon-remove red" aria-hidden="true"></span>');
+          var published = $('<span class="glyphicon glyphicon-remove red" aria-hidden="true"></span><button type="button" class="basic-btn btn-lg menu-publish-btn"><span class="glyphicon glyphicon-globe blue"></span></button>');
         }
+        
         var $menutr = $('<tr>').addClass('menu-table-row');
         $menutr.append($('<td>').addClass('menu-table-data menu-id-data'));
         $menutr.append($('<td>').addClass('menu-table-data menu-title-data'));
         $menutr.append($('<td>').addClass('menu-table-data menu-shared-data'));
         $menutr.append($('<td>').addClass('menu-table-data menu-published-data'));
         $menutr.append($('<td>').addClass('menu-table-btn menu-edit-data'));
-        $menutr.append($('<td>').addClass('menu-table-btn menu-publish-data'));
-        if (menu.PublicLink != null) {
-          $menutr.find('.menu-publish-data').append($('<button type="button" class="menu-takedown-btn btn-lg form-control"><span class="glyphicon glyphicon-ban-circle orange"></span></button>'));
-        } else {
-          $menutr.find('.menu-publish-data').append($('<button type="button" class="menu-publish-btn btn-lg form-control"><span class="glyphicon glyphicon-globe blue" aria-hidden="true"></span></button>'));
-        }
         $menutr.append($('<td>').addClass('menu-table-btn menu-delete-data'));
 
         $menutr.find('.menu-id-data').text(menu.MenuId);
@@ -488,6 +484,27 @@ $(function() {
     }
   });
   // Takedown menu
+
+
+
+  // Get public link
+  $('#menu-table').on('click', '.get-pub-link-btn', function() {
+    var menuid = $(this).parent().siblings('.menu-id-data').text();
+    $.ajax({
+      url: backendHostUrl + '/menus',
+      headers: {'Authorization': 'Bearer ' + userIdToken},
+      method: 'GET',
+      data: {'MenuId': menuid},
+      contentType: 'application/json',
+      success: function(menudata) {
+        alert(menudata.PublicLink);
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    });
+  });
+  // Get public link
 
 
 
