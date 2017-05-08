@@ -107,6 +107,12 @@ $(function() {
   //////////////////////// END Firebase /////////////////////////
 
 
+  
+  // tooltip
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+  });
+  //
 
 
 
@@ -131,10 +137,10 @@ $(function() {
         }
         
         if (menu.PublicLink != null) {
-          var published = $('<span class="glyphicon glyphicon-ok green" aria-hidden="true"></span><button type="button" class="basic-btn btn-lg get-pub-link-btn"><span class="glyphicon glyphicon-link blue"></span></button><button type="button" class="basic-btn btn-lg menu-takedown-btn"><span class="glyphicon glyphicon-ban-circle orange"></span></button>');
+          var published = $('<span class="glyphicon glyphicon-ok green" aria-hidden="true"></span><button type="button" data-toggle="tooltip" title="Get Link" class="basic-btn btn-lg get-pub-link-btn"><span class="glyphicon glyphicon-link blue"></span></button><button type="button" data-toggle="tooltip" title="Take down" class="basic-btn btn-lg menu-takedown-btn"><span class="glyphicon glyphicon-ban-circle orange"></span></button>');
         }
         else {
-          var published = $('<span class="glyphicon glyphicon-remove red" aria-hidden="true"></span><button type="button" class="basic-btn btn-lg menu-publish-btn"><span class="glyphicon glyphicon-globe blue"></span></button>');
+          var published = $('<span class="glyphicon glyphicon-remove red" aria-hidden="true"></span><button type="button" data-toggle="tooltip" title="Publish" class="basic-btn btn-lg menu-publish-btn"><span class="glyphicon glyphicon-globe blue"></span></button>');
         }
         
         var $menutr = $('<tr>').addClass('menu-table-row');
@@ -149,8 +155,8 @@ $(function() {
         $menutr.find('.menu-title-data').text(menu.MenuTitle);
         $menutr.find('.menu-shared-data').append(shared);
         $menutr.find('.menu-published-data').append(published);
-        $menutr.find('.menu-edit-data').append($('<button type="button" class="menu-edit-btn btn-lg form-control" aria-label="Left Align"><span class="glyphicon glyphicon-pencil blue" aria-hidden="true"></span></button>'));
-        $menutr.find('.menu-delete-data').append($('<button type="button" class="menu-delete-btn btn-lg form-control"><span class="glyphicon glyphicon-trash red" aria-hidden="true"></span></button>'));
+        $menutr.find('.menu-edit-data').append($('<button type="button" data-toggle="tooltip" title="Edit" class="menu-edit-btn btn-lg form-control" aria-label="Left Align"><span class="glyphicon glyphicon-pencil blue" aria-hidden="true"></span></button>'));
+        $menutr.find('.menu-delete-data').append($('<button type="button" data-toggle="tooltip" title="Delete" class="menu-delete-btn btn-lg form-control"><span class="glyphicon glyphicon-trash red" aria-hidden="true"></span></button>'));
         $('#menu-table-body').append($menutr);
       });
     });
