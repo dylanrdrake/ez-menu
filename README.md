@@ -85,8 +85,8 @@ https://backend-dot-[PROJECT_ID].appspot.com.
 5. Colorscheme:
     colorscheme: #11353B, #4ecdc4, #f7fff7, #ff6b6b, #ffe66d
 
-6. style the color selectors as circles
+6. style the color selectors as circles, make templates mobile friendly when in portrait orienation (jquery orientationchange. hide landscape html then show portrait vice versa), font selector.
 
 7. Kiosks: put code on back of pi. Set up local network site on pi that user can enter in wifi password. Have Set up Kiosk feature in web UI.
 
-8. Load menus via Ajax direct from db instead of hosting on storage? Don't require auth when hitting /menus GET with menuid (has to be public).
+8. Load menus via Ajax direct from db instead of hosting on storage? Don't require auth when hitting /menus GET with menuid (Publish column has to be true).
