@@ -14,57 +14,57 @@
     body {
       background-color: {{ menu["MenuBkgrdColor"] }};
       color: #fdf6ee;
-      font-family: 'Shadows Into Light';
+      font-family: 'Arvo';
     }
-    .section-div {
+    .section-div-pt {
       margin-top: 5vh;
       border-bottom: 1px solid #ffffff;
     }
-    .section-title-div {
+    .section-title-div-pt {
       width: 100%;
       text-align: center;
       font-size: 6vh;
       font-weight: bold;
     }
-    .item-list-div {
+    .item-list-div-pt {
       border-top: 1px solid #ffffff;
     }
-    .item-div {
+    .item-div-pt {
       width: 100%;
       color: #ffffff;
     }
-    .inline {
+    .inline-pt {
       display: inline-block;
       float: left;
     }
-    .item-title-desc-div {
+    .item-title-desc-div-pt {
       width: 90%;
     }
-    .item-title-div {
+    .item-title-div-pt {
       height: 5vh;
       font-weight: bold;
       font-size: 4vh;
     }
-    .item-desc-div {
+    .item-desc-div-pt {
       height: 10vh;
       font-size: 3vh;
     }
-    .item-price-stock-div {
+    .item-price-stock-div-pt {
       width: 10%;
     }
-    .item-price-div {
+    .item-price-div-pt {
       height: 5vh;
       font-size: 4vh;
     }
-    .item-stock-div {
+    .item-stock-div-pt {
       height: 10vh;
       font-size: 5vh;
       color: #FF4500;
     }
-    #menu-title-div {
+    #menu-title-div-pt {
       width: 100%;
     }
-    #menu-title {
+    #menu-title-pt {
       width: 100%;
       text-align: center;
       color: {{ menu["MenuTitleColor"] }};
@@ -78,42 +78,42 @@
 
 <body>
 
-  <div id="menu-title-div">
-    <div id="menu-title">{{ menu["MenuTitle"] }}</div>
+  <div id="menu-title-div-pt">
+    <div id="menu-title-pt">{{ menu["MenuTitle"] }}</div>
   </div>
 
   {% for sect in menu["Sections"] %}
 
-    <div class = "section-div">
+    <div class = "section-div-pt">
 
-      <div class="section-title-div"
+      <div class="section-title-div-pt"
           style="color:{{ sect['SectionTitleColor'] }};">
         <div>
           {{ sect["SectionTitle"] }}
         </div>
       </div>
 
-      <div class="item-list-div">
+      <div class="item-list-div-pt">
     
         {% for item in sect["Items"] %}
-          <div class="item-div">
+          <div class="item-div-pt">
             
-            <div class="item-title-desc-div inline">
-              <div class="item-title-div"
+            <div class="item-title-desc-div-pt inline-pt">
+              <div class="item-title-div-pt"
                    style="color:{{ item['ItemTitleColor'] }};">
                 {{ item["ItemTitle"] }}
               </div>
-              <div class="item-desc-div"
+              <div class="item-desc-div-pt"
                    style="color:{{ item['ItemDescColor'] }};">
                 {{ item["ItemDesc"] }}
               </div>
             </div>
             
-            <div class="item-price-stock-div inline">
-              <div class="item-price-div">
+            <div class="item-price-stock-div-pt inline-pt">
+              <div class="item-price-div-pt">
                 {{ item["ItemPrice"] }}
               </div>
-              <div class="item-stock-div">
+              <div class="item-stock-div-pt">
                   {% if item["ItemStock"] != None %}
                     {{ item["ItemStock"] }}
                   {% endif %}
