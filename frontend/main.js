@@ -503,7 +503,7 @@ $(function() {
       data: {'MenuId': menuid},
       contentType: 'application/json',
       success: function(menudata) {
-        alert(menudata.PublicLink);
+        prompt('Public Link for '+menudata.MenuTitle, menudata.PublicLink);
       },
       error: function(error) {
         console.log(error);
