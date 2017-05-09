@@ -5,8 +5,6 @@
   <!-- Font -->
   <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Atma' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
   <!-- Font -->
 
   <!-- JQuery -->
@@ -19,12 +17,27 @@
       color: #fdf6ee;
     }
     .menu-title-div {
+      position: absolute;
       width: 100%;
+      border-bottom: solid 1px gray;
+      padding-bottom: 2vh;
+      position: relative;
       font-family: 'Arvo';
       font-size: 5vh;
       text-align: center;
-      border-bottom: solid 1px gray;
-      padding-bottom: 2vh;
+    }
+    .logo-div img {
+      height: 9vh;
+    }
+    .left-logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .right-logo {
+      position: absolute;
+      top: 0;
+      right: 0;
     }
     .section-div {
       width: 33%;
@@ -47,7 +60,6 @@
       width: 100%;
       color: #ffffff;
       font-family: 'Arvo';
-      border-left: solid 1px gray;
     }
     .inline {
       display: inline-block;
@@ -81,7 +93,7 @@
       padding-left: 1%;
     }
     .item-stock-div {
-      font-family: "Shadows Into Light";
+      font-family: 'Shadows Into Light';
       height: 50%;
       width: auto;
       color: #FF4500;
@@ -98,15 +110,26 @@
 
 <body>
 
-  <div class="menu-title-div"
-       style="color:{{ menu['MenuTitleColor'] }}">
+  <div class="menu-title-div" style="color:{{ menu['MenuTitleColor'] }}">
     {{ menu["MenuTitle"] }}
+  </div>
+  <div class="left-logo logo-div">
+    <img src="https://storage.googleapis.com/ez-menu.appspot.com/menuassets/popscreen_logo.jpg">
+  </div>
+
+  <div class="right-logo logo-div">
+    <img src="https://storage.googleapis.com/ez-menu.appspot.com/menuassets/popscreen_logo.jpg">
   </div>
 
   {% for sect in menu["Sections"] %}
 
-  <div class="section-div">   
-  
+  {% if loop.last != True %}
+  <div class="section-div" style="border-right:solid 1px gray;">
+  {% else %}
+  <div class="section-div">
+  {% endif %}
+
+ 
     <div class="section-title-div"
          style="color:{{ sect['SectionTitleColor'] }};">
       {{ sect["SectionTitle"] }}
