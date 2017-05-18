@@ -87,7 +87,7 @@ def auth_check(request):
                     name=claims.get('name'),
                     email=claims.get('email'),
                     picture=claims.get('picture'))
-    elif getuser(claims.get('user_id')):
+    elif not getuser(claims.get('user_id')):
         create_user(userid=claims.get('user_id'),
                     provider=claims.get('firebase')['sign_in_provider'],
                     name=claims.get('name'),

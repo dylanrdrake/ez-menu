@@ -195,7 +195,9 @@ $(function() {
       contentType: 'application/json',
       success: function(user) {
         user.Templates.forEach(function(template) {
-          $('#template-select').append($('<option>'+template.TemplateName+'</option>').attr('id', template.TemplateId).addClass('added temp-option'));
+          $('#template-select').append(
+            $('<option>'+template.TemplateName+'</option>').attr(
+              'id',template.TemplateId).addClass('added temp-option invert'));
         });
       },
       error: function(error) {
@@ -212,7 +214,18 @@ $(function() {
       success: function(menu) {
         $('#editor-id-input').val(menu.MenuId);
         $('#editor-title-input').val(menu.MenuTitle);
+        
+        $('#menu-title-color-input').colorpicker()
+          .on('changeColor', function(el) {
+            changeTextColor(el);
+        });
         $('#menu-title-color-input').val(menu.MenuTitleColor).change();
+
+        $('#menu-bkgrd-color-input').colorpicker()
+          .on('changeColor', function(el) {
+            changeBkgrdColor(el);
+            $(el.target).css('color', invertColor($(el.target).val(), true));
+        });
         $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor).change();
 
         $('.temp-option').each(function(i, tempopt) {
@@ -233,21 +246,27 @@ $(function() {
           $section.addClass('added');
           $section.find('.sect-id-input').val(sect.SectionId);
           $section.find('.sect-title-input').val(sect.SectionTitle);
-          $section.find('.sect-title-input').css('color',sect.SectionTitleColor);
-          $section.find('.sect-color-input').val(sect.SectionTitleColor);
+          $section.find('.sect-color-input').colorpicker()
+            .on('changeColor', function(el) {
+              changeTextColor(el);
+          }).val(sect.SectionTitleColor).change();
           
           sect.Items.forEach(function(item) {
             var $itemrow = $itemrow_temp.clone();
             $itemrow.removeAttr('id');
             $itemrow.find('.item-id-input').val(item.ItemId);
             $itemrow.find('.item-title-input').val(item.ItemTitle);
-            $itemrow.find('.item-title-input').css('color',item.ItemTitleColor);
-            $itemrow.find('.item-title-color-input').val(item.ItemTitleColor);
+            $itemrow.find('.item-title-color-input').colorpicker()
+              .on('changeColor', function(el) {
+                changeTextColor(el);
+            }).val(item.ItemTitleColor).change();
             $itemrow.find('.item-stock-input').val(item.ItemStock);
             $itemrow.find('.item-price-input').val(item.ItemPrice);
             $itemrow.find('.item-desc-input').val(item.ItemDesc);
-            $itemrow.find('.item-desc-input').css('color',item.ItemDescColor);
-            $itemrow.find('.item-desc-color-input').val(item.ItemDescColor);
+            $itemrow.find('.item-desc-color-input').colorpicker()
+              .on('changeColor', function(el) {
+                changeTextColor(el);
+            }).val(item.ItemDescColor).change();
             $section.find('.add-item-btn-row').before($itemrow);
           });
 
@@ -261,7 +280,7 @@ $(function() {
       }
     });
 
-   
+  
     $("#editor-div").show(300);
 
   });
@@ -302,27 +321,57 @@ $(function() {
 
 
   // Update background color
-  $('#editor-div').on('change', '#menu-bkgrd-color-input', function() {
-    var newbgcolor = $(this).val();
+  function changeBkgrdColor (input) {
+    var newbgcolor = $(input.target).val();
     $('#editor-div').css('background-color',newbgcolor);
+    $('#editor-div').find('.temp-option').css('background-color',newbgcolor);
     $('#editor-div .invert').css('color',invertColor(newbgcolor,true));
-  });
+  }
   //
 
 
   // Update text input colors
-  $('#editor-div').on('change', '.color-input', function() {
-    var newcolor = $(this).val();
-    var change_color = $(this).parent().siblings().find('.change-color');
+  function changeTextColor (input) {
+    var newcolor = $(input.target).val();
+    var newcolorinv = invertColor(newcolor,true);
+    var change_color = $(input.target).parent().siblings().find('.change-color');
     change_color.css('color', newcolor);
-  });
+    $(input.target).css('background-color', newcolor);
+    $(input.target).css('color', newcolorinv);
+  }
   //
+
+
+  // Add section
+  $(document).on('click', '.add-sect-btn', function() {
+    event.preventDefault();
+    var newsect = $('#SectionTemplate').clone();
+    newsect.find('.sect-color-input').colorpicker()
+      .on('changeColor', function(el) {
+        changeTextColor(el);
+      }).val('#333333').change();
+    newsect.find('.item-row').remove();
+    newsect.removeAttr('hidden');
+    newsect.addClass('added');
+    $(this).parent().parent().before(newsect);
+  });
+  // Add section
 
 
   // Add item
   $(document).on('click', '.add-item-btn', function() {
     event.preventDefault();
     var newitem = $('#ItemTemplate').clone();
+    newitem.find('.item-title-color-input').colorpicker()
+      .on('changeColor', function(el) {
+        changeTextColor(el);
+      }).val('#333333').change();
+    newitem.find('.item-desc-color-input').colorpicker()
+      .on('changeColor', function(el) {
+        changeTextColor(el);
+      }).val('#333333').change();
+
+
     $(this).parent().parent().before(newitem);
   });
   // Add item
@@ -337,17 +386,6 @@ $(function() {
   });
   // Delete item
 
-
-
-  // Add section
-  $(document).on('click', '.add-sect-btn', function() {
-    event.preventDefault();
-    var newsect = $('#SectionTemplate').clone();
-    newsect.removeAttr('hidden');
-    newsect.addClass('added');
-    $(this).parent().parent().before(newsect);
-  });
-  // Add section
 
 
   // Delete section

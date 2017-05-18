@@ -158,13 +158,15 @@ body {
   box-shadow: none;
 }
 
+#menu-bkgrd-color-input {
+  border: 1px solid #666;
+  text-align: center;
+}
+
 .basic-btn {
   background-color: inherit;
   border: none;
   box-shadow: none;
-}
-
-input[type="color"] {
 }
 
 .color-input-div {
@@ -173,6 +175,8 @@ input[type="color"] {
 
 .color-input {
   float: left;
+  border-radius: 50%;
+  text-align: center;
 }
 
 .change-color {
@@ -192,6 +196,7 @@ input[type="color"] {
 .sect-color-input {
   width: 50%;
   height: 5vh;
+  font-size: 1.4vh;
 }
 
 .sect-title-input {
@@ -213,6 +218,7 @@ input[type="color"] {
 
 .item-title-color-input, .item-desc-color-input {
   width: 50%;
+  font-size: 1vh;
 }
 
 .item-title-input {

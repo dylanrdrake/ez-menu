@@ -5,6 +5,7 @@
   <!-- Font -->
   <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Cutive' rel='stylesheet' type='text/css'>
   <!-- Font -->
 
   <!-- JQuery -->
@@ -25,6 +26,24 @@
         $('#pt-view').show();
       }
     });
+
+    $(window).resize(function() {
+      if (window.innerHeight > window.innerWidth) {
+        $('#ls-view').hide();
+        $('#pt-view').show();
+      } else if (window.innerWidth > window.innerHeight) {
+        $('#pt-view').hide();
+        $('#ls-view').show();
+      } else {
+        $('#ls-view').hide();
+        $('#pt-view').show();
+      }
+    });
+
+    function reload() {
+      location.reload(true);
+    }
+    setInterval(reload, 60000);
   </script>
 
   <style>
@@ -32,7 +51,7 @@
     body {
       background-color: {{ menu["MenuBkgrdColor"] }};
       color: #fdf6ee;
-      font-family: 'Arvo';
+      font-family: 'Cutive';
     }
     .menu-title-div-ls {
       position: absolute;
@@ -44,7 +63,7 @@
       text-align: center;
     }
     .logo-div-ls img {
-      height: 9.2vh;
+      height: 8.5vh;
     }
     .left-logo-ls {
       position: absolute;
@@ -110,12 +129,9 @@
       padding-left: 1%;
     }
     .item-stock-div-ls {
-      font-family: 'Shadows Into Light';
-      height: 50%;
       width: auto;
       color: #FF4500;
       font-weight: bold;
-      overflow: hidden;
       padding-left: 1%;
     }
     .item-stock-ls {
@@ -127,20 +143,18 @@
     body {
       background-color: {{ menu["MenuBkgrdColor"] }};
       color: #fdf6ee;
-      font-family: 'Arvo';
+      font-family: 'Cutive';
     }
     .section-div-pt {
       margin-top: 5vh;
-      border-bottom: 1px solid #ffffff;
     }
     .section-title-div-pt {
       width: 100%;
       text-align: center;
-      font-size: 6vh;
-      font-weight: bold;
+      font-size: 4vh;
+      text-decoration: underline;
     }
     .item-list-div-pt {
-      border-top: 1px solid #ffffff;
     }
     .item-div-pt {
       width: 100%;
@@ -155,34 +169,35 @@
     }
     .item-title-div-pt {
       height: 5vh;
-      font-weight: bold;
-      font-size: 4vh;
+      font-size: 3vh;
     }
     .item-desc-div-pt {
       height: 10vh;
-      font-size: 3vh;
+      font-size: 2vh;
     }
     .item-price-stock-div-pt {
       width: 10%;
     }
     .item-price-div-pt {
       height: 5vh;
-      font-size: 4vh;
+      font-size: 3vh;
     }
     .item-stock-div-pt {
       height: 10vh;
-      font-size: 5vh;
+      font-size: 3vh;
       color: #FF4500;
+      font-weight: bold;
     }
     #menu-title-div-pt {
+      margin-top: 2%;
       width: 100%;
+      border-bottom: 1px solid #ffffff;
     }
     #menu-title-pt {
       width: 100%;
       text-align: center;
       color: {{ menu["MenuTitleColor"] }};
-      font-size: 8vh;
-      font-weight: bold;
+      font-size: 5vh;
     }
     /* END Portrait CSS */
 

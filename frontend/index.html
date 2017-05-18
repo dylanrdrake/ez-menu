@@ -28,7 +28,10 @@
   
   <!-- ez-menu -->
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css"
+        href="/colorpicker/css/bootstrap-colorpicker.css">
   <script src="/main.js"></script>
+  <script src="/colorpicker/js/bootstrap-colorpicker.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Baloo'
         rel='stylesheet' type='text/css'>
   <!-- ez-menu -->
@@ -106,8 +109,9 @@
 
         <div class="row">
           <div class="col-xs-1 menu-title-color-div color-input-div">
-            <input type="color" id="menu-title-color-input"
-            class="form-control menu-data color-input menu-title-color-input"
+            <input id="menu-title-color-input"
+                   class="form-control menu-data color-input
+                          menu-title-color-input"
                    name="MenuTitleColor">
           </div>
           
@@ -127,9 +131,9 @@
 
           <div class="col-xs-1">
             <label for="MenuBkgrdColor" class="invert">Background</label>
-            <input type="color" id="menu-bkgrd-color-input"
-                   class="form-control menu-data" name="MenuBkgrdColor">
-            </input>
+            <input id="menu-bkgrd-color-input"
+                   class="form-control menu-data"
+                   name="MenuBkgrdColor">
           </div>
         </div>
       
@@ -151,14 +155,14 @@
             
             <div class="row">
               <div class="col-xs-1 color-input-div">
-                <input type="color"
-                       class="form-control sect-data color-input sect-color-input"
-                       name="SectionTitleColor" value="#ffffff">
-                </input>
+                <input class="form-control sect-data color-input
+                              sect-color-input"
+                       name="SectionTitleColor">
               </div>
               <div class="col-xs-6 change-color">
                 <input type="text"
-                        class="form-control sect-data change-color sect-title-input"
+                        class="form-control sect-data change-color
+                               sect-title-input"
                         name="SectionTitle" placeholder="Section Title">
                 </input>
               </div>
@@ -188,10 +192,9 @@
               
               <div class="row">
                 <div class="col-xs-1 item-title-color-div color-input-div">
-                  <input type="color"
-                         class="form-control item-data color-input item-title-color-input"
-                         name="ItemTitleColor" value="#ffffff">
-                  </input>
+                  <input class="form-control item-data color-input
+                                item-title-color-input"
+                         name="ItemTitleColor">
                 </div>
                 <div class="col-xs-5 item-title-div change-color">
                   <input type="text"
@@ -224,10 +227,9 @@
               </div>
               <div class="row">
                 <div class="col-xs-1 item-desc-color-div color-input-div">
-                  <input type="color"
-                         class="form-control item-data color-input item-desc-color-input"
+                  <input class="form-control item-data color-input
+                                item-desc-color-input"
                          name="ItemDescColor" value="#ffffff">
-                  </input>
                 </div>
                 <div class="col-xs-9 item-desc-div change-color">
                   <input type="text"
