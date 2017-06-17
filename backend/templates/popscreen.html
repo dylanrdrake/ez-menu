@@ -3,15 +3,15 @@
 
 <head>
   <!-- Font -->
-  <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Cutive' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family={{ menu["MenuFont"] }}' rel='stylesheet' type='text/css'>
   <!-- Font -->
 
   <!-- JQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <!-- JQuery -->
 
+ 
+  
   <!-- Portrait/Landscape JS -->
   <script>
     $(document).ready(function() {
@@ -46,6 +46,8 @@
     setInterval(reload, 60000);
   </script>
 
+
+  
   <style>
     /* START Landscape CSS */
     body {
@@ -145,6 +147,14 @@
       color: #fdf6ee;
       font-family: 'Cutive';
     }
+    #logo-div-pt {
+      min-width: 100%;
+    }
+    #logo-div-pt img {
+      height: 10vh;
+      display: block;
+      margin: 0 auto;
+    }
     .section-div-pt {
       margin-top: 5vh;
     }
@@ -214,11 +224,11 @@
       {{ menu["MenuTitle"] }}
     </div>
     <div class="left-logo-ls logo-div-ls">
-      <img src="https://storage.googleapis.com/ez-menu.appspot.com/menuassets/popscreen_logo.jpg">
+      <img src="{{ menu['MenuLogo'] }}">
     </div>
 
     <div class="right-logo-ls logo-div-ls">
-      <img src="https://storage.googleapis.com/ez-menu.appspot.com/menuassets/popscreen_logo.jpg">
+      <img src="{{ menu['MenuLogo'] }}">
     </div>
 
     {% for sect in menu["Sections"] %}
@@ -283,8 +293,11 @@
   <div id="pt-view">
     <div id="menu-title-div-pt">
       <div id="menu-title-pt">{{ menu["MenuTitle"] }}</div>
+      <div id="logo-div-pt">
+        <img src="{{ menu['MenuLogo'] }}">
+      </div>
     </div>
-
+    
     {% for sect in menu["Sections"] %}
 
       <div class = "section-div-pt">
