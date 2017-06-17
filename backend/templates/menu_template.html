@@ -75,6 +75,14 @@
     #menu-title-div-pt {
       width: 100%;
     }
+    #logo-div-pt {
+      min-width: 100%;
+    }
+    #logo-div-pt img {
+      height: 10vh;
+      display: block;
+      margin: 0 auto;
+    }
     #menu-title-pt {
       width: 100%;
       text-align: center;
@@ -91,6 +99,9 @@
 
   <div id="menu-title-div-pt">
     <div id="menu-title-pt">{{ menu["MenuTitle"] }}</div>
+    <div id="logo-div-pt">
+      <img src="{{ menu['MenuLogo'] }}">
+    </div>
   </div>
 
   {% for sect in menu["Sections"] %}

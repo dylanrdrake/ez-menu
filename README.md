@@ -73,7 +73,7 @@ https://backend-dot-[PROJECT_ID].appspot.com.
 ## TODO
 1. Create sharing code.
 
-2. Create theme options and code.
+2. QR Code generator.
 
 3. Alert me when this menu changes:
 - Twilio docs in Google Cloud docs or Firebase messaging
