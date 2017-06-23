@@ -230,6 +230,14 @@ $(function() {
         });
         $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor).change();
 
+        $('#menu-logo-input').val(menu.MenuLogo);
+        
+        $('#menu-font-input')
+          .on('change', function(el) {
+            changeEditorFont(el);
+          })
+          .val(menu.MenuFont).change();
+
         $('.temp-option').each(function(i, tempopt) {
           if (tempopt.id == String(menu.Template)) {
             $(tempopt).attr('selected','selected');
@@ -328,6 +336,16 @@ $(function() {
     $('#editor-div').css('background-color',newbgcolor);
     $('#editor-div').find('.temp-option').css('background-color',newbgcolor);
     $('#editor-div .invert').css('color',invertColor(newbgcolor,true));
+  }
+  //
+
+
+  // Update menu editor font
+  function changeEditorFont (input) {
+    var newfont = $(input.target).val();
+    $('#editor-font').attr('href',
+      'https://fonts.googleapis.com/css?family='+newfont);
+    $('#editor-div').css('font-family', newfont);
   }
   //
 
