@@ -61,7 +61,7 @@
       border-bottom: solid 1px gray;
       padding-bottom: 2vh;
       position: relative;
-      font-size: 5vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*3vh);
       text-align: center;
     }
     .logo-div-ls img {
@@ -87,7 +87,7 @@
       height: 100%;
     }
     .section-title-div-ls {
-      font-size: 3vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*2vh);
       font-weight: bold;
       text-align: center;
     }
@@ -105,7 +105,7 @@
     }
     .item-title-div-ls {
       width: auto;
-      font-size: 2vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
       padding-left: 1%;
     }
     .item-title-ls {
@@ -115,7 +115,7 @@
     }
     .item-desc-div-ls {
       width: 100%;
-      font-size: 2vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
       overflow: hidden;
       padding-left: 1%;
     }
@@ -124,7 +124,7 @@
     .item-price-div-ls{
       height: 50%;
       width: 10%;
-      font-size: 2vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
       float: right !important;
     }
     .item-price-ls {
@@ -161,7 +161,7 @@
     .section-title-div-pt {
       width: 100%;
       text-align: center;
-      font-size: 4vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*2vh);
       text-decoration: underline;
     }
     .item-list-div-pt {
@@ -179,22 +179,22 @@
     }
     .item-title-div-pt {
       height: 5vh;
-      font-size: 3vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
     }
     .item-desc-div-pt {
       height: 10vh;
-      font-size: 2vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
     }
     .item-price-stock-div-pt {
       width: 10%;
     }
     .item-price-div-pt {
       height: 5vh;
-      font-size: 3vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
     }
     .item-stock-div-pt {
       height: 10vh;
-      font-size: 3vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
       color: #FF4500;
       font-weight: bold;
     }
@@ -207,7 +207,7 @@
       width: 100%;
       text-align: center;
       color: {{ menu["MenuTitleColor"] }};
-      font-size: 5vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*3vh);
     }
     /* END Portrait CSS */
 

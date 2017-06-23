@@ -1,9 +1,9 @@
 $(function() {
   //local dev backendHostURL:
-  backendHostUrl = 'http://localhost:8081';
+  //backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
-  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
   
 
 
@@ -238,6 +238,12 @@ $(function() {
           })
           .val(menu.MenuFont).change();
 
+        $('#menu-font-size-input')
+          .on('change', function(el) {
+            changeEditorFontSize(el);
+          })
+          .val(menu.MenuFontSize).change();
+
         $('.temp-option').each(function(i, tempopt) {
           if (tempopt.id == String(menu.Template)) {
             $(tempopt).attr('selected','selected');
@@ -346,6 +352,22 @@ $(function() {
     $('#editor-font').attr('href',
       'https://fonts.googleapis.com/css?family='+newfont);
     $('#editor-div').css('font-family', newfont);
+  }
+  //
+
+
+  // Update menu editor font size
+  function changeEditorFontSize (input) {
+    var newfontsize = $(input.target).val()/10.0;
+    $('.font1').each(function(i, elem) {
+      $(elem).css('font-size', String(newfontsize*1.5)+'vh');
+    });
+    $('.font2').each(function(i, elem) {
+      $(elem).css('font-size', String(newfontsize*2)+'vh');
+    });
+    $('.font3').each(function(i, elem) {
+      $(elem).css('font-size', String(newfontsize*3)+'vh');
+    });
   }
   //
 

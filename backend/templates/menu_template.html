@@ -34,7 +34,7 @@
     .section-title-div-pt {
       width: 100%;
       text-align: center;
-      font-size: 6vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*2vh);
       font-weight: bold;
     }
     .item-list-div-pt {
@@ -54,22 +54,22 @@
     .item-title-div-pt {
       height: 5vh;
       font-weight: bold;
-      font-size: 4vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
     }
     .item-desc-div-pt {
       height: 10vh;
-      font-size: 3vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.2vh);
     }
     .item-price-stock-div-pt {
       width: 10%;
     }
     .item-price-div-pt {
       height: 5vh;
-      font-size: 4vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.8vh);
     }
     .item-stock-div-pt {
       height: 10vh;
-      font-size: 5vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*2vh);
       color: #FF4500;
     }
     #menu-title-div-pt {
@@ -87,7 +87,7 @@
       width: 100%;
       text-align: center;
       color: {{ menu["MenuTitleColor"] }};
-      font-size: 8vh;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*3vh);
       font-weight: bold;
     }
   </style>

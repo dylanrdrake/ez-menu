@@ -56,16 +56,6 @@
       <div class="col-xs-4">
         <div class="col-xs-12 site-title">
           <div class="pull-left">
-<!--
-            <span style="color:#F92B20;">y</span>
-            <span style="color:#FE9920;">u</span>
-            <span style="color:#F2E93A;">m</span>
-            <span style="color:#4CAD39;">b</span>
-            <span style="color:#3FBA84;">o</span>
-            <span style="color:#126896;">a</span>
-            <span style="color:#7c48ff;">r</span>
-            <span style="color:#D14991;">d</span>
--->
             <span style="color:#F92B20;" class="title-char">e</span>
             <span style="color:#FE9920;" class="title-char">z</span>
             <span style="color:#F2E93A;" class="title-char">&middot</span>
@@ -128,7 +118,7 @@
           
           <div class="col-xs-11 menu-title-input-div change-color">
             <input type="text" id="editor-title-input"
-                    class="form-control change-color menu-data"
+                    class="form-control change-color menu-data font3"
                     name="MenuTitle"
                     placeholder="Menu Title">
             </input>
@@ -138,7 +128,8 @@
         <div class="row">
           <div class="col-xs-2 col-xs-offset-1">
             <label for="Template" class="invert">Template</label>
-            <select class="form-control menu-data invert" id="template-select"
+            <select class="form-control menu-data invert"
+                    id="template-select"
                     name="Template">
             </select> 
           </div>
@@ -160,6 +151,16 @@
                    class="form-control menu-data invert"
                    name="MenuFont"
                    placeholder="Enter a free Google Font">
+            </input>
+          </div>
+
+          <div class="col-xs-1">
+            <label for="MenuFontSize" class="invert">Font Size</label>
+            <input type="number"
+                   min="1" max="100"
+                   id="menu-font-size-input"
+                   class="form-control menu-data invert"
+                   name="MenuFontSize">
             </input>
           </div>
 
@@ -196,13 +197,14 @@
               <div class="col-xs-6 change-color">
                 <input type="text"
                         class="form-control sect-data change-color
-                               sect-title-input"
+                               sect-title-input font2"
                         name="SectionTitle" placeholder="Section Title">
                 </input>
               </div>
               <div class="col-xs-2 pull-right">
                 <button type="button"
-                    class="btn btn-danger delete-sect-btn form-control"
+                        class="btn btn-danger delete-sect-btn
+                               form-control"
                         aria-label="Left Align">
                   <span class="glyphicon glyphicon-trash invert"
                         aria-hidden="true">
@@ -232,20 +234,23 @@
                 </div>
                 <div class="col-xs-5 item-title-div change-color">
                   <input type="text"
-                          class="form-control item-data change-color item-title-input"
-                          name="ItemTitle" placeholder="Item Title">
+                         class="form-control item-data change-color
+                                 item-title-input font1"
+                         name="ItemTitle" placeholder="Item Title">
                   </input>
                 </div>
                 <div class="col-xs-3 item-stock-div">
                   <input type="text"
-                          class="form-control item-data item-stock-input"
-                          name="ItemStock" placeholder="Stock Note">
+                         class="form-control item-data
+                                item-stock-input font1"
+                         name="ItemStock" placeholder="Stock Note">
                   </input>
                 </div>
                 <div class="col-xs-1 item-price-div">
                   <input type="text"
-                          class="form-control item-data item-price-input invert"
-                          name="ItemPrice" placeholder="0.00">
+                         class="form-control item-data item-price-input
+                                invert font1"
+                         name="ItemPrice" placeholder="0.00">
                   </input>
                 </div>
                 <div class="col-xs-2 pull-right">
@@ -267,7 +272,8 @@
                 </div>
                 <div class="col-xs-9 item-desc-div change-color">
                   <input type="text"
-                          class="form-control item-data change-color item-desc-input"
+                          class="form-control item-data change-color
+                                 item-desc-input font1"
                           name="ItemDesc" placeholder="Item Description">
                   </input>
                 </div>
@@ -290,7 +296,8 @@
           </div>
         </div>
       
-        <div id="add-sect-div" class="col-xs-10 col-xs-offset-1 form-group">
+        <div id="add-sect-div"
+             class="col-xs-10 col-xs-offset-1 form-group">
           <div class="col-xs-4 col-xs-offset-4">
             <button type="button"
                     class="btn btn-info add-sect-btn form-control"
