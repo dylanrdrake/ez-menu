@@ -27,68 +27,67 @@
       color: #fdf6ee;
       font-family: '{{ menu["MenuFont"] }}';
     }
+    #logo-div-pt {
+      min-width: 100%;
+    }
+    #logo-div-pt img {
+      height: calc(({{ menu["MenuFontSize"] }}/10.0)*6vh);
+      display: block;
+      margin: 0 auto;
+    }
     .section-div-pt {
       margin-top: 5vh;
-      border-bottom: 1px solid #ffffff;
     }
     .section-title-div-pt {
       width: 100%;
       text-align: center;
       font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*2vh);
-      font-weight: bold;
+      text-decoration: underline;
     }
     .item-list-div-pt {
-      border-top: 1px solid #ffffff;
     }
     .item-div-pt {
       width: 100%;
       color: #ffffff;
+      padding-bottom: 3vh;
     }
     .inline-pt {
       display: inline-block;
       float: left;
     }
-    .item-title-desc-div-pt {
-      width: 90%;
-    }
-    .item-title-div-pt {
-      height: 5vh;
-      font-weight: bold;
-      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
-    }
-    .item-desc-div-pt {
-      height: 10vh;
-      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.2vh);
-    }
-    .item-price-stock-div-pt {
-      width: 10%;
-    }
-    .item-price-div-pt {
-      height: 5vh;
-      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.8vh);
-    }
-    .item-stock-div-pt {
-      height: 10vh;
-      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*2vh);
-      color: #FF4500;
-    }
-    #menu-title-div-pt {
+    .item-title-stock-price-div-pt {
       width: 100%;
     }
-    #logo-div-pt {
-      min-width: 100%;
+    .item-title-div-pt {
+      width: auto;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
     }
-    #logo-div-pt img {
-      height: 10vh;
-      display: block;
-      margin: 0 auto;
+    .item-stock-div-pt {
+      width: auto;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
+      color: #FF4500;
+      font-weight: bold;
+    }
+    .item-price-div-pt {
+      width: auto;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
+      float: right !important;
+      text-align: right;
+    }
+    .item-desc-div-pt {
+      width: 100%;
+      font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
+    }
+    #menu-title-div-pt {
+      margin-top: 2%;
+      width: 100%;
+      border-bottom: 1px solid #ffffff;
     }
     #menu-title-pt {
       width: 100%;
       text-align: center;
       color: {{ menu["MenuTitleColor"] }};
       font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*3vh);
-      font-weight: bold;
     }
   </style>
 
@@ -110,36 +109,32 @@
 
       <div class="section-title-div-pt"
           style="color:{{ sect['SectionTitleColor'] }};">
-        <div>
-          {{ sect["SectionTitle"] }}
-        </div>
+        {{ sect["SectionTitle"] }}
       </div>
 
       <div class="item-list-div-pt">
     
         {% for item in sect["Items"] %}
-          <div class="item-div-pt">
+          <div class="item-div-pt inline-pt">
             
-            <div class="item-title-desc-div-pt inline-pt">
-              <div class="item-title-div-pt"
-                   style="color:{{ item['ItemTitleColor'] }};">
+            <div class="item-title-stock-price-div-pt">
+              <div class="item-title-div-pt inline-pt"
+                    style="color:{{ item['ItemTitleColor'] }};">
                 {{ item["ItemTitle"] }}
               </div>
-              <div class="item-desc-div-pt"
-                   style="color:{{ item['ItemDescColor'] }};">
-                {{ item["ItemDesc"] }}
-              </div>
-            </div>
-            
-            <div class="item-price-stock-div-pt inline-pt">
-              <div class="item-price-div-pt">
-                {{ item["ItemPrice"] }}
-              </div>
-              <div class="item-stock-div-pt">
+              <div class="item-stock-div-pt inline-pt">
                   {% if item["ItemStock"] != None %}
                     {{ item["ItemStock"] }}
                   {% endif %}
               </div>
+              <div class="item-price-div-pt inline-pt">
+                {{ item["ItemPrice"] }}
+              </div>
+            </div>
+            
+            <div class="item-desc-div-pt inline-pt"
+                  style="color:{{ item['ItemDescColor'] }};">
+              {{ item["ItemDesc"] }}
             </div>
           
           </div>
