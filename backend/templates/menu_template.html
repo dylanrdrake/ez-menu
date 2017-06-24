@@ -70,6 +70,7 @@
     }
     .item-price-div-pt {
       width: auto;
+      text-align: right;
       font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
       float: right !important;
       text-align: right;
@@ -105,11 +106,11 @@
 
   {% for sect in menu["Sections"] %}
 
-    <div class = "section-div-pt">
+    <div class="section-div-pt">
 
       <div class="section-title-div-pt"
           style="color:{{ sect['SectionTitleColor'] }};">
-        {{ sect["SectionTitle"] }}
+          {{ sect["SectionTitle"] }}
       </div>
 
       <div class="item-list-div-pt">
@@ -143,7 +144,7 @@
       </div>
 
     </div>
-    
+  
   {% endfor %}
 </body>
 </html>
