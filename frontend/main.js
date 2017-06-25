@@ -245,7 +245,7 @@ $(function() {
           .val(menu.MenuFontSize).change();
 
         $('.temp-option').each(function(i, tempopt) {
-          if (tempopt.id == String(menu.Template)) {
+          if (String(tempopt.id) == String(menu.Template)) {
             $(tempopt).attr('selected','selected');
             return true;
           }
