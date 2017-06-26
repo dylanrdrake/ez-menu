@@ -246,20 +246,19 @@ def updatemenu(menudata):
     for menu in menudata:
         menuid = menu.pop('MenuId')
         menudata = getmenu(menuid)
-        
+       
+        # Update sections
         if 'Sections' in menu:
             sects = menu.pop('Sections')
             updatesect(menuid, sects)
 
+        # Update database
         if 'Publish' in menu and menu['Publish'] == True:
-            menu['PublicLink'] = publishmenu(menuid)
             menu['Publish'] = 'true'
         elif 'Publish' in menu and menu['Publish'] == False:
-            takedownmenu(menuid)
             menu['PublicLink'] = None
             menu['Publish'] = 'false'
         elif menudata['Publish'] == 'true':
-            menu['PublicLink'] = publishmenu(menuid)
             menu['Publish'] = 'true'
         
         if len(menu) != 0:
@@ -269,6 +268,14 @@ def updatemenu(menudata):
             update_menu_sql += "SET "+(",").join(updates)+" "
             update_menu_sql += "WHERE MenuId='"+menuid+"'"
             query_db(update_menu_sql, True)
+
+        # Update Storage object
+        if 'Publish' in menu and menu['Publish'] == True:
+            menu['PublicLink'] = publishmenu(menuid)
+        elif 'Publish' in menu and menu['Publish'] == False:
+            takedownmenu(menuid)
+        elif menudata['Publish'] == 'true':
+            menu['PublicLink'] = publishmenu(menuid)
 
 
 
