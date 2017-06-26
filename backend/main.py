@@ -254,11 +254,15 @@ def updatemenu(menudata):
 
         # Update database
         if 'Publish' in menu and menu['Publish'] == True:
+            menu['PublicLink'] = 'https://storage.googleapis.com/'+bucket+'/menus/'\
+                    +menuid+'.html'
             menu['Publish'] = 'true'
         elif 'Publish' in menu and menu['Publish'] == False:
             menu['PublicLink'] = None
             menu['Publish'] = 'false'
         elif menudata['Publish'] == 'true':
+            menu['PublicLink'] = 'https://storage.googleapis.com/'+bucket+'/menus/'\
+                    +menuid+'.html'
             menu['Publish'] = 'true'
         
         if len(menu) != 0:
@@ -271,11 +275,11 @@ def updatemenu(menudata):
 
         # Update Storage object
         if 'Publish' in menu and menu['Publish'] == True:
-            menu['PublicLink'] = publishmenu(menuid)
+            publiclink = publishmenu(menuid)
         elif 'Publish' in menu and menu['Publish'] == False:
             takedownmenu(menuid)
         elif menudata['Publish'] == 'true':
-            menu['PublicLink'] = publishmenu(menuid)
+            publiclink = publishmenu(menuid)
 
 
 
