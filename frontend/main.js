@@ -244,15 +244,17 @@ $(function() {
           })
           .val(menu.MenuFontSize).change();
 
-        $('.temp-option').each(function(i, tempopt) {
-          if (String(tempopt.id) == String(menu.Template)) {
-            $(tempopt).attr('selected', 'selected');
-            return true;
-          }
-          else {
-            $(tempopt).removeAttr('selected');
-            return true;
-          }
+        $('#template-select').ready( function() {
+          $('.temp-option').each(function(i, tempopt) {
+            if (String(tempopt.id) == String(menu.Template)) {
+              $(tempopt).attr('selected', 'selected');
+              return true;
+            }
+            else {
+              $(tempopt).removeAttr('selected');
+              return true;
+            }
+          });
         });
 
         var $section_temp = $('#SectionTemplate').clone();
