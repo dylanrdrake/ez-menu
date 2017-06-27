@@ -268,14 +268,16 @@
             </div>
 
             <div class="item-price-div-ls inline-ls">
-              <div class="item-price-ls">
+              <div class="item-price-ls"
+                   style="color:{{ item['ItemTitleColor'] }};">
                 {{ item["ItemPrice"] }}
               </div>
             </div>
           </div>
 
           <div class="item-desc-div-ls">
-            <div style="color:{{ item['ItemDescColor'] }};" class="item-desc-ls">
+            <div style="color:{{ item['ItemDescColor'] }};"
+                 class="item-desc-ls">
             </div>
           </div>
         
@@ -325,7 +327,8 @@
                       {{ item["ItemStock"] }}
                     {% endif %}
                 </div>
-                <div class="item-price-div-pt inline-pt">
+                <div class="item-price-div-pt inline-pt"
+                     style="color:{{ item['ItemTitleColor'] }};">
                   {{ item["ItemPrice"] }}
                 </div>
               </div>

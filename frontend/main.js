@@ -246,7 +246,11 @@ $(function() {
 
         $('.temp-option').each(function(i, tempopt) {
           if (String(tempopt.id) == String(menu.Template)) {
-            $(tempopt).attr('selected','selected');
+            $(tempopt).attr('selected', 'selected');
+            return true;
+          }
+          else {
+            $(tempopt).removeAttr('selected');
             return true;
           }
         });
@@ -277,7 +281,8 @@ $(function() {
                 changeTextColor(el);
             }).val(item.ItemTitleColor).change();
             $itemrow.find('.item-stock-input').val(item.ItemStock);
-            $itemrow.find('.item-price-input').val(item.ItemPrice);
+            $itemrow.find('.item-price-input').val(item.ItemPrice)
+              .css('color', item.ItemTitleColor);
             $itemrow.find('.item-desc-input').val(item.ItemDesc);
             $itemrow.find('.item-desc-color-input').colorpicker()
               .on('changeColor', function(el) {
