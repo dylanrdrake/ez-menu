@@ -135,6 +135,10 @@ body {
   color: #337ab7;
 }
 
+.toggle-border {
+  border: 1px solid !important;
+}
+
 #menu-level-data {
   padding-bottom: 5vh;
 }

@@ -112,43 +112,49 @@
           <div class="col-xs-1 menu-title-color-div color-input-div">
             <input id="menu-title-color-input"
                    class="form-control menu-data color-input
-                          menu-title-color-input"
+                          menu-title-color-input field"
                    name="MenuTitleColor">
           </div>
           
-          <div class="col-xs-11 menu-title-input-div change-color">
+          <div class="col-xs-9 menu-title-input-div change-color">
             <input type="text" id="editor-title-input"
-                    class="form-control change-color menu-data font3"
+                    class="form-control change-color menu-data field font3"
                     name="MenuTitle"
                     placeholder="Menu Title">
             </input>
+          </div>
+
+          <div class="col-xs-2 edit-hl-fields-btn-div">
+            <button id="edit-hl-fields-btn"
+                    class="btn btn-primary">
+            <span>Highlight Fields</span>
           </div>
         </div>
 
         <div class="row">
           <div class="col-xs-2 col-xs-offset-1">
             <label for="Template" class="invert">Template</label>
-            <select class="form-control menu-data invert"
+            <select class="form-control menu-data invert field"
                     id="template-select"
                     name="Template">
             </select> 
           </div>
 
-          <div class="col-xs-2 col-xs-offset-1">
+          <div class="col-xs-3">
             <label for="MenuLogo" class="invert">Logo</label>
             <input type="text"
                    id="menu-logo-input"
-                   class="form-control menu-data invert"
+                   class="form-control menu-data invert field"
                    name="MenuLogo"
                    placeholder="Link to your logo file">
             </input>
           </div>
 
-          <div class="col-xs-1 col-xs-offset-1">
+          <div class="col-xs-2">
             <label for="MenuFont" class="invert">Font</label>
             <input type="text" 
                    id="menu-font-input"
-                   class="form-control menu-data invert"
+                   class="form-control menu-data invert field"
                    name="MenuFont"
                    placeholder="Enter a free Google Font">
             </input>
@@ -159,13 +165,13 @@
             <input type="number"
                    min="1" max="100"
                    id="menu-font-size-input"
-                   class="form-control menu-data invert"
+                   class="form-control menu-data invert field"
                    name="MenuFontSize">
             </input>
           </div>
 
-          <div class="col-xs-2 col-xs-offset-1">
-            <label for="MenuBkgrdColor" class="invert">Background Color</label>
+          <div class="col-xs-1 col-xs-offset-1">
+            <label for="MenuBkgrdColor" class="invert">Background</label>
             <input id="menu-bkgrd-color-input"
                    class="form-control menu-data"
                    name="MenuBkgrdColor">
@@ -191,13 +197,13 @@
             <div class="row">
               <div class="col-xs-1 color-input-div">
                 <input class="form-control sect-data color-input
-                              sect-color-input"
+                              sect-color-input field"
                        name="SectionTitleColor">
               </div>
               <div class="col-xs-6 change-color">
                 <input type="text"
                         class="form-control sect-data change-color
-                               sect-title-input font2"
+                               sect-title-input font2 field"
                         name="SectionTitle" placeholder="Section Title">
                 </input>
               </div>
@@ -209,7 +215,7 @@
                   <span class="glyphicon glyphicon-trash invert"
                         aria-hidden="true">
                   </span>
-                  <span class="invert"> Delete Section</span>
+                  <span class="invert"> Section</span>
                 </button>                
               </div>
             </div>
@@ -229,27 +235,27 @@
               <div class="row">
                 <div class="col-xs-1 item-title-color-div color-input-div">
                   <input class="form-control item-data color-input
-                                item-title-color-input"
+                                item-title-color-input field"
                          name="ItemTitleColor">
                 </div>
                 <div class="col-xs-5 item-title-div change-color">
                   <input type="text"
                          class="form-control item-data change-color
-                                 item-title-input font1"
+                                 item-title-input field font1"
                          name="ItemTitle" placeholder="Item Title">
                   </input>
                 </div>
                 <div class="col-xs-3 item-stock-div">
                   <input type="text"
                          class="form-control item-data
-                                item-stock-input font1"
+                                item-stock-input font1 field"
                          name="ItemStock" placeholder="Stock Note">
                   </input>
                 </div>
                 <div class="col-xs-1 item-price-div">
                   <input type="text"
                          class="form-control item-data item-price-input
-                                invert font1"
+                                invert field font1"
                          name="ItemPrice" placeholder="0.00">
                   </input>
                 </div>
@@ -260,20 +266,20 @@
                     <span class="glyphicon glyphicon-trash invert"
                           aria-hidden="true">
                     </span>
-                    <span class="invert"> Delete Item</span>
+                    <span class="invert"> Item</span>
                   </button>                
                 </div>
               </div>
               <div class="row">
                 <div class="col-xs-1 item-desc-color-div color-input-div">
                   <input class="form-control item-data color-input
-                                item-desc-color-input"
+                                item-desc-color-input field"
                          name="ItemDescColor" value="#ffffff">
                 </div>
                 <div class="col-xs-9 item-desc-div change-color">
                   <input type="text"
                           class="form-control item-data change-color
-                                 item-desc-input font1"
+                                 item-desc-input field font1"
                           name="ItemDesc" placeholder="Item Description">
                   </input>
                 </div>
@@ -288,7 +294,7 @@
                   <span class="glyphicon glyphicon-plus invert"
                         aria-hidden="true">
                   </span>
-                  <span class="invert"> Add Item</span>
+                  <span class="invert"> Item</span>
                 </button>                
               </div>
             </div>
@@ -305,7 +311,7 @@
               <span class="glyphicon glyphicon-plus invert"
                     aria-hidden="true">
               </span>
-              <span class="invert"> Add Section</span>
+              <span class="invert"> Section</span>
             </button>                
           </div>
         </div>
@@ -323,7 +329,8 @@
           </div>
           <div class="col-xs-1">
             <button type="button" id="editor-save-btn"
-                   class="form-control btn btn-primary">
+                   class="form-control btn btn-primary"
+                   disabled>
               <span class="invert">Save</span>
             </button>
           </div>

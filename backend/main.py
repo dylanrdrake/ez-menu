@@ -245,7 +245,7 @@ def updatesect(menuid, sectdata):
 def updatemenu(menudata):
     for menu in menudata:
         menuid = menu.pop('MenuId')
-        menudata = getmenu(menuid)
+        dbdata = getmenu(menuid)
        
         # Update sections
         if 'Sections' in menu:
@@ -254,15 +254,15 @@ def updatemenu(menudata):
 
         # Update database
         if 'Publish' in menu and menu['Publish'] == True:
-            menu['PublicLink'] = 'https://storage.googleapis.com/'+bucket+'/menus/'\
-                    +menuid+'.html'
+            menu['PublicLink'] = 'https://storage.googleapis.com/'\
+                    +bucket+'/menus/'+menuid+'.html'
             menu['Publish'] = 'true'
         elif 'Publish' in menu and menu['Publish'] == False:
             menu['PublicLink'] = None
             menu['Publish'] = 'false'
-        elif menudata['Publish'] == 'true':
-            menu['PublicLink'] = 'https://storage.googleapis.com/'+bucket+'/menus/'\
-                    +menuid+'.html'
+        elif dbdata['Publish'] == 'true':
+            menu['PublicLink'] = 'https://storage.googleapis.com/'\
+                    +bucket+'/menus/'+menuid+'.html'
             menu['Publish'] = 'true'
         
         if len(menu) != 0:
@@ -274,11 +274,11 @@ def updatemenu(menudata):
             query_db(update_menu_sql, True)
 
         # Update Storage object
-        if 'Publish' in menu and menu['Publish'] == True:
+        if 'Publish' in menu and menu['Publish'] == 'true':
             publiclink = publishmenu(menuid)
-        elif 'Publish' in menu and menu['Publish'] == False:
+        elif 'Publish' in menu and menu['Publish'] == 'false':
             takedownmenu(menuid)
-        elif menudata['Publish'] == 'true':
+        elif dbdata['Publish'] == 'true':
             publiclink = publishmenu(menuid)
 
 

@@ -188,6 +188,7 @@ $(function() {
   /////////////// Edit menu ///////////////////////////////////
   $('#menu-table').on('click', '.menu-edit-btn', function() {
     $('.added').remove();
+    $('#editor-save-btn').removeAttr('disabled');
     var menuid = $(this).parent().siblings('.menu-id-data').text();
 
     $.ajax({
@@ -310,6 +311,14 @@ $(function() {
   ///////////////// Edit menu ////////////////////////////////
   
 
+  
+  
+  // Highlight fields
+  $(document).on('click', '#edit-hl-fields-btn', function() {
+    $('.field').toggleClass('toggle-border');
+  });
+  // Highlight fields
+  
   
   // Invert color
   function invertColor(hex, bw) {
@@ -451,6 +460,7 @@ $(function() {
 
   // Save menu
   $('#editor-save-btn').click(function() {
+    $('#editor-save-btn').attr('disabled', 'disabled');
     var menudict = {};
     $('#editor-div').find('.menu-data').each(function(i ,menudata) {
      
