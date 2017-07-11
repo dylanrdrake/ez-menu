@@ -50,10 +50,11 @@ body {
 }
 
 #menu-table-div {
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
   background-color: #fafbfa;
   border: #bcc7bd solid 1px;
+  box-shadow: 2px 2px 6px #666666;
 }
 
 #menu-table {
