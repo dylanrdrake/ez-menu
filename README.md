@@ -85,7 +85,7 @@ https://backend-dot-[PROJECT_ID].appspot.com.
 5. Colorscheme:
     colorscheme: #11353B, #4ecdc4, #f7fff7, #ff6b6b, #ffe66d
 
-6. font selector. logo uploader. Move menu templates to Storage(NON public).
+6. Move menu templates to Storage(NON public).
 
 7. Kiosks: put code on back of pi. Set up local network site on pi that user can enter in wifi password. Have Set up Kiosk feature in web UI.
 
