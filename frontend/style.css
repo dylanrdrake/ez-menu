@@ -60,6 +60,7 @@ body {
   background-color: #fafbfa;
   border: #bcc7bd solid 1px;
   box-shadow: 2px 2px 6px #666666;
+  border-radius: 10px;
 }
 
 #menu-table {
