@@ -1,3 +1,8 @@
+#logged-out {
+  background-color: #3A3A3A;
+  color: #f7fff7;
+}
+
 body {
   font-family: "helvetica", sans-serif;
   text-align: center;
