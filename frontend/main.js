@@ -1,20 +1,22 @@
 $(function() {
   //local dev backendHostURL:
-  //backendHostUrl = 'http://localhost:8081';
+  backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
-  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
   
 
 
   // Loading
   $(document).ajaxStart(function() {
+    var logoColors = [];
  
     function loadStart() {
       var time = 0;
       var bkdgcolor = $('#top-row').css('color');
       $('.title-char').each(function(i, titlechar) {
         var charcolor = $(titlechar).css('color');
+        logoColors.push(charcolor);
         $(titlechar).css('color',bkdgcolor);
         setTimeout(function() {
           $(titlechar).css('color', charcolor);
@@ -27,8 +29,13 @@ $(function() {
 
     $(document).ajaxStop(function() {
       clearInterval(loadInterval);
+      
+      $('.title-char').each(function(i, titlechar) {
+        $(titlechar).css('color', logoColors[i]);
+        alert(i);
+      });
     });
-  
+
   });
   // Loading
 
