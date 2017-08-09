@@ -1,22 +1,27 @@
 $(function() {
   //local dev backendHostURL:
-  backendHostUrl = 'http://localhost:8081';
+  //backendHostUrl = 'http://localhost:8081';
   
   // production backendHostURL:
-  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
   
 
-
-  // Loading
+  // Loading animation
   $(document).ajaxStart(function() {
-    var logoColors = [];
+    function getRandomColor() {
+      var colorLetters = '0123456789ABCDEF';
+      var colorString = '#';
+      for (var i = 0; i < 6; i++) {
+        colorString += colorLetters[Math.floor(Math.random() * 16)];
+      }
+      return colorString;
+    };
  
     function loadStart() {
       var time = 0;
       var bkdgcolor = $('#top-row').css('color');
       $('.title-char').each(function(i, titlechar) {
-        var charcolor = $(titlechar).css('color');
-        logoColors.push(charcolor);
+        var charcolor = getRandomColor();
         $(titlechar).css('color',bkdgcolor);
         setTimeout(function() {
           $(titlechar).css('color', charcolor);
@@ -31,13 +36,12 @@ $(function() {
       clearInterval(loadInterval);
       
       $('.title-char').each(function(i, titlechar) {
-        $(titlechar).css('color', logoColors[i]);
-        alert(i);
+        $(titlechar).css('color', getRandomColor());
       });
     });
-
+  
   });
-  // Loading
+  // Loading animation
 
 
   
@@ -213,105 +217,103 @@ $(function() {
       error: function(error) {
         console.log(error);
       }
-    });
- 
-    $.ajax({
-      url: backendHostUrl + '/menus',
-      headers: {'Authorization': 'Bearer ' + userIdToken},
-      method: 'GET',
-      data: {'MenuId': menuid},
-      contentType: 'application/json',
-      success: function(menu) {
-        $('#editor-id-input').val(menu.MenuId);
-        $('#editor-title-input').val(menu.MenuTitle);
-        
-        $('#menu-title-color-input').colorpicker()
-          .on('changeColor', function(el) {
-            changeTextColor(el);
-        });
-        $('#menu-title-color-input').val(menu.MenuTitleColor).change();
-
-        $('#menu-bkgrd-color-input').colorpicker()
-          .on('changeColor', function(el) {
-            changeBkgrdColor(el);
-            $(el.target).css('color', invertColor($(el.target).val(), true));
-        });
-        $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor).change();
-
-        $('#menu-logo-input').val(menu.MenuLogo);
-        
-        $('#menu-font-input')
-          .on('change', function(el) {
-            changeEditorFont(el);
-          })
-          .val(menu.MenuFont).change();
-
-        $('#menu-font-size-input')
-          .on('change', function(el) {
-            changeEditorFontSize(el);
-          })
-          .val(menu.MenuFontSize).change();
-
-        $('#template-select').ready( function() {
-          $('.temp-option').each(function(i, tempopt) {
-            if (String(tempopt.id) == String(menu.Template)) {
-              $(tempopt).attr('selected', 'selected');
-              return true;
-            }
-            else {
-              $(tempopt).removeAttr('selected');
-              return true;
-            }
-          });
-        });
-
-        var $section_temp = $('#SectionTemplate').clone();
-        var $itemrow_temp = $('#ItemTemplate').clone();
-        $section_temp.find('#ItemTemplate').remove();
-        $section_temp.removeAttr('hidden');
-        
-        menu.Sections.forEach(function(sect) {
-          var $section = $section_temp.clone();
-          $section.removeAttr('id');
-          $section.addClass('added');
-          $section.find('.sect-id-input').val(sect.SectionId);
-          $section.find('.sect-title-input').val(sect.SectionTitle);
-          $section.find('.sect-color-input').colorpicker()
+    }).then(function() {
+      
+      $.ajax({
+        url: backendHostUrl + '/menus',
+        headers: {'Authorization': 'Bearer ' + userIdToken},
+        method: 'GET',
+        data: {'MenuId': menuid},
+        contentType: 'application/json',
+        success: function(menu) {
+          $('#editor-id-input').val(menu.MenuId);
+          $('#editor-title-input').val(menu.MenuTitle);
+          
+          $('#menu-title-color-input').colorpicker()
             .on('changeColor', function(el) {
               changeTextColor(el);
-          }).val(sect.SectionTitleColor).change();
+          });
+          $('#menu-title-color-input').val(menu.MenuTitleColor).change();
+
+          $('#menu-bkgrd-color-input').colorpicker()
+            .on('changeColor', function(el) {
+              changeBkgrdColor(el);
+              $(el.target).css('color', invertColor($(el.target).val(), true));
+          });
+          $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor).change();
+
+          $('#menu-logo-input').val(menu.MenuLogo);
           
-          sect.Items.forEach(function(item) {
-            var $itemrow = $itemrow_temp.clone();
-            $itemrow.removeAttr('id');
-            $itemrow.find('.item-id-input').val(item.ItemId);
-            $itemrow.find('.item-title-input').val(item.ItemTitle);
-            $itemrow.find('.item-title-color-input').colorpicker()
-              .on('changeColor', function(el) {
-                changeTextColor(el);
-            }).val(item.ItemTitleColor).change();
-            $itemrow.find('.item-stock-input').val(item.ItemStock);
-            $itemrow.find('.item-price-input').val(item.ItemPrice)
-              .css('color', item.ItemTitleColor);
-            $itemrow.find('.item-desc-input').val(item.ItemDesc);
-            $itemrow.find('.item-desc-color-input').colorpicker()
-              .on('changeColor', function(el) {
-                changeTextColor(el);
-            }).val(item.ItemDescColor).change();
-            $section.find('.add-item-btn-row').before($itemrow);
+          $('#menu-font-input')
+            .on('change', function(el) {
+              changeEditorFont(el);
+            })
+            .val(menu.MenuFont).change();
+
+          $('#menu-font-size-input')
+            .on('change', function(el) {
+              changeEditorFontSize(el);
+            })
+            .val(menu.MenuFontSize).change();
+
+          $('#template-select').ready( function() {
+            $('.temp-option').each(function(i, tempopt) {
+              if (String(tempopt.id) == String(menu.Template)) {
+                $(tempopt).attr('selected', 'selected');
+              }
+              else {
+                $(tempopt).removeAttr('selected');
+              }
+            });
           });
 
-          $('#add-sect-div').before($section);
+          var $section_temp = $('#SectionTemplate').clone();
+          var $itemrow_temp = $('#ItemTemplate').clone();
+          $section_temp.find('#ItemTemplate').remove();
+          $section_temp.removeAttr('hidden');
           
-        });
+          menu.Sections.forEach(function(sect) {
+            var $section = $section_temp.clone();
+            $section.removeAttr('id');
+            $section.addClass('added');
+            $section.find('.sect-id-input').val(sect.SectionId);
+            $section.find('.sect-title-input').val(sect.SectionTitle);
+            $section.find('.sect-color-input').colorpicker()
+              .on('changeColor', function(el) {
+                changeTextColor(el);
+            }).val(sect.SectionTitleColor).change();
+            
+            sect.Items.forEach(function(item) {
+              var $itemrow = $itemrow_temp.clone();
+              $itemrow.removeAttr('id');
+              $itemrow.find('.item-id-input').val(item.ItemId);
+              $itemrow.find('.item-title-input').val(item.ItemTitle);
+              $itemrow.find('.item-title-color-input').colorpicker()
+                .on('changeColor', function(el) {
+                  changeTextColor(el);
+              }).val(item.ItemTitleColor).change();
+              $itemrow.find('.item-stock-input').val(item.ItemStock);
+              $itemrow.find('.item-price-input').val(item.ItemPrice)
+                .css('color', item.ItemTitleColor);
+              $itemrow.find('.item-desc-input').val(item.ItemDesc);
+              $itemrow.find('.item-desc-color-input').colorpicker()
+                .on('changeColor', function(el) {
+                  changeTextColor(el);
+              }).val(item.ItemDescColor).change();
+              $section.find('.add-item-btn-row').before($itemrow);
+            });
 
-      },
-      error: function(error) {
-        console.log(error);
-      }
+            $('#add-sect-div').before($section);
+            
+          });
+
+        },
+        error: function(error) {
+          console.log(error);
+        }
+      });
     });
 
-  
     $("#editor-div").show(300);
 
   });
