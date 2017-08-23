@@ -62,7 +62,7 @@ server with the following command:
 https://backend-dot-[PROJECT_ID].appspot.com.
 1. Deploy the application using the Cloud SDK command-line interface:
 
-        gcloud app deploy backend/index.yaml frontend/app.yaml backend/app.yaml
+        gcloud app deploy frontend/app.yaml backend/app.yaml
 
     The Cloud Datastore indexes can take a while to update, so the application
     might not be fully functional immediately after deployment.

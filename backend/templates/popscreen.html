@@ -18,36 +18,56 @@
   
   <!-- Portrait/Landscape JS -->
   <script>
-    $(document).ready(function() {
+    var pages = 1;
+    var currentPage = 1;
+    
+    function setupMenu() {
       if (window.innerHeight > window.innerWidth) {
         $('#ls-view').hide();
         $('#pt-view').show();
       } else if (window.innerWidth > window.innerHeight) {
         $('#pt-view').hide();
         $('#ls-view').show();
+        
+        $('.item-div-ls').each(function(i, itemdiv) {
+          var windhgt = window.innerHeight;
+          var itemtop = $(itemdiv).offset().top;
+          var itemhgt = $(itemdiv).height();
+          var pagenum = Math.floor((itemtop + itemhgt) / windhgt) + 1;
+          if (pagenum > pages) { pages = pagenum; }
+          if (pagenum > 1) { $(itemdiv).hide(); }
+          $(itemdiv).addClass('page-' + pagenum.toString()); 
+        });
+
       } else {
         $('#ls-view').hide();
         $('#pt-view').show();
       }
+    };
+
+    $(document).ready(function() {
+      setupMenu();
     });
 
     $(window).resize(function() {
-      if (window.innerHeight > window.innerWidth) {
-        $('#ls-view').hide();
-        $('#pt-view').show();
-      } else if (window.innerWidth > window.innerHeight) {
-        $('#pt-view').hide();
-        $('#ls-view').show();
-      } else {
-        $('#ls-view').hide();
-        $('#pt-view').show();
-      }
+      setupMenu();
     });
 
-    function reload() {
+    function reloadMenu() {
       location.reload(true);
-    }
-    setInterval(reload, 60000);
+    };
+
+    function changePage() {
+      if (currentPage >= pages) {
+        reloadMenu();
+      } else {
+        $('.page-'+currentPage.toString()).hide();
+        $('.page-'+(currentPage+1).toString()).show();
+        currentPage += 1;
+      }
+    };
+    
+    setInterval(changePage, 30000);
   </script>
 
 
@@ -168,7 +188,6 @@
       width: 100%;
       text-align: center;
       font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*2vh);
-      text-decoration: underline;
     }
     .item-list-div-pt {
     }
@@ -191,6 +210,7 @@
     .item-stock-div-pt {
       width: auto;
       font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
+      padding-left: 1%;
       color: #FF4500;
       font-weight: bold;
     }
@@ -208,7 +228,6 @@
     #menu-title-div-pt {
       margin-top: 2%;
       width: 100%;
-      border-bottom: 1px solid #ffffff;
     }
     #menu-title-pt {
       width: 100%;
@@ -226,7 +245,7 @@
 <body>
 
   <!-- START Landscape view -->
-  <div id="ls-view">
+  <div id="ls-view" hidden>
     <div class="menu-title-div-ls" style="color:{{ menu['MenuTitleColor'] }}">
       {{ menu["MenuTitle"] }}
     </div>
@@ -299,7 +318,7 @@
 
 
   <!-- START Portrait view -->
-  <div id="pt-view">
+  <div id="pt-view" hidden>
     <div id="menu-title-div-pt">
       <div id="menu-title-pt">{{ menu["MenuTitle"] }}</div>
       <div id="logo-div-pt">
