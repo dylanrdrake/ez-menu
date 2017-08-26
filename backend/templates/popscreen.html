@@ -77,8 +77,13 @@
       if (currentPage >= pages) {
         reloadMenu();
       } else {
-        $('.page-'+currentPage.toString()).hide();
-        $('.page-'+(currentPage+1).toString()).show();
+        $('.section-div-ls').each(function(i, sect) {
+          var sectItems = $(sect).find('.page-'+(currentPage+1).toString());
+          if ($(sectItems).length > 0) {
+            $(sect).find('.page-'+currentPage.toString()).hide();
+            $(sect).find('.page-'+(currentPage+1).toString()).show();
+          }
+        });
         currentPage += 1;
       }
     };
@@ -105,7 +110,7 @@
       text-align: center;
     }
     .logo-div-ls img {
-      height: calc(({{ menu["MenuFontSize"] }}/10.0)*6vh);
+      height: calc(({{ menu["MenuFontSize"] }}/10.0)*7vh);
     }
     .left-logo-ls {
       position: absolute;
