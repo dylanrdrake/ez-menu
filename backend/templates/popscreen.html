@@ -20,6 +20,7 @@
   <script>
     var pages = 1;
     var currentPage = 1;
+    var itemsPerPage = 0;
     
     function setupMenu() {
       if (window.innerHeight > window.innerWidth) {
@@ -28,12 +29,27 @@
       } else if (window.innerWidth > window.innerHeight) {
         $('#pt-view').hide();
         $('#ls-view').show();
-        
+
+
+       
+        var itemsPerPage = 0;
+        var trackedIndexes = [];
         $('.item-div-ls').each(function(i, itemdiv) {
+          var index = $(itemdiv).index();
           var windhgt = window.innerHeight;
           var itemtop = $(itemdiv).offset().top;
           var itemhgt = $(itemdiv).height();
-          var pagenum = Math.floor((itemtop + itemhgt) / windhgt) + 1;
+          if (itemtop+itemhgt < windhgt) {
+            if (trackedIndexes.includes(index) == false) {
+              itemsPerPage += 1;
+              trackedIndexes.push(index); 
+            }
+          }
+        });
+
+        $('.item-div-ls').each(function(i, itemdiv) {
+          var index = $(itemdiv).index();
+          var pagenum = Math.floor(index / itemsPerPage) + 1;
           if (pagenum > pages) { pages = pagenum; }
           if (pagenum > 1) { $(itemdiv).hide(); }
           $(itemdiv).addClass('page-' + pagenum.toString()); 
