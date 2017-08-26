@@ -78,10 +78,13 @@
         reloadMenu();
       } else {
         $('.section-div-ls').each(function(i, sect) {
-          var sectItems = $(sect).find('.page-'+(currentPage+1).toString());
-          if ($(sectItems).length > 0) {
+          var nextItems = $(sect).find('.page-'+(currentPage+1).toString());
+          if ($(nextItems).length > 0) {
             $(sect).find('.page-'+currentPage.toString()).hide();
             $(sect).find('.page-'+(currentPage+1).toString()).show();
+          } else {
+            $(sect).find('.page-'+currentPage.toString()).hide();
+            $(sect).find('.page-1').show();
           }
         });
         currentPage += 1;
