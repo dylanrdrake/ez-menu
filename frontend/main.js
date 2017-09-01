@@ -211,7 +211,9 @@ $(function() {
         user.Templates.forEach(function(template) {
           $('#template-select').append(
             $('<option>'+template.TemplateName+'</option>').attr(
-              'id',template.TemplateId).addClass('added temp-option invert'));
+              'id',template.TemplateId).attr('role', 'button')
+              .attr('href', '#').attr('data-toggle', 'dropdown')
+              .addClass('added temp-option invert'));
         });
       },
       error: function(error) {
