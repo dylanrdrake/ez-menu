@@ -131,8 +131,7 @@ body {
 .fixed {
   position: fixed;
   -webkit-transform: translateZ(0);
-  bottom: 5px;
-  right: 5px;
+  bottom: 20px;
 }
 
 .font-size-4 {
