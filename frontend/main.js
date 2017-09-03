@@ -225,7 +225,7 @@ $(function() {
       error: function(error) {
         console.log(error);
       }
-    }).then(function() {
+    }).done(function() {
       
       $.ajax({
         url: backendHostUrl + '/menus',
@@ -320,9 +320,9 @@ $(function() {
           console.log(error);
         }
       });
+    }).done(function() {
+      $("#editor-div").show("slide", {direction:"up"}, 300);
     });
-
-    $("#editor-div").show(300);
 
   });
   ///////////////// Edit menu ////////////////////////////////
@@ -523,7 +523,7 @@ $(function() {
       data: JSON.stringify([menudict]),
       contentType: 'application/json'
     }).then(function() {
-      $('#editor-div').hide(300);
+      $('#editor-div').hide("slide", {direction: "up"}, 300);
     }).then(function() {
       home();
     });
@@ -535,7 +535,7 @@ $(function() {
 
   // Cancel editor
   $('#editor-cancel-btn').click(function() {
-    $('#editor-div').hide(300);
+    $('#editor-div').hide("slide", {direction: "up"}, 300);
     home();
   });
   // Cancel editor

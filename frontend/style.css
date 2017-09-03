@@ -124,6 +124,13 @@ body {
   overflow: auto;
 }
 
+.fixed {
+  position: fixed;
+  -webkit-transform: translateZ(0);
+  bottom: 5px;
+  right: 5px;
+}
+
 .font-size-4 {
   font-size: 4vh;
 }
@@ -181,6 +188,9 @@ body {
   padding: 0;
   border: none;
   box-shadow: none;
+}
+
+.edit-save-canc-btn {
 }
 
 #menu-bkgrd-color-input {

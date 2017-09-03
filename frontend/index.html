@@ -7,6 +7,7 @@
 
   <!-- JQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'></script>
   <!-- JQuery -->
 
   <!-- Bootstrap -->
@@ -128,7 +129,8 @@
           
           <div class="col-xs-9 menu-title-input-div change-color">
             <input type="text" id="editor-title-input"
-                    class="form-control change-color menu-data field font3"
+                    class="form-control change-color menu-data
+                    field font3"
                     name="MenuTitle"
                     placeholder="Menu Title">
             </input>
@@ -330,16 +332,16 @@
        
 
       <div id="editor-save-btn-div">
-        <div class="col-xs-12">
+        <div class="col-xs-12 fixed">
           <div class="col-xs-1 col-xs-offset-10">
             <button type="button" id="editor-cancel-btn"
-                    class="form-control btn btn-warning">
+                    class="edit-save-canc-btn btn btn-warning">
               <span class="invert">Cancel</span>
             </button>
           </div>
           <div class="col-xs-1">
             <button type="button" id="editor-save-btn"
-                   class="form-control btn btn-primary"
+                   class="edit-save-canc-btn btn btn-primary"
                    disabled>
               <span class="invert">Save</span>
             </button>
