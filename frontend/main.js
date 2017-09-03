@@ -225,7 +225,7 @@ $(function() {
       error: function(error) {
         console.log(error);
       }
-    }).done(function() {
+    }).then(function() {
       
       $.ajax({
         url: backendHostUrl + '/menus',
@@ -320,9 +320,9 @@ $(function() {
           console.log(error);
         }
       });
-    }).done(function() {
-      $("#editor-div").show("slide", {direction:"up"}, 300);
     });
+    
+    $("#editor-div").show("slide", {direction:"up"}, 300);
 
   });
   ///////////////// Edit menu ////////////////////////////////
@@ -382,7 +382,7 @@ $(function() {
   // Update menu editor font
   function changeEditorFont (input) {
     var newfont = $(input.target).val();
-    $('#editor-font').attr('href',
+    $('#editor-font').not($('#editor-save-btn-div')).attr('href',
       'https://fonts.googleapis.com/css?family='+newfont);
     $('#editor-div').css('font-family', newfont);
   }

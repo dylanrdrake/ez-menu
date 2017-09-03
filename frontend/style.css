@@ -124,6 +124,10 @@ body {
   overflow: auto;
 }
 
+#editor-save-btn-div {
+  font-family: "Baloo";
+}
+
 .fixed {
   position: fixed;
   -webkit-transform: translateZ(0);
