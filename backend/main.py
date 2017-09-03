@@ -274,12 +274,12 @@ def updatemenu(menudata):
         
         if len(menu) != 0:
             update_menu_sql = "UPDATE menus "
-            updates = [field+"=%s" if value != None else\
-                    field+"=NULL" for field,value in menu.iteritems()]
+            updates = [field+"=%s" for field in menu.iterkeys()]
             update_menu_sql += "SET "+(",").join(updates)+" "
             update_menu_sql += "WHERE MenuId=%s"
             value_params = [value for key,value in menu.iteritems()]
             value_params.append(menuid)
+            print value_params
             query_db(update_menu_sql, value_params, True)
 
         # Update Storage object
