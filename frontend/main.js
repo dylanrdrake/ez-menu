@@ -6,42 +6,48 @@ $(function() {
   var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
   
 
-  // Loading animation
-  $(document).ajaxStart(function() {
-    function getRandomColor() {
-      var colorLetters = '0123456789ABCDEF';
-      var colorString = '#';
-      for (var i = 0; i < 6; i++) {
-        colorString += colorLetters[Math.floor(Math.random() * 16)];
-      }
-      return colorString;
-    };
- 
-    function loadStart() {
-      var time = 0;
-      var bkdgcolor = $('#top-row').css('color');
-      $('.title-char').each(function(i, titlechar) {
-        var charcolor = getRandomColor();
-        $(titlechar).css('color',bkdgcolor);
-        setTimeout(function() {
-          $(titlechar).css('color', charcolor);
-        }, time);
-        time += 30;
-      });
-    };
+  // gen random color
+  function getRandomColor() {
+    var colorLetters = '0123456789ABCDEF';
+    var colorString = '#';
+    for (var i = 0; i < 6; i++) {
+      colorString += colorLetters[Math.floor(Math.random() * 16)];
+    }
+    return colorString;
+  };
+  // gen random color
+  
 
+  // apply colors to logo
+  function logoColors() {
+    var time = 0;
+    var bkdgcolor = $('#top-row').css('color');
+    $('.title-char').each(function(i, titlechar) {
+      var charcolor = getRandomColor();
+      $(titlechar).css('color',bkdgcolor);
+      setTimeout(function() {
+        $(titlechar).css('color', charcolor);
+      }, time);
+      time += 30;
+    });
+  };
+  // apply colors to logo
+
+  
+  // Ajax request loading animation
+  $(document).ajaxStart(function() {
+    function loadStart() {
+      logoColors();
+    };
+    
     var loadInterval = setInterval(function() { loadStart() }, 300);
 
     $(document).ajaxStop(function() {
       clearInterval(loadInterval);
-      
-      $('.title-char').each(function(i, titlechar) {
-        $(titlechar).css('color', getRandomColor());
-      });
+      logoColors();
     });
-  
   });
-  // Loading animation
+  // Ajax request loading animation
 
 
   
@@ -157,18 +163,18 @@ $(function() {
         }
         
         var $menutr = $('<tr>').addClass('menu-table-row');
+        $menutr.append($('<td>').addClass('menu-table-btn menu-edit-data'));
         $menutr.append($('<td>').addClass('menu-table-data menu-id-data'));
         $menutr.append($('<td>').addClass('menu-table-data menu-title-data'));
         $menutr.append($('<td>').addClass('menu-table-data menu-shared-data'));
         $menutr.append($('<td>').addClass('menu-table-data menu-published-data'));
-        $menutr.append($('<td>').addClass('menu-table-btn menu-edit-data'));
         $menutr.append($('<td>').addClass('menu-table-btn menu-delete-data'));
 
+        $menutr.find('.menu-edit-data').append($('<button type="button" data-toggle="tooltip" title="Edit" class="menu-edit-btn btn-lg form-control" aria-label="Left Align"><span class="glyphicon glyphicon-pencil blue" aria-hidden="true"></span></button>'));
         $menutr.find('.menu-id-data').text(menu.MenuId);
         $menutr.find('.menu-title-data').text(menu.MenuTitle);
         $menutr.find('.menu-shared-data').append(shared);
         $menutr.find('.menu-published-data').append(published);
-        $menutr.find('.menu-edit-data').append($('<button type="button" data-toggle="tooltip" title="Edit" class="menu-edit-btn btn-lg form-control" aria-label="Left Align"><span class="glyphicon glyphicon-pencil blue" aria-hidden="true"></span></button>'));
         $menutr.find('.menu-delete-data').append($('<button type="button" data-toggle="tooltip" title="Delete" class="menu-delete-btn btn-lg form-control"><span class="glyphicon glyphicon-trash red" aria-hidden="true"></span></button>'));
         $('#menu-table-body').append($menutr);
       });
@@ -344,8 +350,8 @@ $(function() {
       throw new Error('Invalid HEX color.');
     }
     var r = parseInt(hex.slice(0, 2), 16),
-      g = parseInt(hex.slice(2, 4), 16),
-      b = parseInt(hex.slice(4, 6), 16);
+        g = parseInt(hex.slice(2, 4), 16),
+        b = parseInt(hex.slice(4, 6), 16);
     if (bw) {
       // http://stackoverflow.com/a/3943023/112731
       return (r * 0.299 + g * 0.587 + b * 0.114) > 186

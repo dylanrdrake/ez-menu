@@ -53,10 +53,10 @@ def db_disconnect(exception):
 
 
 
-# Query Database
-def query_db(sql_query, commit):
+def query_db(sql_query, params, commit):
+    params = tuple(params)
     cursor = g.conn.cursor()
-    cursor.execute(sql_query)
+    cursor.execute(sql_query, params)
     raw_results = cursor.fetchall()
     column_data = cursor.description
     cursor.close()
@@ -68,7 +68,6 @@ def query_db(sql_query, commit):
         results = [{col: data for col,data in zip(columns,result)}\
                 for result in raw_results]
         return results
-
 
 
 # Check Authorization
@@ -102,9 +101,9 @@ def auth_check(request):
 def getuser(userid):
     user_query = """
     SELECT * FROM Users
-    WHERE UserId = '{0}'
-    """.format(userid)
-    userdata = query_db(user_query, False)
+    WHERE UserId = %s
+    """
+    userdata = query_db(user_query, [userid], False)
     if len(userdata) > 0:
         userdata = userdata[0]
         tempdata = getusertemplates(userid)
@@ -119,30 +118,32 @@ def create_user(userid, provider, name=None, email=None, picture=None):
     create_user_sql = """
     INSERT INTO Users
     (UserId, AuthProvider, Name, Email, Picture)
-    VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')
-    """.format(userid, provider, name, email, picture)
-    query_db(create_user_sql, True)
+    VALUES (%s, %s, %s, %s, %s)
+    """
+    value_params = [userid, provider, name, email, picture]
+    query_db(create_user_sql, value_params, True)
 
     user_temp_sql = """
     INSERT INTO user_templates
     (UserId, TemplateId)
-    VALUES ('{0}', {1})
-    """.format(userid, '1001112224')
-    query_db(user_temp_sql, True)
+    VALUES (%s, %s)
+    """
+    value_params = [userid, '1001112224']
+    query_db(user_temp_sql, value_params, True)
 
 
 # Update User
 def update_user(userid, provider, name=None, email=None, picture=None):
     update_user_sql = """
     UPDATE Users
-    SET AuthProvider='{0}',
-        Name='{1}',
-        Email='{2}',
-        Picture='{3}'
-    WHERE UserId='{4}'
-    """.format(provider, name, email, picture, userid)
-    query_db(update_user_sql, True)
-
+    SET AuthProvider=%s,
+        Name=%s,
+        Email=%s,
+        Picture=%s
+    WHERE UserId=%s
+    """
+    value_params = [provider, name, email, picture, userid]
+    query_db(update_user_sql, value_params, True)
 
 
 # Create item
@@ -153,11 +154,10 @@ def createitem(sectid, itemdata):
         create_item_sql = "INSERT INTO items "
         fields = [field for field in item.iterkeys()]
         create_item_sql += "("+(",").join(fields)+") "
-        values = ["'{0}'".format(value) if key != 'SectionId'\
-                else "{0}".format(value) for key,value in item.iteritems()]
+        values = ["%s"] * len(item)
         create_item_sql += "VALUES ("+(",").join(values)+")"
-        query_db(create_item_sql, True)
-
+        value_params = [value for key,value in item.iteritems()]
+        query_db(create_item_sql, value_params, True)
 
 
 # Create section
@@ -171,9 +171,10 @@ def createsect(menuid, sectdata):
         create_sect_sql = "INSERT INTO sections "
         fields = [field for field in sect.iterkeys()]
         create_sect_sql += "("+(",").join(fields)+") "
-        values = ["'"+value+"'" for value in sect.itervalues()]
+        values = ["%s"] * len(sect)
         create_sect_sql += "VALUES ("+(",").join(values)+")"
-        sectid = query_db(create_sect_sql, True)
+        value_params = [value for key,value in sect.iteritems()]
+        sectid = query_db(create_sect_sql, value_params, True)
 
         if 'items' in locals():
             updateitem(sectid, items)
@@ -188,9 +189,10 @@ def createmenu(userid, menudata):
         create_menu_sql = "INSERT INTO menus "
         fields = [field for field in menu.iterkeys()]
         create_menu_sql += "("+(",").join(fields)+") "
-        values = ["'"+value+"'" for value in menu.itervalues()]
+        values = ["%s"] * len(menu)
         create_menu_sql += "VALUES ("+(",").join(values)+")"
-        menuid = query_db(create_menu_sql, True)
+        value_params = [value for key,value in menu.iteritems()]
+        menuid = query_db(create_menu_sql, value_params, True)
 
         if 'sects' in locals():
             updatesect(menuid, sects)
@@ -198,9 +200,10 @@ def createmenu(userid, menudata):
         user_menu_sql = """
         INSERT INTO user_menus
         (UserId, MenuId)
-        VALUES ('{0}', '{1}')
-        """.format(userid, menuid)
-        query_db(user_menu_sql, True)
+        VALUES (%s, %s)
+        """
+        user_menu_params = [userid, menuid] 
+        query_db(user_menu_sql, user_menu_params, True)
 
 
 
@@ -214,10 +217,12 @@ def updateitem(sectid, itemdata):
         elif item['_DELETE_'] != 'true':
             itemid = item.pop('ItemId')
             update_item_sql = "UPDATE items "
-            updates = [field+"='"+value+"'" for field,value in item.iteritems()]
+            updates = [field+"=%s" for field in item.iterkeys()]
             update_item_sql += "SET "+(",").join(updates)+" "
-            update_item_sql += "WHERE ItemId='"+str(itemid)+"'" 
-            query_db(update_item_sql, True)
+            update_item_sql += "WHERE ItemId=%s" 
+            value_params = [value for key,value in item.iteritems()]
+            value_params.append(itemid)
+            query_db(update_item_sql, value_params, True)
 
 
 # Update section
@@ -234,10 +239,12 @@ def updatesect(menuid, sectdata):
                 updateitem(sectid, items)
 
             update_sect_sql = "UPDATE sections "
-            updates = [field+"='"+value+"'" for field,value in sect.iteritems()]
+            updates = [field+"=%s" for field in sect.iterkeys()]
             update_sect_sql += "SET "+(",").join(updates)+" "
-            update_sect_sql += "WHERE SectionId='"+str(sectid)+"'"
-            query_db(update_sect_sql, True)
+            update_sect_sql += "WHERE SectionId=%s"
+            value_params = [value for key,value in sect.iteritems()]
+            value_params.append(sectid)
+            query_db(update_sect_sql, value_params, True)
 
 
 
@@ -267,11 +274,13 @@ def updatemenu(menudata):
         
         if len(menu) != 0:
             update_menu_sql = "UPDATE menus "
-            updates = [field+"='"+value+"'" if value != None else\
+            updates = [field+"=%s" if value != None else\
                     field+"=NULL" for field,value in menu.iteritems()]
             update_menu_sql += "SET "+(",").join(updates)+" "
-            update_menu_sql += "WHERE MenuId='"+menuid+"'"
-            query_db(update_menu_sql, True)
+            update_menu_sql += "WHERE MenuId=%s"
+            value_params = [value for key,value in menu.iteritems()]
+            value_params.append(menuid)
+            query_db(update_menu_sql, value_params, True)
 
         # Update Storage object
         if 'Publish' in menu and menu['Publish'] == 'true':
@@ -288,10 +297,11 @@ def deletemenu(userid, menudata):
     for menu in menudata:
         delete_menu_sql = """
         DELETE FROM user_menus
-        WHERE UserId='{0}'
-        AND MenuId='{1}'
-        """.format(userid, menu['MenuId'])
-        query_db(delete_menu_sql, True)
+        WHERE UserId=%s
+        AND MenuId=%s
+        """
+        value_params = [userid, menu['MenuId']]
+        query_db(delete_menu_sql, value_params, True)
 
 
 # Delete section
@@ -300,9 +310,10 @@ def deletesect(sectdata):
         delete_sect_sql = """
         UPDATE sections
         SET MenuId=NULL
-        WHERE SectionId={0}
-        """.format(sect['SectionId'])
-        query_db(delete_sect_sql, True)
+        WHERE SectionId=%s
+        """
+        value_params = [sect['SectionId']]
+        query_db(delete_sect_sql, value_params, True)
 
 
 # Delete item
@@ -311,33 +322,37 @@ def deleteitem(itemdata):
         delete_item_sql = """
         UPDATE items
         SET SectionId=NULL
-        WHERE ItemId={0}
-        """.format(item['ItemId'])
-        query_db(delete_item_sql, True)
+        WHERE ItemId=%s
+        """
+        value_params = [item['ItemId']]
+        query_db(delete_item_sql, value_params, True)
 
 
 # Get Menu
 def getmenu(menuid):
     menu_query = """
     SELECT * FROM menus
-    WHERE MenuId={0}
-    """.format(menuid)
-    menudata = query_db(menu_query, False)[0]
+    WHERE MenuId=%s
+    """
+    value_params = [menuid]
+    menudata = query_db(menu_query, value_params, False)[0]
 
     sect_query = """
     SELECT * FROM sections
-    WHERE MenuId={0}
-    """.format(menuid)
-    sections = query_db(sect_query, False)
+    WHERE MenuId=%s
+    """
+    value_params = [menuid]
+    sections = query_db(sect_query, value_params, False)
 
     menudata['Sections'] = []
 
     for sect in sections:
         item_query = """
         SELECT * FROM items
-        WHERE SectionId={0}
-        """.format(sect['SectionId'])
-        itemdata = query_db(item_query, False)
+        WHERE SectionId=%s
+        """
+        value_params = [sect['SectionId']]
+        itemdata = query_db(item_query, value_params, False)
         sect['Items'] = itemdata
         menudata['Sections'].append(sect)
 
@@ -348,9 +363,10 @@ def getmenu(menuid):
 def getusermenus(userid):
     menus_query = """
     SELECT * FROM user_menus
-    WHERE UserId='{0}'
-    """.format(userid)
-    usermenus = query_db(menus_query, False)
+    WHERE UserId=%s
+    """
+    value_params = [userid]
+    usermenus = query_db(menus_query, value_params, False)
 
     menudata = []
     
@@ -365,18 +381,20 @@ def getusermenus(userid):
 def getusertemplates(userid):
     temp_query = """
     SELECT * FROM user_templates
-    WHERE UserId='{0}'
-    """.format(userid)
-    usertemps = query_db(temp_query, False)
+    WHERE UserId=%s
+    """
+    value_params = [userid]
+    usertemps = query_db(temp_query, value_params, False)
 
     usertemplates = []
 
     for temp in usertemps:
         temp_query = """
         SELECT * FROM templates
-        WHERE TemplateId='{0}'
-        """.format(temp['TemplateId'])
-        tempdata = query_db(temp_query, False)[0]
+        WHERE TemplateId=%s
+        """
+        value_params = [temp['TemplateId']]
+        tempdata = query_db(temp_query, value_params, False)[0]
         usertemplates.append(tempdata)
 
     return usertemplates
@@ -387,9 +405,10 @@ def getusertemplates(userid):
 def gettemplate(tempid):
     temp_query = """
     SELECT * FROM templates
-    WHERE TemplateId={0}
-    """.format(tempid)
-    tempdata = query_db(temp_query, False)[0]
+    WHERE TemplateId=%s
+    """
+    value_params = [tempid]
+    tempdata = query_db(temp_query, value_params, False)[0]
 
     return tempdata
 
