@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 
-# 
+# imports
 import logging
 from flask import Flask,request,url_for,redirect,render_template,g,jsonify
 import flask_cors
@@ -92,7 +92,7 @@ def auth_check(request):
                     name=claims.get('name'),
                     email=claims.get('email'),
                     picture=claims.get('picture'))
-    
+
     return claims.get('user_id')
 
 
@@ -202,7 +202,7 @@ def createmenu(userid, menudata):
         (UserId, MenuId)
         VALUES (%s, %s)
         """
-        user_menu_params = [userid, menuid] 
+        user_menu_params = [userid, menuid]
         query_db(user_menu_sql, user_menu_params, True)
 
 
@@ -219,7 +219,7 @@ def updateitem(sectid, itemdata):
             update_item_sql = "UPDATE items "
             updates = [field+"=%s" for field in item.iterkeys()]
             update_item_sql += "SET "+(",").join(updates)+" "
-            update_item_sql += "WHERE ItemId=%s" 
+            update_item_sql += "WHERE ItemId=%s"
             value_params = [value for key,value in item.iteritems()]
             value_params.append(itemid)
             query_db(update_item_sql, value_params, True)
@@ -253,7 +253,7 @@ def updatemenu(menudata):
     for menu in menudata:
         menuid = menu.pop('MenuId')
         dbdata = getmenu(menuid)
-       
+
         # Update sections
         if 'Sections' in menu:
             sects = menu.pop('Sections')
@@ -271,7 +271,7 @@ def updatemenu(menudata):
             menu['PublicLink'] = 'https://storage.googleapis.com/'\
                     +bucket+'/menus/'+menuid+'.html'
             menu['Publish'] = 'true'
-        
+
         if len(menu) != 0:
             update_menu_sql = "UPDATE menus "
             updates = [field+"=%s" for field in menu.iterkeys()]
@@ -369,7 +369,7 @@ def getusermenus(userid):
     usermenus = query_db(menus_query, value_params, False)
 
     menudata = []
-    
+
     for menu in usermenus:
         menuresp = getmenu(menu['MenuId'])
         menudata.append(menuresp)
@@ -434,7 +434,7 @@ def publishmenu(menuid):
                   retry_params=write_retry_params) as menu_file:
         menu_file.write(str(menuHTML))
         menu_file.close()
- 
+
     menu_link = 'https://storage.googleapis.com/'+bucket+'/menus/'\
             +menuid+'.html'
 
@@ -481,7 +481,7 @@ def menus():
 
     else:
         return 'Bad request', 400
- 
+
 
 
 # API endpoint: /users
@@ -492,7 +492,7 @@ def users():
     if request.method == 'GET':
         userdata = getuser(userid)
         return jsonify(userdata), 200
-    
+
     else:
         return 'Bad request', 400
 

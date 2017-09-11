@@ -1,10 +1,10 @@
 $(function() {
   //local dev backendHostURL:
   //backendHostUrl = 'http://localhost:8081';
-  
+
   // production backendHostURL:
   var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
-  
+
 
   // gen random color
   function getRandomColor() {
@@ -16,7 +16,7 @@ $(function() {
     return colorString;
   };
   // gen random color
-  
+
 
   // apply colors to logo
   function logoColors() {
@@ -39,7 +39,7 @@ $(function() {
     function loadStart() {
       logoColors();
     };
-    
+
     var loadInterval = setInterval(function() { loadStart() }, 300);
 
     $(document).ajaxStop(function() {
@@ -50,7 +50,7 @@ $(function() {
   // Ajax request loading animation
 
 
-  
+
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyAPAEZg9AMSlE2cqC5h2_7VelZP5Md0wpc",
@@ -226,7 +226,7 @@ $(function() {
         console.log(error);
       }
     }).then(function() {
-      
+
       $.ajax({
         url: backendHostUrl + '/menus',
         headers: {'Authorization': 'Bearer ' + userIdToken},
@@ -236,7 +236,7 @@ $(function() {
         success: function(menu) {
           $('#editor-id-input').val(menu.MenuId);
           $('#editor-title-input').val(menu.MenuTitle);
-          
+
           $('#menu-title-color-input').colorpicker()
             .on('changeColor', function(el) {
               changeTextColor(el);
@@ -251,7 +251,7 @@ $(function() {
           $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor).change();
 
           $('#menu-logo-input').val(menu.MenuLogo);
-          
+
           $('#menu-font-input')
             .on('change', function(el) {
               changeEditorFont(el);

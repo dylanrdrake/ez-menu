@@ -142,9 +142,10 @@
       padding-top: 2vh;
     }
     .item-div-ls {
-      height: calc({{ menu["MenuFontSize"] }}*0.3333vh);
+      height: auto;
       width: 100%;
       color: #ffffff;
+      padding-bottom: 2vh;
     }
     .inline-ls {
       display: inline-block;
@@ -161,12 +162,13 @@
       width: 100%;
     }
     .item-desc-div-ls {
-      width: 100%;
       font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
-      overflow: hidden;
       padding-left: 1%;
+      padding-right: 1%;
     }
     .item-desc-ls {
+      width: 100%;
+      overflow: hidden;
     }
     .item-price-div-ls{
       height: 50%;
@@ -325,6 +327,7 @@
           <div class="item-desc-div-ls">
             <div style="color:{{ item['ItemDescColor'] }};"
                  class="item-desc-ls">
+              {{ item["ItemDesc"] }}
             </div>
           </div>
         
