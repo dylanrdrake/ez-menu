@@ -31,6 +31,7 @@ bucket = os.environ.get('BUCKET_NAME',
         app_identity.get_default_gcs_bucket_name())
 
 
+# Create a connection to database before every request
 @app.before_request
 def db_connect():
     if (os.getenv('SERVER_SOFTWARE') and \
@@ -52,7 +53,8 @@ def db_disconnect(exception):
     g.conn.close()
 
 
-
+# Returns lastrowid if commiting changes
+# Returns results if querying data
 def query_db(sql_query, params, commit):
     params = tuple(params)
     cursor = g.conn.cursor()

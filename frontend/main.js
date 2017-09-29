@@ -514,8 +514,6 @@ $(function() {
 
     });
 
-    //console.log(menudict);
-    
     $.ajax({
       url: backendHostUrl + '/menus',
       headers: {'Authorization': 'Bearer ' + userIdToken},
@@ -523,9 +521,7 @@ $(function() {
       data: JSON.stringify([menudict]),
       contentType: 'application/json'
     }).then(function() {
-      $('#editor-div').hide("slide", {direction: "up"}, 300);
-    }).then(function() {
-      home();
+      $('#editor-save-btn').removeAttr('disabled');
     });
   
   });
