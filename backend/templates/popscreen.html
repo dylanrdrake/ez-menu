@@ -14,46 +14,46 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <!-- JQuery -->
 
- 
-  
+
+
   <!-- Portrait/Landscape JS -->
   <script>
     var pages = 1;
     var currentPage = 1;
-    var itemsPerPage = 0;
-    
+    var windhgt = window.innerHeight;
+    var pageInterval = 30000;
+
     function setupMenu() {
       if (window.innerHeight > window.innerWidth) {
         $('#ls-view').hide();
         $('#pt-view').show();
+        setInterval(changePage, pageInterval * 4);
       } else if (window.innerWidth > window.innerHeight) {
         $('#pt-view').hide();
         $('#ls-view').show();
-
-
-       
-        var itemsPerPage = 0;
-        var trackedIndexes = [];
-        $('.item-div-ls').each(function(i, itemdiv) {
-          var index = $(itemdiv).index();
-          var windhgt = window.innerHeight;
-          var itemtop = $(itemdiv).offset().top;
-          var itemhgt = $(itemdiv).height();
-          if (itemtop+itemhgt < windhgt) {
-            if (trackedIndexes.includes(index) == false) {
-              itemsPerPage += 1;
-              trackedIndexes.push(index); 
+        setInterval(changePage, pageInterval);
+        // compute items per page for each section
+        $('.section-div-ls').each(function(s, sectd) {
+          var pageNum = 1;
+          var itemListDiv = $(sectd).find('.item-list-div-ls');
+          var itemListHgt = $(itemListDiv).offset().top;
+          var itemsTotalHeight = itemListHgt;
+          $(sectd).find('.item-div-ls').each(function(i, itemd) {
+            var itemhgt = $(itemd).height();
+            if (itemsTotalHeight+itemhgt < windhgt) {
+              $(itemd).addClass('page-' + pageNum.toString());
+              itemsTotalHeight += itemhgt;
             }
-          }
+            else if (itemsTotalHeight+itemhgt > windhgt) {
+              pageNum += 1;
+              $(itemd).addClass('page-' + pageNum.toString());
+              itemsTotalHeight = itemListHgt + itemhgt;
+            }
+            if (pageNum > 1) { $(itemd).hide(); }
+            if (pageNum > pages) { pages = pageNum; }
+          });
         });
 
-        $('.item-div-ls').each(function(i, itemdiv) {
-          var index = $(itemdiv).index();
-          var pagenum = Math.floor(index / itemsPerPage) + 1;
-          if (pagenum > pages) { pages = pagenum; }
-          if (pagenum > 1) { $(itemdiv).hide(); }
-          $(itemdiv).addClass('page-' + pagenum.toString()); 
-        });
 
       } else {
         $('#ls-view').hide();
@@ -78,7 +78,8 @@
         reloadMenu();
       } else {
         $('.section-div-ls').each(function(i, sect) {
-          var nextItems = $(sect).find('.page-'+(currentPage+1).toString());
+          var nextItems = $(sect).find('.page-'
+                                       +(currentPage+1).toString());
           if ($(nextItems).length > 0) {
             $(sect).find('.page-'+currentPage.toString()).hide();
             $(sect).find('.page-'+(currentPage+1).toString()).show();
@@ -90,12 +91,11 @@
         currentPage += 1;
       }
     };
-    
-    setInterval(changePage, 30000);
+
   </script>
 
 
-  
+
   <style>
     /* START Landscape CSS */
     body {
@@ -145,7 +145,7 @@
       height: auto;
       width: 100%;
       color: #ffffff;
-      padding-bottom: 2vh;
+      /*padding-bottom: 2vh;*/
     }
     .inline-ls {
       display: inline-block;
@@ -165,6 +165,7 @@
       font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
       padding-left: 1%;
       padding-right: 1%;
+      padding-bottom: 2vh;
     }
     .item-desc-ls {
       width: 100%;
