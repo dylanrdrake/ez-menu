@@ -1,9 +1,9 @@
 $(function() {
   //local dev backendHostURL:
-  //backendHostUrl = 'http://localhost:8081';
+  backendHostUrl = 'http://localhost:8081';
 
   // production backendHostURL:
-  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
 
   // gen random color
@@ -33,7 +33,7 @@ $(function() {
   };
   // apply colors to logo
 
-  
+
   // Ajax request loading animation
   $(document).ajaxStart(function() {
     function loadStart() {
@@ -124,7 +124,7 @@ $(function() {
   //////////////////////// END Firebase /////////////////////////
 
 
- 
+
 
   // tooltips
   $(document).ready(function(){
@@ -154,14 +154,14 @@ $(function() {
         else {
           var shared = $('<span class="glyphicon glyphicon-remove red" aria-hidden="true"></span>');
         }
-        
+
         if (menu.PublicLink != null) {
           var published = $('<span class="glyphicon glyphicon-ok green" aria-hidden="true"></span><button type="button" data-toggle="tooltip" title="Get Link" class="basic-btn btn-lg get-pub-link-btn"><span class="glyphicon glyphicon-link blue"></span></button><button type="button" data-toggle="tooltip" title="Take down" class="basic-btn btn-lg menu-takedown-btn"><span class="glyphicon glyphicon-ban-circle orange"></span></button>');
         }
         else {
           var published = $('<span class="glyphicon glyphicon-remove red" aria-hidden="true"></span><button type="button" data-toggle="tooltip" title="Publish" class="basic-btn btn-lg menu-publish-btn"><span class="glyphicon glyphicon-globe blue"></span></button>');
         }
-        
+
         var $menutr = $('<tr>').addClass('menu-table-row');
         $menutr.append($('<td>').addClass('menu-table-btn menu-edit-data'));
         $menutr.append($('<td>').addClass('menu-table-data menu-id-data'));
@@ -181,7 +181,7 @@ $(function() {
     });
   }
   ///////// [END home]
- 
+
 
 
   // Create menu
@@ -199,7 +199,7 @@ $(function() {
     });
   });
   // Create menu
-  
+
 
 
   /////////////// Edit menu ///////////////////////////////////
@@ -279,7 +279,7 @@ $(function() {
           var $itemrow_temp = $('#ItemTemplate').clone();
           $section_temp.find('#ItemTemplate').remove();
           $section_temp.removeAttr('hidden');
-          
+
           menu.Sections.forEach(function(sect) {
             var $section = $section_temp.clone();
             $section.removeAttr('id');
@@ -290,7 +290,7 @@ $(function() {
               .on('changeColor', function(el) {
                 changeTextColor(el);
             }).val(sect.SectionTitleColor).change();
-            
+
             sect.Items.forEach(function(item) {
               var $itemrow = $itemrow_temp.clone();
               $itemrow.removeAttr('id');
@@ -312,7 +312,7 @@ $(function() {
             });
 
             $('#add-sect-div').before($section);
-            
+
           });
 
         },
@@ -321,22 +321,22 @@ $(function() {
         }
       });
     });
-    
+
     $("#editor-div").show("slide", {direction:"up"}, 300);
 
   });
   ///////////////// Edit menu ////////////////////////////////
-  
 
-  
-  
+
+
+
   // Highlight fields
   $(document).on('click', '#edit-hl-fields-btn', function() {
     $('.field').toggleClass('toggle-border');
   });
   // Highlight fields
-  
-  
+
+
   // Invert color
   function invertColor(hex, bw) {
     if (hex.indexOf('#') === 0) {
@@ -450,9 +450,9 @@ $(function() {
     $(this).parent().parent().before(newitem);
   });
   // Add item
-  
 
-  
+
+
   // Delete item
   $(document).on('click', '.delete-item-btn', function() {
     event.preventDefault();
@@ -480,7 +480,7 @@ $(function() {
     $('#editor-save-btn').attr('disabled', 'disabled');
     var menudict = {};
     $('#editor-div').find('.menu-data').each(function(i ,menudata) {
-     
+
       if ($(menudata).attr('name') == 'Template') {
         menudict['Template'] = $(menudata).children(':selected').attr('id');
         return true;
@@ -489,10 +489,10 @@ $(function() {
       menudict[$(menudata).attr('name')] = $(menudata).val();
 
       menudict['Sections'] = [];
-      
+
       $('#editor-div').find('.sect-row.added').each(function(i, sect) {
         var sectdict = {};
-      
+
         $(sect).find('.sect-data').each(function(i, sectdata) {
           sectdict[$(sectdata).attr('name')] = $(sectdata).val();
         });
@@ -508,7 +508,7 @@ $(function() {
 
           sectdict['Items'].push(itemdict);
         });
-        
+
         menudict['Sections'].push(sectdict);
       });
 
@@ -523,10 +523,10 @@ $(function() {
     }).then(function() {
       $('#editor-save-btn').removeAttr('disabled');
     });
-  
+
   });
   // Save menu
-  
+
 
 
   // Cancel editor
@@ -543,7 +543,7 @@ $(function() {
   // dynamically on page
   $('#menu-table').on('click', '.menu-publish-btn', function() {
     if (confirm('Are you sure you want to publish this menu?')) {
-      
+
       var menuid = $(this).parent().siblings('.menu-id-data').text();
       $.ajax({
         url: backendHostUrl + '/menus',
@@ -576,7 +576,7 @@ $(function() {
     }
   });
   // Publish menu
- 
+
 
 
   // Takedown menu
@@ -594,7 +594,7 @@ $(function() {
       }).then(function() {
         home();
       });
-    
+
     } else {
       home();
     }
@@ -663,7 +663,7 @@ $(function() {
   // [END signOutBtn]
 
 
- 
+
 
 
   configureFirebaseLogin();
