@@ -1,9 +1,9 @@
 $(function() {
   //local dev backendHostURL:
-  backendHostUrl = 'http://localhost:8081';
+  //backendHostUrl = 'http://localhost:8081';
 
   // production backendHostURL:
-  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
 
   // gen random color
@@ -21,7 +21,7 @@ $(function() {
   // apply colors to logo
   function logoColors() {
     var time = 0;
-    var bkdgcolor = $('#top-row').css('color');
+    var bkdgcolor = $('#top-row').css('background-color');
     $('.title-char').each(function(i, titlechar) {
       var charcolor = getRandomColor();
       $(titlechar).css('color',bkdgcolor);

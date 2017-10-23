@@ -125,11 +125,12 @@ body {
   position: absolute;
   top: 10vh;
   z-index: 1;
-  border-bottom: 1vh solid #666;
   padding: 2vh;
   color: #ffffff;
   display: none;
   overflow: auto;
+  box-shadow: 0 2px 6px #666666;
+  background-color: #ffffff;
 }
 
 .dropdown-backdrop {
