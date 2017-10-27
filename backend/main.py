@@ -456,15 +456,15 @@ def menus():
     userid = auth_check(request)
 
     if request.method == 'GET':
-        # if /menus GET request is made without
-        # data, the submitting user's menus
-        # are returned
+        # a /menus GET request can be made
+        # with a specific MenuId in the request
+        # data to get the specific menu's data
         if request.args:
             menudata = getmenu(request.args.get('MenuId'))
             return jsonify(menudata), 200
-        # a /menus GET request can be made 
-        # with a specific MenuId in the request
-        # data to get the specific menu
+        # if /menus GET request is made without
+        # data, the submitting user's menus
+        # are returned
         else:
             usermenus = getusermenus(userid)
             return jsonify(usermenus), 200

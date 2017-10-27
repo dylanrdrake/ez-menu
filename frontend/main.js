@@ -184,6 +184,14 @@ $(function() {
 
 
 
+  // Cycle logo colors
+  var logoBtn = $("#logo-div");
+  logoBtn.click(function(event) {
+    event.preventDefault();
+    logoColors();
+  });
+
+
   // Create menu
   var createMenuBtn = $('#create-menu-btn');
   createMenuBtn.click(function(event) {
