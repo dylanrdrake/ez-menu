@@ -76,6 +76,7 @@ $(function() {
       if (user) {
         $('#logged-out').hide();
         var name = user.displayName;
+        var authProvider = user.providerData[0].providerId;
 
         /* If the provider gives a display name, use the name for the
         personal welcome message. Otherwise, use the user's email. */
@@ -88,6 +89,7 @@ $(function() {
           home();
 
           $('#user').text(welcomeName);
+          $('#auth-prov-span').text(authProvider);
           $('#logged-in').show();
 
         });
