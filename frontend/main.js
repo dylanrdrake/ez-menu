@@ -25,6 +25,8 @@ $(function() {
     $('.title-char').each(function(i, titlechar) {
       var charcolor = getRandomColor();
       $(titlechar).css('color',bkdgcolor);
+      $(titlechar).attr('data-toggle', 'tooltip');
+      $(titlechar).attr('title', charcolor.toString());
       setTimeout(function() {
         $(titlechar).css('color', charcolor);
       }, time);
@@ -126,13 +128,6 @@ $(function() {
 
 
 
-  // tooltips
-  $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip(); 
-  });
-  //
-
-
 
 
   //////////////////////// [START home] //////////////////////////
@@ -184,12 +179,22 @@ $(function() {
 
 
 
+
+  // tooltips
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+  });
+  //
+
+
+
   // Cycle logo colors
-  var logoBtn = $("#logo-div");
+  var logoBtn = $("#rand-logo-color-btn");
   logoBtn.click(function(event) {
     event.preventDefault();
     logoColors();
   });
+
 
 
   // Create menu

@@ -305,6 +305,8 @@ def deletemenu(userid, menudata):
         value_params = [userid, menu['MenuId']]
         query_db(delete_menu_sql, value_params, True)
 
+        deletemenublob(menu['MenuId'])
+
 
 # Delete section
 def deletesect(sectdata):
@@ -443,8 +445,29 @@ def publishmenu(menuid):
     return menu_link
 
 
+
 # Take down menu
 def takedownmenu(menuid):
+    menudata = getmenu(menuid)
+
+    maintHTML = render_template("maintenance.html",
+                                menu=menudata)
+
+    object = '/'+bucket+'/menus/'+menuid+'.html'
+
+    write_retry_params = gcs.RetryParams(backoff_factor=1.1)
+    with gcs.open(object,
+                  'w',
+                  content_type='text/html',
+                  options={'x-goog-acl': 'public-read',
+                           'Cache-Control': 'no-cache'},
+                  retry_params=write_retry_params) as menu_file:
+        menu_file.write(str(maintHTML))
+        menu_file.close()
+
+
+
+def deletemenublob(menuid):
     object = '/'+bucket+'/menus/'+menuid+'.html'
     gcs.delete(object)
 

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <!-- Icon -->
+        <link rel='shortcut icon' type='image/x-icon'
+              href="{{ menu['MenuLogo'] }}" />
+        <!-- Icon -->
+
+        <!-- Font -->
+        <link href='https://fonts.googleapis.com/css?family={{ menu["MenuFont"] }}' rel='stylesheet' type='text/css'>
+        <!-- Font -->
+
+        <!-- Reload -->
+        <script>
+            function reload() {
+                location.reload(true);
+            }
+            setInterval(reload, 60000);
+        </script>
+        <!-- Reload -->
+
+        <style>
+            body {
+                background-color: {{ menu["MenuBkgrdColor"] }};
+                color: #fdf6ee;
+                font-family: '{{ menu["MenuFont"] }}';
+            }
+            #logo-div-pt img {
+                height: calc(({{ menu["MenuFontSize"] }}/10.0)*6vh);
+                display: block;
+                margin: 0 auto;
+            }
+            #menu-title-div-pt {
+                margin-top: 2%;
+                width: 100%;
+                border-bottom: 1px solid #ffffff;
+            }
+            #menu-title-pt {
+                width: 100%;
+                text-align: center;
+                color: {{ menu["MenuTitleColor"] }};
+                font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*3vh);
+            }
+        </style>
+
+        <title>{{ menu["MenuTitle"] }}</title>
+    </head>
+
+    <body>
+        <div id="menu-title-div-pt">
+            <div id="menu-title-pt">{{ menu["MenuTitle"] }}</div>
+            <div id="logo-div-pt">
+                <img src="{{ menu['MenuLogo'] }}">
+            </div>
+        </div>
+
+        <h1>
+            This menu has been temporarily taken down for maintenance!
+        </h1>
+
+        <br>
+        <br>
+
+        <h1>Check back soon!</h1>
+    </body>
+
+</html>
+
