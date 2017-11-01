@@ -148,6 +148,24 @@ def update_user(userid, provider, name=None, email=None, picture=None):
     query_db(update_user_sql, value_params, True)
 
 
+# Returns boolean that determines
+# whether user has shared access to menu
+# (menu has been shared with user by owner)
+#def canuseredit(userid, menuid):
+#    return True
+
+
+# Returns boolean that determines whether user owns menu
+# (User created menu)
+def isuserowner(userid, menuid):
+    usersmenus = getusermenus(userid)
+    menuids = [menu['MenuId'] for menu in usersmenus]
+    if int(menuid) in menuids:
+        return True
+    else:
+        return False
+
+
 # Create item
 def createitem(sectid, itemdata):
     for item in itemdata:
@@ -251,61 +269,70 @@ def updatesect(menuid, sectdata):
 
 
 # Update menu
-def updatemenu(menudata):
+def updatemenu(userid, menudata):
     for menu in menudata:
         menuid = menu.pop('MenuId')
-        dbdata = getmenu(menuid)
+        isowner = isuserowner(userid, menuid)
+        if isowner == False:
+            continue
+        elif isowner == True:
+            dbdata = getmenu(menuid)
 
-        # Update sections
-        if 'Sections' in menu:
-            sects = menu.pop('Sections')
-            updatesect(menuid, sects)
+            # Update sections
+            if 'Sections' in menu:
+                sects = menu.pop('Sections')
+                updatesect(menuid, sects)
 
-        # Update database
-        if 'Publish' in menu and menu['Publish'] == True:
-            menu['PublicLink'] = 'https://storage.googleapis.com/'\
-                    +bucket+'/menus/'+menuid+'.html'
-            menu['Publish'] = 'true'
-        elif 'Publish' in menu and menu['Publish'] == False:
-            menu['PublicLink'] = None
-            menu['Publish'] = 'false'
-        elif dbdata['Publish'] == 'true':
-            menu['PublicLink'] = 'https://storage.googleapis.com/'\
-                    +bucket+'/menus/'+menuid+'.html'
-            menu['Publish'] = 'true'
+            # Update database
+            if 'Publish' in menu and menu['Publish'] == True:
+                menu['PublicLink'] = 'https://storage.googleapis.com/'\
+                        +bucket+'/menus/'+menuid+'.html'
+                menu['Publish'] = 'true'
+            elif 'Publish' in menu and menu['Publish'] == False:
+                menu['PublicLink'] = None
+                menu['Publish'] = 'false'
+            elif dbdata['Publish'] == 'true':
+                menu['PublicLink'] = 'https://storage.googleapis.com/'\
+                        +bucket+'/menus/'+menuid+'.html'
+                menu['Publish'] = 'true'
 
-        if len(menu) != 0:
-            update_menu_sql = "UPDATE menus "
-            updates = [field+"=%s" for field in menu.iterkeys()]
-            update_menu_sql += "SET "+(",").join(updates)+" "
-            update_menu_sql += "WHERE MenuId=%s"
-            value_params = [value for key,value in menu.iteritems()]
-            value_params.append(menuid)
-            print value_params
-            query_db(update_menu_sql, value_params, True)
+            if len(menu) != 0:
+                update_menu_sql = "UPDATE menus "
+                updates = [field+"=%s" for field in menu.iterkeys()]
+                update_menu_sql += "SET "+(",").join(updates)+" "
+                update_menu_sql += "WHERE MenuId=%s"
+                value_params = [value for key,value in menu.iteritems()]
+                value_params.append(menuid)
+                query_db(update_menu_sql, value_params, True)
 
-        # Update Storage object
-        if 'Publish' in menu and menu['Publish'] == 'true':
-            publiclink = publishmenu(menuid)
-        elif 'Publish' in menu and menu['Publish'] == 'false':
-            takedownmenu(menuid)
-        elif dbdata['Publish'] == 'true':
-            publiclink = publishmenu(menuid)
+            # Update Storage object
+            if 'Publish' in menu and menu['Publish'] == 'true':
+                publiclink = publishmenu(menuid)
+            elif 'Publish' in menu and menu['Publish'] == 'false':
+                takedownmenu(menuid)
+            elif dbdata['Publish'] == 'true':
+                publiclink = publishmenu(menuid)
 
 
 
 # Delete menu
 def deletemenu(userid, menudata):
     for menu in menudata:
-        delete_menu_sql = """
-        DELETE FROM user_menus
-        WHERE UserId=%s
-        AND MenuId=%s
-        """
-        value_params = [userid, menu['MenuId']]
-        query_db(delete_menu_sql, value_params, True)
+        dbmenudata = getmenu(menu['MenuId'])
+        isowner = isuserowner(userid, menu['MenuId'])
+        if isowner == False:
+            continue
+        elif isowner == True:
+            delete_menu_sql = """
+            DELETE FROM user_menus
+            WHERE UserId=%s
+            AND MenuId=%s
+            """
+            value_params = [userid, menu['MenuId']]
+            query_db(delete_menu_sql, value_params, True)
 
-        deletemenublob(menu['MenuId'])
+            if dbmenudata['PublicLink'] is not None:
+                deletemenublob(menu['MenuId'])
 
 
 # Delete section
@@ -497,7 +524,7 @@ def menus():
         return 'Menu created', 200
 
     elif request.method == 'PUT':
-        updatemenu(json.loads(request.data))
+        updatemenu(userid, json.loads(request.data))
         return 'Menu updated', 200
 
     elif request.method == 'DELETE':
