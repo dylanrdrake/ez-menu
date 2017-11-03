@@ -68,6 +68,7 @@ $(function() {
 
   // Firebase log-in
   function configureFirebaseLogin() {
+    $('#logged-in').hide();
 
     firebase.initializeApp(config);
 
@@ -266,6 +267,7 @@ $(function() {
           $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor).change();
 
           $('#menu-logo-input').val(menu.MenuLogo);
+          $('#menu-logo-size-input').val(menu.MenuLogoSize);
 
           $('#menu-font-input')
             .on('change', function(el) {

@@ -5,10 +5,12 @@
   <link rel='shortcut icon' type='image/x-icon' href='https://storage.googleapis.com/ez-menu.appspot.com/menuassets/menu.png' />
   <!-- Icon -->
 
+
   <!-- JQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'></script>
   <!-- JQuery -->
+
 
   <!-- Bootstrap -->
   <!-- Latest compiled and minified CSS -->
@@ -22,7 +24,8 @@
           crossorigin="anonymous">
   </script>
   <!-- Bootstrap -->
- 
+
+
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-app.js"></script>
@@ -30,7 +33,8 @@
   <script src="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.js"></script>
   <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.5/firebase-ui-auth.css">
   <!-- Firebase -->
-  
+
+
   <!-- ez-menu -->
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" type="text/css"
@@ -41,6 +45,7 @@
         rel='stylesheet' type='text/css'>
   <link id='editor-font' href='' rel='stylesheet' type='text/css'>
   <!-- ez-menu -->
+
 
   <title>EZ Menu</title>
 </head>
@@ -110,15 +115,15 @@
         </div>
         <div class="col-xs-1 pull-right">
           <button type="button" id="sign-out-btn"
-                  class="btn btn-warning basic-btn pull-right"
+                  class="btn basic-btn pull-right"
                   aria-label="Left Align">
             <span class="glyphicon glyphicon-log-out white"</span>
           </button>
         </div>
-        <div class="col-xs-2 pull-right">
+        <div class="col-xs-2 pull-right" id="auth-prov-div">
           <span class="pull-right" id="auth-prov-span"></span>
         </div>
-        <div class="col-xs-4 pull-right">
+        <div class="col-xs-4 pull-right" id="logged-in-with-div">
           <span class="pull-right" id="logged-in-with-span">
             Logged in with&nbsp;
           </span>
@@ -161,7 +166,7 @@
         </div>
 
         <div class="row">
-          <div class="col-xs-2 col-xs-offset-1">
+          <div class="col-xs-2">
             <label for="Template" class="invert">Template</label>
             <select class="form-control menu-data invert field"
                     id="template-select"
@@ -179,9 +184,19 @@
             </input>
           </div>
 
+          <div class="col-xs-1">
+            <label for="MenuLogoSize" class="invert">Logo Size</label>
+            <input type="number"
+                   min="1" max="100"
+                   id="menu-logo-size-input"
+                   class="form-control menu-data invert field"
+                   name="MenuLogoSize">
+            </input>
+          </div>
+
           <div class="col-xs-2">
             <label for="MenuFont" class="invert">Font</label>
-            <input type="text" 
+            <input type="text"
                    id="menu-font-input"
                    class="form-control menu-data invert field"
                    name="MenuFont"
@@ -212,9 +227,9 @@
 
       <div id="sections-div">
 
-        <div class="col-xs-10 col-xs-offset-1 form-group sect-row"
+        <div class="col-xs-12 form-group sect-row"
              id="SectionTemplate" hidden>
-          
+
           <div class="col-xs-12 form-group sect-data-div">
             <input type="text" class="sect-data sect-id-input"
                    name="SectionId" hidden>
@@ -222,7 +237,7 @@
             <input type="radio" class="sect-data sect-delete-input"
                    name="_DELETE_" value="false" hidden>
             </input>
-            
+
             <div class="row">
               <div class="col-xs-1 color-input-div">
                 <input class="form-control sect-data color-input
@@ -245,22 +260,23 @@
                         aria-hidden="true">
                   </span>
                   <span class="invert"> Section</span>
-                </button>                
+                </button>
               </div>
             </div>
           </div>
 
-          
-          <div class="col-xs-10 col-xs-offset-1 form-group sect-items">
-            
-            <div class="col-xs-12 form-group item-row" id="ItemTemplate">
+
+          <div class="col-xs-12 form-group sect-items">
+
+            <div class="col-xs-12 form-group item-row"
+                 id="ItemTemplate">
               <input type="text" class="item-data item-id-input"
                      name="ItemId" hidden>
               </input>
               <input type="radio" class="item-data item-delete-input"
                      name="_DELETE_" value="false" hidden>
               </input>
-              
+
               <div class="row">
                 <div class="col-xs-1 item-title-color-div color-input-div">
                   <input class="form-control item-data color-input
@@ -288,7 +304,7 @@
                          name="ItemPrice" placeholder="0.00">
                   </input>
                 </div>
-                <div class="col-xs-2 pull-right">
+                <div class="col-xs-1">
                   <button type="button"
                     class="btn btn-danger delete-item-btn form-control"
                           aria-label="Left Align">
@@ -296,7 +312,7 @@
                           aria-hidden="true">
                     </span>
                     <span class="invert"> Item</span>
-                  </button>                
+                  </button>
                 </div>
               </div>
               <div class="row">
