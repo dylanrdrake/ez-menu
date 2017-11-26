@@ -12,7 +12,6 @@ body {
 }
 
 .site-title {
-  font-family: "Baloo";
   font-size: 5vh;
 }
 
@@ -26,6 +25,7 @@ body {
 }
 
 #top-row {
+  font-family: "Baloo";
   height: 10vh;
   margin-left: 0;
   margin-right: 0;
@@ -39,7 +39,8 @@ body {
 }
 
 #user-div {
-  font-size: 3vh;
+  font-size: 4.5vh;
+  font-weight: 50;
 }
 
 #auth-prov-div {
@@ -78,6 +79,7 @@ body {
 }
 
 #menu-table-div {
+  font-family: "Baloo";
   width: 90%;
   margin: 5% auto;
   background-color: #fafbfa;

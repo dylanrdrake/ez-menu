@@ -1,9 +1,9 @@
 $(function() {
   //local dev backendHostURL:
-  //backendHostUrl = 'http://localhost:8081';
+  backendHostUrl = 'http://localhost:8081';
 
   // production backendHostURL:
-  var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
 
   // gen random color
@@ -27,7 +27,9 @@ $(function() {
       $(titlechar).css('color',bkdgcolor);
       $(titlechar).attr('data-toggle', 'tooltip');
       $(titlechar).attr('title', charcolor.toString());
-      setTimeout(function() {
+      seThis button triggers a popover on click.
+
+tTimeout(function() {
         $(titlechar).css('color', charcolor);
       }, time);
       time += 30;
@@ -170,10 +172,22 @@ $(function() {
 
         $menutr.find('.menu-edit-data').append($('<button type="button" data-toggle="tooltip" title="Edit" class="menu-edit-btn btn-lg form-control" aria-label="Left Align"><span class="glyphicon glyphicon-pencil blue" aria-hidden="true"></span></button>'));
         $menutr.find('.menu-id-data').text(menu.MenuId);
-        $menutr.find('.menu-title-data').text(menu.MenuTitle);
+        $('head').append($('<link>',
+                           {type:'text/css',
+                            rel:'stylesheet',
+                      href:'https://fonts.googleapis.com/css?family='+
+                            menu.MenuFont}));
+        //$menutr.find('.menu-title-data').append($('<img>',
+        //                                         {src:menu.MenuLogo,
+        //                                        style:'height:3vh;',
+        //                                         }));
+        $menutr.find('.menu-title-data').append(menu.MenuTitle)
+          .css('font-family', menu.MenuFont).change();
         $menutr.find('.menu-shared-data').append(shared);
         $menutr.find('.menu-published-data').append(published);
         $menutr.find('.menu-delete-data').append($('<button type="button" data-toggle="tooltip" title="Delete" class="menu-delete-btn btn-lg form-control"><span class="glyphicon glyphicon-trash red" aria-hidden="true"></span></button>'));
+        //$menutr.css('background-color', menu.MenuBkgrdColor);
+        //$menutr.css('color', menu.MenuTitleColor);
         $('#menu-table-body').append($menutr);
       });
     });
