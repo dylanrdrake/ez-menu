@@ -22,17 +22,21 @@
     var currentPage = 1;
     var windhgt = window.innerHeight;
     var pageInterval = 30000;
+    var isModified = false;
+    var lastModified = document.lastModified;
+    lastModified = lastModified.replace("/", " ").replace("/", " ");
+    lastModified = Date.parse(lastModified);
 
     function setupMenu() {
       if (window.innerHeight > window.innerWidth) {
         $('#ls-view').hide();
         $('#pt-view').show();
-        clearInterval(changePage);
+        clearInterval(page);
       }
       else if (window.innerWidth > window.innerHeight) {
         $('#pt-view').hide();
         $('#ls-view').show();
-        setInterval(changePage, pageInterval);
+        setInterval(page, pageInterval);
         // compute items per page for each section
         $('.section-div-ls').each(function(s, sectd) {
           var pageNum = 1;
@@ -70,28 +74,49 @@
       setupMenu();
     });
 
-    function reloadMenu() {
-      location.reload(true);
+    function updates() {
+      $.ajax({
+        url: location.href,
+        type: 'HEAD',
+        success: function(message,text,resp) {
+          servModified = resp.getResponseHeader('last-modified');
+          servModified = servModified.replace("/", " ").replace("/", " ");
+          servModified = Date.parse(servModified);
+          if (servModified > lastModified) {
+            isModified = true;
+          }
+        }
+      });
     };
 
-    function changePage() {
+    function changePage(nextPage) {
+      $('.section-div-ls').each(function(i, sect) {
+        var nextItems = $(sect).find('.page-'+nextPage.toString());
+        if ($(nextItems).length > 0) {
+          $(sect).find('.page-'+currentPage.toString()).hide();
+          $(sect).find('.page-'+nextPage.toString()).show();
+        }
+        else {
+          $(sect).find('.page-'+currentPage.toString()).hide();
+          $(sect).find('.page-1').show();
+        }
+      });
+      currentPage = nextPage;
+    };
+
+    function page() {
       if (currentPage >= pages) {
-        reloadMenu();
+        if (isModified) {
+          location.reload(true);
+        } else {
+          changePage(1);
+        }
       }
       else {
-        $('.section-div-ls').each(function(i, sect) {
-          var nextItems = $(sect).find('.page-'
-                                       +(currentPage+1).toString());
-          if ($(nextItems).length > 0) {
-            $(sect).find('.page-'+currentPage.toString()).hide();
-            $(sect).find('.page-'+(currentPage+1).toString()).show();
-          }
-          else {
-            $(sect).find('.page-'+currentPage.toString()).hide();
-            $(sect).find('.page-1').show();
-          }
-        });
-        currentPage += 1;
+        if (currentPage+1 == pages) {
+          updates();
+        }
+        changePage(currentPage+1);
       }
     };
 

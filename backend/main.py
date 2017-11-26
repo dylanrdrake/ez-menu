@@ -456,13 +456,17 @@ def publishmenu(menuid):
 
     object = '/'+bucket+'/menus/'+menuid+'.html'
 
+    last_change = datetime.utcnow().strftime('%y-%m-%dT%H:%M:%S%f')
+
     write_retry_params = gcs.RetryParams(backoff_factor=1.1)
     with gcs.open(object,
                   'w',
                   content_type='text/html',
                   options={'x-goog-acl': 'public-read',
-                           'Cache-Control': 'no-cache'},
+                           'Cache-Control': 'no-cache',
+                           'x-goog-meta-last-change': last_change},
                   retry_params=write_retry_params) as menu_file:
+        menu_file.metadata = {'last-change': last_change}
         menu_file.write(str(menuHTML))
         menu_file.close()
 
