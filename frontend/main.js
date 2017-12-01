@@ -1,10 +1,8 @@
-$(function() {
-  //local dev backendHostURL:
-  backendHostUrl = 'http://localhost:8081';
+//local dev backendHostURL:
+//var backendHostUrl = 'http://localhost:8081';
 
-  // production backendHostURL:
-  //var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
-});
+// production backendHostURL:
+var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
 
 // Ajax request loading animation
