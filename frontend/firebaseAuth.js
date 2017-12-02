@@ -73,5 +73,3 @@ function configureFirebaseLoginWidget() {
   ui.start('#firebaseui-auth-container', uiConfig);
 }
 // [END configureFirebaseLoginWidget]
-//////////////////////// END Firebase /////////////////////////
-

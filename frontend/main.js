@@ -5,7 +5,17 @@
 var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
 
-// Ajax request loading animation
+
+// Firebase
+$(function() {
+  configureFirebaseLogin();
+  configureFirebaseLoginWidget();
+});
+// Firebase
+
+
+
+// Run loading animation for all AJAX requests
 $(document).ajaxStart(function() {
   function loadStart() {
     logoColors();
@@ -18,13 +28,8 @@ $(document).ajaxStart(function() {
     logoColors();
   });
 });
-// Ajax request loading animation
+// Run loading animation for all AJAX requests
 
-
-$(function() {
-  configureFirebaseLogin();
-  configureFirebaseLoginWidget();
-});
 
 
 // home
@@ -40,43 +45,69 @@ function home() {
     // Iterate over user data to display user's notes from database.
     data.forEach(function(menu) {
       if (menu.SharedWith != null) {
-        var shared = $('<span class="glyphicon glyphicon-ok green" aria-hidden="true"></span>');
+        var shared = $('<span class="glyphicon glyphicon-ok green" \
+aria-hidden="true"></span>');
       }
       else {
-        var shared = $('<span class="glyphicon glyphicon-remove red" aria-hidden="true"></span>');
+        var shared = $('<span class="glyphicon glyphicon-remove red" \
+aria-hidden="true"></span>');
       }
 
       if (menu.PublicLink != null) {
-        var published = $('<span class="glyphicon glyphicon-ok green" aria-hidden="true"></span><button type="button" data-toggle="tooltip" title="Get Link" class="basic-btn btn-lg get-pub-link-btn"><span class="glyphicon glyphicon-link blue"></span></button><button type="button" data-toggle="tooltip" title="Take down" class="basic-btn btn-lg menu-takedown-btn"><span class="glyphicon glyphicon-ban-circle orange"></span></button>');
+        var published = $('<span class="glyphicon glyphicon-ok \
+green" aria-hidden="true"></span><button type="button" \
+data-toggle="tooltip" title="Get Link" class="basic-btn \
+btn-lg get-pub-link-btn"><span class="glyphicon \
+glyphicon-link blue"></span></button><button type="button" \
+data-toggle="tooltip" title="Take down" class="basic-btn \
+btn-lg menu-takedown-btn"><span class="glyphicon \
+glyphicon-ban-circle orange"></span></button>');
       }
       else {
-        var published = $('<span class="glyphicon glyphicon-remove red" aria-hidden="true"></span><button type="button" data-toggle="tooltip" title="Publish" class="basic-btn btn-lg menu-publish-btn"><span class="glyphicon glyphicon-globe blue"></span></button>');
+        var published = $('<span class="glyphicon glyphicon-remove \
+red" aria-hidden="true"></span><button type="button" \
+data-toggle="tooltip" title="Publish" class="basic-btn \
+btn-lg menu-publish-btn"><span class="glyphicon \
+glyphicon-globe blue"></span></button>');
       }
 
       var $menutr = $('<tr>').addClass('menu-table-row');
-      $menutr.append($('<td>').addClass('menu-table-btn menu-edit-data'));
-      $menutr.append($('<td>').addClass('menu-table-data menu-id-data'));
-      $menutr.append($('<td>').addClass('menu-table-data menu-title-data'));
-      $menutr.append($('<td>').addClass('menu-table-data menu-shared-data'));
-      $menutr.append($('<td>').addClass('menu-table-data menu-published-data'));
-      $menutr.append($('<td>').addClass('menu-table-btn menu-delete-data'));
+      $menutr.append($('<td>')
+             .addClass('menu-table-btn menu-edit-data'));
+      $menutr.append($('<td>')
+             .addClass('menu-table-data menu-id-data'));
+      $menutr.append($('<td>')
+             .addClass('menu-table-data menu-title-data'));
+      $menutr.append($('<td>')
+             .addClass('menu-table-data menu-shared-data'));
+      $menutr.append($('<td>')
+             .addClass('menu-table-data menu-published-data'));
+      $menutr.append($('<td>')
+             .addClass('menu-table-btn menu-delete-data'));
 
-      $menutr.find('.menu-edit-data').append($('<button type="button" data-toggle="tooltip" title="Edit" class="menu-edit-btn btn-lg form-control" aria-label="Left Align"><span class="glyphicon glyphicon-pencil blue" aria-hidden="true"></span></button>'));
+      $menutr.find('.menu-edit-data').append($('<button \
+type="button" data-toggle="tooltip" title="Edit" \
+class="menu-edit-btn btn-lg form-control" aria-label="Left Align">\
+<span class="glyphicon glyphicon-pencil blue" aria-hidden="true">\
+</span></button>'));
       $menutr.find('.menu-id-data').text(menu.MenuId);
       $('head').append($('<link>',
-                          {type:'text/css',
-                          rel:'stylesheet',
+                         {type:'text/css',
+                         rel:'stylesheet',
                     href:'https://fonts.googleapis.com/css?family='+
-                          menu.MenuFont}));
+                         menu.MenuFont}));
       //$menutr.find('.menu-title-data').append($('<img>',
       //                                         {src:menu.MenuLogo,
       //                                        style:'height:3vh;',
       //                                         }));
       $menutr.find('.menu-title-data').append(menu.MenuTitle)
-        .css('font-family', menu.MenuFont).change();
+             .css('font-family', menu.MenuFont).change();
       $menutr.find('.menu-shared-data').append(shared);
       $menutr.find('.menu-published-data').append(published);
-      $menutr.find('.menu-delete-data').append($('<button type="button" data-toggle="tooltip" title="Delete" class="menu-delete-btn btn-lg form-control"><span class="glyphicon glyphicon-trash red" aria-hidden="true"></span></button>'));
+      $menutr.find('.menu-delete-data').append($('<button \
+type="button" data-toggle="tooltip" title="Delete" \
+class="menu-delete-btn btn-lg form-control"><span class="glyphicon \
+glyphicon-trash red" aria-hidden="true"></span></button>'));
       //$menutr.css('background-color', menu.MenuBkgrdColor);
       //$menutr.css('color', menu.MenuTitleColor);
       $('#menu-table-body').append($menutr);
@@ -103,17 +134,26 @@ $(document).on('click', '#create-menu-btn', function(event) {
 
 
 
-// Edit menu
+/////////////////// Edit menu /////////////////////////
 $(document).on('click', '.menu-edit-btn', function() {
+  // remove added elements from previous editor opens
   $('.added').remove();
+
+  // enable save button from previous editor save
   $('#editor-save-btn').removeAttr('disabled');
+
+  // get menu id from menu-table
   var menuid = $(this).parent().siblings('.menu-id-data').text();
 
+  // remove template options from selector
+  $('#template-select').remove('.temp-option');
+  // GET user data from server
   $.ajax({
     url: backendHostUrl + '/users',
     headers: {'Authorization': 'Bearer ' + userIdToken},
     method: 'GET',
     contentType: 'application/json',
+    // populate template selector
     success: function(user) {
       user.Templates.forEach(function(template) {
         $('#template-select').append(
@@ -128,6 +168,7 @@ $(document).on('click', '.menu-edit-btn', function() {
     }
   }).then(function() {
 
+    // GET selected menu's data from server
     $.ajax({
       url: backendHostUrl + '/menus',
       headers: {'Authorization': 'Bearer ' + userIdToken},
@@ -135,87 +176,121 @@ $(document).on('click', '.menu-edit-btn', function() {
       data: {'MenuId': menuid},
       contentType: 'application/json',
       success: function(menu) {
+        // populate editor id
         $('#editor-id-input').val(menu.MenuId);
+
+        // populate editor title
         $('#editor-title-input').val(menu.MenuTitle);
 
+        // create editor title color picker
         $('#menu-title-color-input').colorpicker()
           .on('changeColor', function(el) {
             changeTextColor(el);
-        });
+          });
+        // populate editor title color
         $('#menu-title-color-input').val(menu.MenuTitleColor)
                                     .change();
 
+        // create editor background color picker
         $('#menu-bkgrd-color-input').colorpicker()
           .on('changeColor', function(el) {
             changeBkgrdColor(el);
             $(el.target).css('color',
                               invertColor($(el.target).val(), true));
-        });
+          });
+        // populate editor background color
         $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor)
                                     .change();
 
+        // populate editor logo link
         $('#menu-logo-input').val(menu.MenuLogo);
+
+        // populate editor logo size
         $('#menu-logo-size-input').val(menu.MenuLogoSize);
 
+        // populate editor font
         $('#menu-font-input')
           .on('change', function(el) {
             changeEditorFont(el);
           })
           .val(menu.MenuFont).change();
 
+        // populate editor font size
         $('#menu-font-size-input')
           .on('change', function(el) {
             changeEditorFontSize(el);
           })
           .val(menu.MenuFontSize).change();
 
+        // select menu template if one has been saved before
         $('#template-select').ready( function() {
           $('.temp-option').each(function(i, tempopt) {
             if (String(tempopt.id) == String(menu.Template)) {
               $(tempopt).attr('selected', 'selected');
             }
-            else {
-              $(tempopt).removeAttr('selected');
-            }
           });
         });
 
+        // copy section template
         var $section_temp = $('#SectionTemplate').clone();
+
+        // copy item template
         var $itemrow_temp = $('#ItemTemplate').clone();
+
+        // remove blank item template
         $section_temp.find('#ItemTemplate').remove();
+
+        // show section
         $section_temp.removeAttr('hidden');
 
+        // iterate through sections from server
         menu.Sections.forEach(function(sect) {
+          // create new editor section from template
           var $section = $section_temp.clone();
           $section.removeAttr('id');
+          // mark as a dynamically added section from server
           $section.addClass('added');
+          // populate section id
           $section.find('.sect-id-input').val(sect.SectionId);
+          // populate section title
           $section.find('.sect-title-input').val(sect.SectionTitle);
+          // populate section title font color
           $section.find('.sect-color-input').colorpicker()
             .on('changeColor', function(el) {
               changeTextColor(el);
           }).val(sect.SectionTitleColor).change();
 
+          // iterate over each item from the server
           sect.Items.forEach(function(item) {
+            // create new item from template
             var $itemrow = $itemrow_temp.clone();
             $itemrow.removeAttr('id');
+            // populate item id
             $itemrow.find('.item-id-input').val(item.ItemId);
+            // populate item title
             $itemrow.find('.item-title-input').val(item.ItemTitle);
+            // populate item title font color
             $itemrow.find('.item-title-color-input').colorpicker()
               .on('changeColor', function(el) {
                 changeTextColor(el);
             }).val(item.ItemTitleColor).change();
+            // populate item stock note
             $itemrow.find('.item-stock-input').val(item.ItemStock);
+            // populate item price
             $itemrow.find('.item-price-input').val(item.ItemPrice)
               .css('color', item.ItemTitleColor);
+            // populate item description
             $itemrow.find('.item-desc-input').val(item.ItemDesc);
+            // populate item description color
             $itemrow.find('.item-desc-color-input').colorpicker()
               .on('changeColor', function(el) {
                 changeTextColor(el);
             }).val(item.ItemDescColor).change();
+            // insert add item button
             $section.find('.add-item-btn-row').before($itemrow);
           });
 
+          // inser add section button
           $('#add-sect-div').before($section);
 
         });
@@ -227,10 +302,11 @@ $(document).on('click', '.menu-edit-btn', function() {
     });
   });
 
+  // editor show animation
   $("#editor-div").show("slide", {direction:"up"}, 300);
 
 });
-// Edit menu
+//////////////////// Edit menu ///////////////////////////
 
 
 
