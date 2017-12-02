@@ -5,6 +5,7 @@ $(document).on('click', '#edit-hl-fields-btn', function() {
 // Highlight fields
 
 
+
 // Invert color
 function invertColor(hex, bw) {
   if (hex.indexOf('#') === 0) {
@@ -48,6 +49,7 @@ function changeBkgrdColor (input) {
 //
 
 
+
 // Update menu editor font
 function changeEditorFont (input) {
   var newfont = $(input.target).val();
@@ -56,6 +58,7 @@ function changeEditorFont (input) {
   $('#editor-div').css('font-family', newfont);
 }
 //
+
 
 
 // Update menu editor font size
@@ -74,6 +77,7 @@ function changeEditorFontSize (input) {
 //
 
 
+
 // Update text input colors
 function changeTextColor (input) {
   var newcolor = $(input.target).val();
@@ -85,6 +89,7 @@ function changeTextColor (input) {
   $(input.target).css('color', newcolorinv);
 }
 //
+
 
 
 // Add section
@@ -101,6 +106,7 @@ $(document).on('click', '.add-sect-btn', function() {
   $(this).parent().parent().before(newsect);
 });
 // Add section
+
 
 
 // Add item
@@ -151,7 +157,10 @@ $(document).on('click', '.delete-sect-btn', function() {
 $(document).on('click', '#editor-save-btn', function() {
   $('#editor-save-btn').attr('disabled', 'disabled');
 
+  // Menu data dict
   var menudict = {};
+
+  // Menu level data
   $('#editor-div').find('.menu-data').each(function(i ,menudata) {
 
     if ($(menudata).attr('name') == 'Template') {
@@ -159,36 +168,39 @@ $(document).on('click', '#editor-save-btn', function() {
                                         .attr('id');
       return true;
     }
-
     menudict[$(menudata).attr('name')] = $(menudata).val();
 
+    // 'Sections': [{}, {}, ...]
     menudict['Sections'] = [];
 
+    // Iterate through each Section
     $('#editor-div').find('.sect-row.added').each(function(i, sect) {
       var sectdict = {};
 
       $(sect).find('.sect-data').each(function(i, sectdata) {
         sectdict[$(sectdata).attr('name')] = $(sectdata).val();
       });
-
       sectdict['Items'] = [];
 
+      // Iterate through each item row
       $(sect).find('.item-row').each(function(i, item) {
         var itemdict = {};
 
+        // Iterate within the item row for item data
         $(item).find('.item-data').each(function(i, itemdata) {
           itemdict[$(itemdata).attr('name')] = $(itemdata).val();
         });
-
         sectdict['Items'].push(itemdict);
-      });
 
+      });
       menudict['Sections'].push(sectdict);
+
     });
 
   });
 
 
+  // Send array of menu dicts, in this case just one dict
   $.ajax({
     url: backendHostUrl + '/menus',
     headers: {'Authorization': 'Bearer ' + userIdToken},

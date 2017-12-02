@@ -17,7 +17,8 @@ from env_config import creds
 import cloudstorage as gcs
 from google.appengine.api import app_identity
 
-# Use the App Engine Requests adapter. This makes sure that Requests uses
+# Use the App Engine Requests adapter.
+# This makes sure that Requests uses
 # URLFetch.
 requests_toolbelt.adapters.appengine.monkeypatch()
 HTTP_REQUEST = google.auth.transport.requests.Request()
@@ -35,8 +36,10 @@ bucket = os.environ.get('BUCKET_NAME',
 @app.before_request
 def db_connect():
     if (os.getenv('SERVER_SOFTWARE') and \
-            os.getenv('SERVER_SOFTWARE').startswith('Google App Engine/')):
-        g.conn = mysql.connect(unix_socket='/cloudsql/'+creds['_INSTANCE_NAME'],
+            os.getenv('SERVER_SOFTWARE')
+              .startswith('Google App Engine/')):
+        g.conn = mysql.connect(unix_socket='/cloudsql/'+
+                               creds['_INSTANCE_NAME'],
                                db=creds['dbbase'],
                                user=creds['dbuser'],
                                passwd=creds['dbpass'])

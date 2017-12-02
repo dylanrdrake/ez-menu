@@ -1,4 +1,4 @@
-// Initialize Firebase
+// Firebase credentials
 var config = {
   apiKey: "AIzaSyAPAEZg9AMSlE2cqC5h2_7VelZP5Md0wpc",
   authDomain: "ez-menu.firebaseapp.com",
