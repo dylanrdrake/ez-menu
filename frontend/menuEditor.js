@@ -96,10 +96,12 @@ function changeTextColor (input) {
 $(document).on('click', '.add-sect-btn', function() {
   event.preventDefault();
   var newsect = $('#SectionTemplate').clone();
+
   newsect.find('.sect-color-input').colorpicker()
     .on('changeColor', function(el) {
       changeTextColor(el);
     }).val('#333333').change();
+
   newsect.find('.item-row').remove();
   newsect.removeAttr('hidden');
   newsect.addClass('added');
@@ -113,15 +115,16 @@ $(document).on('click', '.add-sect-btn', function() {
 $(document).on('click', '.add-item-btn', function() {
   event.preventDefault();
   var newitem = $('#ItemTemplate').clone();
+
   newitem.find('.item-title-color-input').colorpicker()
     .on('changeColor', function(el) {
       changeTextColor(el);
     }).val('#333333').change();
+
   newitem.find('.item-desc-color-input').colorpicker()
     .on('changeColor', function(el) {
       changeTextColor(el);
     }).val('#333333').change();
-
 
   $(this).parent().parent().before(newitem);
 });

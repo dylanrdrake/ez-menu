@@ -1,8 +1,8 @@
 //local dev backendHostURL:
-var backendHostUrl = 'http://localhost:8081';
+//var backendHostUrl = 'http://localhost:8081';
 
 // production backendHostURL:
-//var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
 
 

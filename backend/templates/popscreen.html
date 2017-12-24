@@ -21,12 +21,14 @@
     var pages = 1;
     var currentPage = 1;
     var windhgt = window.innerHeight;
-    var pageInterval = 30000;
+    var pageInterval = 5000;
     var isModified = false;
     var lastModified = document.lastModified;
     lastModified = lastModified.replace("/", " ").replace("/", " ");
     lastModified = Date.parse(lastModified);
 
+    // Check window size,
+    // Organize menu items into their pages
     function setupMenu() {
       if (window.innerHeight > window.innerWidth) {
         $('#ls-view').hide();
@@ -57,8 +59,15 @@
             if (pageNum > 1) { $(itemd).hide(); }
             if (pageNum > pages) { pages = pageNum; }
           });
+          // Fill last page with items from page1 if there is room
+          $(sectd).find('.page-1').each(function(i, itemd) {
+            var fillItemHgt = $(itemd).height();
+            if (itemsTotalHeight+fillItemHgt < windhgt) {
+              $(itemd).addClass('page-' + pageNum.toString());
+              itemsTotalHeight += fillItemHgt;
+            }
+          });
         });
-
       }
       else {
         $('#ls-view').hide();
@@ -66,14 +75,17 @@
       }
     };
 
+    // Run setupMenu() when the page loads
     $(document).ready(function() {
       setupMenu();
     });
 
+    // Run setupMent() every time the window is resized
     $(window).resize(function() {
       setupMenu();
     });
 
+    // Check menu object source for updates
     function updates() {
       $.ajax({
         url: location.href,
