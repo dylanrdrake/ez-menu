@@ -117,10 +117,11 @@ glyphicon-trash red" aria-hidden="true"></span></button>'));
 // home
 
 
+
 // Create menu
 $(document).on('click', '#create-menu-btn', function(event) {
   event.preventDefault();
-
+  // /menus, POST, [{}]
   $.ajax(backendHostUrl + '/menus', {
     headers: {'Authorization': 'Bearer ' + userIdToken},
     method: 'POST',
@@ -147,7 +148,7 @@ $(document).on('click', '.menu-edit-btn', function() {
 
   // remove template options from selector
   $('#template-select').remove('.temp-option');
-  // GET user data from server
+  // /users, GET
   $.ajax({
     url: backendHostUrl + '/users',
     headers: {'Authorization': 'Bearer ' + userIdToken},
@@ -167,8 +168,7 @@ $(document).on('click', '.menu-edit-btn', function() {
       console.log(error);
     }
   }).then(function() {
-
-    // GET selected menu's data from server
+    // /users, GET
     $.ajax({
       url: backendHostUrl + '/menus',
       headers: {'Authorization': 'Bearer ' + userIdToken},
@@ -315,6 +315,7 @@ $(document).on('click', '.menu-publish-btn', function() {
   if (confirm('Are you sure you want to publish this menu?')) {
 
     var menuid = $(this).parent().siblings('.menu-id-data').text();
+    // /menus, PUT, [{}, ...]
     $.ajax({
       url: backendHostUrl + '/menus',
       headers: {'Authorization': 'Bearer ' + userIdToken},
@@ -323,6 +324,7 @@ $(document).on('click', '.menu-publish-btn', function() {
                             'Publish': true}]),
       contentType: 'application/json'
     }).then(function() {
+      // /menus, GET
       $.ajax({
         url: backendHostUrl + '/menus',
         headers: {'Authorization': 'Bearer ' + userIdToken},
@@ -351,6 +353,7 @@ $(document).on('click', '.menu-publish-btn', function() {
 // Get public link
 $(document).on('click', '.get-pub-link-btn', function() {
   var menuid = $(this).parent().siblings('.menu-id-data').text();
+  // /menus, GET
   $.ajax({
     url: backendHostUrl + '/menus',
     headers: {'Authorization': 'Bearer ' + userIdToken},
@@ -374,6 +377,7 @@ $(document).on('click', '.menu-takedown-btn', function() {
   if (confirm('Are you sure you want to take this menu down?')) {
 
     var menuid = $(this).parent().siblings('.menu-id-data').text();
+    // /menus, PUT, [{}, ...]
     $.ajax({
       url: backendHostUrl + '/menus',
       headers: {'Authorization': 'Bearer ' + userIdToken},
@@ -397,6 +401,7 @@ $(document).on('click', '.menu-delete-btn', function() {
   if (confirm('Are you sure you want to delete this menu?')) {
 
     var menuid = $(this).parent().siblings('.menu-id-data').text();
+    // /menus, DELETE, [{}, ...]
     $.ajax({
       url: backendHostUrl + '/menus',
       headers: {'Authorization': 'Bearer ' + userIdToken},
