@@ -308,3 +308,7 @@ body {
 input.item-stock-input {
   color: #f55656;
 }
+
+input.disabled-pretty[readonly] {
+  background-color: inherit;
+}

@@ -1,8 +1,8 @@
 //local dev backendHostURL:
-//var backendHostUrl = 'http://localhost:8081';
+var backendHostUrl = 'http://localhost:8081';
 
 // production backendHostURL:
-var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+//var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
 
 
@@ -214,6 +214,9 @@ $(document).on('click', '.menu-edit-btn', function() {
     success: function(menu) {
       // populate editor id
       $('#editor-id-input').val(menu.MenuId);
+
+      // populate template indicator
+      $('#template-indicator').val(menu.Template);
 
       // populate editor title
       $('#editor-title-input').val(menu.MenuTitle);
