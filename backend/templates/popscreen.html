@@ -139,8 +139,8 @@
   <style>
    /* START Landscape CSS */
     body {
-      background-image: url("https://i.imgur.com/HgsxYor.jpg");
-      background-size: 100% 100%;
+      background-image: url('{{ menu["MenuBkgrdImage"] }}');
+      background-size: 100% auto;
       color: #fdf6ee;
       font-family: '{{ menu["MenuFont"] }}';
     }
@@ -226,7 +226,7 @@
     }
     .item-stock-div-ls {
       width: auto;
-      color: #FF4500;
+      color: #fc6335;
       font-weight: bold;
       padding-left: 1%;
     }
@@ -275,7 +275,7 @@
       width: auto;
       font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.3vh);
       padding-left: 1%;
-      color: #FF4500;
+      color: #fc6335;
       font-weight: bold;
     }
     .item-price-div-pt {

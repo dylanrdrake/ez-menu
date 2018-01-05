@@ -32,6 +32,7 @@ $(document).ajaxStart(function() {
 
 
 
+
 // home
 function home() {
   $(document).scrollTop(0);
@@ -118,21 +119,78 @@ glyphicon-trash red" aria-hidden="true"></span></button>'));
 
 
 
+// New menu -> select template
+$(document).on('click', '#new-menu-btn', function(event) {
+  event.preventDefault();
+  $('#template-select .added-option').remove();
+  // /users, GET
+  $.ajax(backendHostUrl + '/users', {
+    headers: {'Authorization': 'Bearer ' + userIdToken},
+    method: 'GET',
+    contentType: 'application/json',
+    success: function(userdata) {
+      userdata.Templates.forEach(function(template) {
+        $('#template-select').append($('<option>')
+          .attr('tempId', template.TemplateId)
+          .addClass('added-option')
+          .text(template.TemplateName));
+      });
+    },
+    error: function(error) {
+      console.log(error);
+    }
+  }).then(function() {
+    $('#new-menu-btn-div').hide();
+    $('#create-menu-btns-div').show();
+  });
+
+});
+// New menu -> select template
+
+
+// Disable Create button when no template is selected
+$(function() {
+$('#template-select').on('change', function() {
+  var $selectedTemp = $(this).find('option:selected').attr('name');
+  if ($selectedTemp == 'default') {
+    $('#create-menu-btn').attr('disabled', true);
+  }
+  else {
+    $('#create-menu-btn').attr('disabled', false);
+  }
+});
+});
+// Disable Create button when no template is selected
+
+
 // Create menu
 $(document).on('click', '#create-menu-btn', function(event) {
   event.preventDefault();
+  var $tempId = $('#template-select').find('option:selected')
+                                     .attr('tempId');
   // /menus, POST, [{}]
   $.ajax(backendHostUrl + '/menus', {
     headers: {'Authorization': 'Bearer ' + userIdToken},
     method: 'POST',
-    data: JSON.stringify([{'MenuTitle': 'No Title'}]),
+    data: JSON.stringify([{'MenuTitle': 'No Title',
+                           'Template': $tempId}]),
     contentType: 'application/json'
   }).then(function() {
+    $('#create-menu-btns-div').hide();
+    $('#new-menu-btn-div').show();
     home();
   });
 });
 // Create menu
 
+
+// Cancel menu
+$(document).on('click', '#cancel-menu-btn', function(event) {
+  event.preventDefault();
+  $('#create-menu-btns-div').hide();
+  $('#new-menu-btn-div').show();
+});
+//
 
 
 /////////////////// Edit menu /////////////////////////
@@ -146,160 +204,134 @@ $(document).on('click', '.menu-edit-btn', function() {
   // get menu id from menu-table
   var menuid = $(this).parent().siblings('.menu-id-data').text();
 
-  // remove template options from selector
-  $('#template-select').remove('.temp-option');
   // /users, GET
   $.ajax({
-    url: backendHostUrl + '/users',
+    url: backendHostUrl + '/menus',
     headers: {'Authorization': 'Bearer ' + userIdToken},
     method: 'GET',
+    data: {'MenuId': menuid},
     contentType: 'application/json',
-    // populate template selector
-    success: function(user) {
-      user.Templates.forEach(function(template) {
-        $('#template-select').append(
-          $('<option>'+template.TemplateName+'</option>').attr(
-            'id',template.TemplateId).attr('role', 'button')
-            .attr('href', '#').attr('data-toggle', 'dropdown')
-            .addClass('added temp-option invert'));
+    success: function(menu) {
+      // populate editor id
+      $('#editor-id-input').val(menu.MenuId);
+
+      // populate editor title
+      $('#editor-title-input').val(menu.MenuTitle);
+
+      // create editor title color picker
+      $('#menu-title-color-input').colorpicker()
+        .on('changeColor', function(el) {
+          changeTextColor(el);
+        });
+      // populate editor title color
+      $('#menu-title-color-input').val(menu.MenuTitleColor)
+                                  .change();
+
+      // create editor background color picker
+      $('#menu-bkgrd-color-input').colorpicker()
+        .on('changeColor', function(el) {
+          changeBkgrdColor(el);
+          $(el.target).css('color',
+                            invertColor($(el.target).val(), true));
+        });
+      // populate editor background color
+      $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor)
+                                  .change();
+
+      // populate editor background image link
+      $('#menu-bkgrd-img-input')
+        .on('change', function(el) {
+          changeBkgrdImage(el);
+        }).val(menu.MenuBkgrdImage).change();
+
+      // populate editor logo link
+      $('#menu-logo-input').val(menu.MenuLogo);
+
+      // populate editor logo size
+      $('#menu-logo-size-input').val(menu.MenuLogoSize);
+
+      // populate editor font
+      $('#menu-font-input')
+        .on('change', function(el) {
+          changeEditorFont(el);
+        })
+        .val(menu.MenuFont).change();
+
+      // populate editor font size
+      $('#menu-font-size-input')
+        .on('change', function(el) {
+          changeEditorFontSize(el);
+        })
+        .val(menu.MenuFontSize).change();
+
+      // copy section html template
+      var $section_temp = $('#SectionTemplate').clone();
+
+      // copy item html template
+      var $itemrow_temp = $('#ItemTemplate').clone();
+
+      // remove blank item html template
+      $section_temp.find('#ItemTemplate').remove();
+
+      // show section
+      $section_temp.removeAttr('hidden');
+
+      // iterate through sections from server
+      menu.Sections.forEach(function(sect) {
+        // create new editor section from html template
+        var $section = $section_temp.clone();
+        $section.removeAttr('id');
+        // mark as a dynamically added section from server
+        $section.addClass('added');
+        // populate section id
+        $section.find('.sect-id-input').val(sect.SectionId);
+        // populate section title
+        $section.find('.sect-title-input').val(sect.SectionTitle);
+        // populate section title font color
+        $section.find('.sect-color-input').colorpicker()
+          .on('changeColor', function(el) {
+            changeTextColor(el);
+        }).val(sect.SectionTitleColor).change();
+
+        // iterate over each item from the server
+        sect.Items.forEach(function(item) {
+          // create new item from html template
+          var $itemrow = $itemrow_temp.clone();
+          $itemrow.removeAttr('id');
+          // populate item id
+          $itemrow.find('.item-id-input').val(item.ItemId);
+          // populate item title
+          $itemrow.find('.item-title-input').val(item.ItemTitle);
+          // populate item title font color
+          $itemrow.find('.item-title-color-input').colorpicker()
+            .on('changeColor', function(el) {
+              changeTextColor(el);
+          }).val(item.ItemTitleColor).change();
+          // populate item stock note
+          $itemrow.find('.item-stock-input').val(item.ItemStock);
+          // populate item price
+          $itemrow.find('.item-price-input').val(item.ItemPrice)
+            .css('color', item.ItemTitleColor);
+          // populate item description
+          $itemrow.find('.item-desc-input').val(item.ItemDesc);
+          // populate item description color
+          $itemrow.find('.item-desc-color-input').colorpicker()
+            .on('changeColor', function(el) {
+              changeTextColor(el);
+          }).val(item.ItemDescColor).change();
+          // insert add item button
+          $section.find('.add-item-btn-row').before($itemrow);
+        });
+
+        // inser add section button
+        $('#add-sect-div').before($section);
+
       });
+
     },
     error: function(error) {
       console.log(error);
     }
-  }).then(function() {
-    // /users, GET
-    $.ajax({
-      url: backendHostUrl + '/menus',
-      headers: {'Authorization': 'Bearer ' + userIdToken},
-      method: 'GET',
-      data: {'MenuId': menuid},
-      contentType: 'application/json',
-      success: function(menu) {
-        // populate editor id
-        $('#editor-id-input').val(menu.MenuId);
-
-        // populate editor title
-        $('#editor-title-input').val(menu.MenuTitle);
-
-        // create editor title color picker
-        $('#menu-title-color-input').colorpicker()
-          .on('changeColor', function(el) {
-            changeTextColor(el);
-          });
-        // populate editor title color
-        $('#menu-title-color-input').val(menu.MenuTitleColor)
-                                    .change();
-
-        // create editor background color picker
-        $('#menu-bkgrd-color-input').colorpicker()
-          .on('changeColor', function(el) {
-            changeBkgrdColor(el);
-            $(el.target).css('color',
-                              invertColor($(el.target).val(), true));
-          });
-        // populate editor background color
-        $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor)
-                                    .change();
-
-        // populate editor logo link
-        $('#menu-logo-input').val(menu.MenuLogo);
-
-        // populate editor logo size
-        $('#menu-logo-size-input').val(menu.MenuLogoSize);
-
-        // populate editor font
-        $('#menu-font-input')
-          .on('change', function(el) {
-            changeEditorFont(el);
-          })
-          .val(menu.MenuFont).change();
-
-        // populate editor font size
-        $('#menu-font-size-input')
-          .on('change', function(el) {
-            changeEditorFontSize(el);
-          })
-          .val(menu.MenuFontSize).change();
-
-        // select menu template if one has been saved before
-        $('#template-select').ready( function() {
-          $('.temp-option').each(function(i, tempopt) {
-            if (String(tempopt.id) == String(menu.Template)) {
-              $(tempopt).attr('selected', 'selected');
-            }
-          });
-        });
-
-        // copy section template
-        var $section_temp = $('#SectionTemplate').clone();
-
-        // copy item template
-        var $itemrow_temp = $('#ItemTemplate').clone();
-
-        // remove blank item template
-        $section_temp.find('#ItemTemplate').remove();
-
-        // show section
-        $section_temp.removeAttr('hidden');
-
-        // iterate through sections from server
-        menu.Sections.forEach(function(sect) {
-          // create new editor section from template
-          var $section = $section_temp.clone();
-          $section.removeAttr('id');
-          // mark as a dynamically added section from server
-          $section.addClass('added');
-          // populate section id
-          $section.find('.sect-id-input').val(sect.SectionId);
-          // populate section title
-          $section.find('.sect-title-input').val(sect.SectionTitle);
-          // populate section title font color
-          $section.find('.sect-color-input').colorpicker()
-            .on('changeColor', function(el) {
-              changeTextColor(el);
-          }).val(sect.SectionTitleColor).change();
-
-          // iterate over each item from the server
-          sect.Items.forEach(function(item) {
-            // create new item from template
-            var $itemrow = $itemrow_temp.clone();
-            $itemrow.removeAttr('id');
-            // populate item id
-            $itemrow.find('.item-id-input').val(item.ItemId);
-            // populate item title
-            $itemrow.find('.item-title-input').val(item.ItemTitle);
-            // populate item title font color
-            $itemrow.find('.item-title-color-input').colorpicker()
-              .on('changeColor', function(el) {
-                changeTextColor(el);
-            }).val(item.ItemTitleColor).change();
-            // populate item stock note
-            $itemrow.find('.item-stock-input').val(item.ItemStock);
-            // populate item price
-            $itemrow.find('.item-price-input').val(item.ItemPrice)
-              .css('color', item.ItemTitleColor);
-            // populate item description
-            $itemrow.find('.item-desc-input').val(item.ItemDesc);
-            // populate item description color
-            $itemrow.find('.item-desc-color-input').colorpicker()
-              .on('changeColor', function(el) {
-                changeTextColor(el);
-            }).val(item.ItemDescColor).change();
-            // insert add item button
-            $section.find('.add-item-btn-row').before($itemrow);
-          });
-
-          // inser add section button
-          $('#add-sect-div').before($section);
-
-        });
-
-      },
-      error: function(error) {
-        console.log(error);
-      }
-    });
   });
 
   // editor show animation

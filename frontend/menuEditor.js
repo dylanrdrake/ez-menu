@@ -49,6 +49,14 @@ function changeBkgrdColor (input) {
 //
 
 
+// Update background image
+function changeBkgrdImage (input) {
+  var newbgimage = $(input.target).val();
+  $('#editor-div').css('background-image','url("'+newbgimage+'")')
+                  .css('background-size', '100%');
+}
+// Update background image
+
 
 // Update menu editor font
 function changeEditorFont (input) {
@@ -165,12 +173,6 @@ $(document).on('click', '#editor-save-btn', function() {
 
   // Menu level data
   $('#editor-div').find('.menu-data').each(function(i ,menudata) {
-
-    if ($(menudata).attr('name') == 'Template') {
-      menudict['Template'] = $(menudata).children(':selected')
-                                        .attr('id');
-      return true;
-    }
     menudict[$(menudata).attr('name')] = $(menudata).val();
 
     // 'Sections': [{}, {}, ...]
