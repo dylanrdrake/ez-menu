@@ -309,6 +309,10 @@ input.item-stock-input {
   color: #f55656;
 }
 
-input.disabled-pretty[readonly] {
+.form-control[readonly] {
   background-color: inherit;
+}
+
+label.invert {
+  float: left;
 }
