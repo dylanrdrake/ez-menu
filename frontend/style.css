@@ -9,6 +9,7 @@
 body {
   font-family: "helvetica", sans-serif;
   text-align: center;
+  height: 100%;
 }
 
 .site-title {
@@ -316,3 +317,10 @@ input.item-stock-input {
 label.invert {
   float: left;
 }
+
+/*
+.btn-shadow {
+  -webkit-filter: drop-shadow(5px 5px 2px #000);
+  filter:         drop-shadow(5px 5px 2px #000);
+}
+*/

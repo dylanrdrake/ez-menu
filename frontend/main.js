@@ -132,6 +132,7 @@ $(document).on('click', '#new-menu-btn', function(event) {
       userdata.Templates.forEach(function(template) {
         $('#template-select').append($('<option>')
           .attr('tempId', template.TemplateId)
+          .attr('tempName', template.TemplateName)
           .addClass('added-option')
           .text(template.TemplateName));
       });
@@ -167,13 +168,16 @@ $('#template-select').on('change', function() {
 $(document).on('click', '#create-menu-btn', function(event) {
   event.preventDefault();
   var $tempId = $('#template-select').find('option:selected')
-                                     .attr('tempId');
+      .attr('tempId');
+  var $tempName = $('#template-select').find('option:selected')
+      .attr('tempName');
   // /menus, POST, [{}]
   $.ajax(backendHostUrl + '/menus', {
     headers: {'Authorization': 'Bearer ' + userIdToken},
     method: 'POST',
     data: JSON.stringify([{'MenuTitle': 'No Title',
-                           'Template': $tempId}]),
+                           'Template': $tempId,
+                           'TemplateName': $tempName}]),
     contentType: 'application/json'
   }).then(function() {
     $('#create-menu-btns-div').hide();
@@ -216,7 +220,7 @@ $(document).on('click', '.menu-edit-btn', function() {
       $('#editor-id-input').val(menu.MenuId);
 
       // populate template indicator
-      $('#template-indicator').val(menu.Template);
+      $('#template-indicator').val(menu.TemplateName);
 
       // populate editor title
       $('#editor-title-input').val(menu.MenuTitle);
