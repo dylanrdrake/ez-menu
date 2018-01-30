@@ -144,24 +144,25 @@ $(document).on('click', '#new-menu-btn', function(event) {
     $('#new-menu-btn-div').hide();
     $('#create-menu-btns-div').show();
   });
-
 });
 // New menu -> select template
 
 
+
 // Disable Create button when no template is selected
 $(function() {
-$('#template-select').on('change', function() {
-  var $selectedTemp = $(this).find('option:selected').attr('name');
-  if ($selectedTemp == 'default') {
-    $('#create-menu-btn').attr('disabled', true);
-  }
-  else {
-    $('#create-menu-btn').attr('disabled', false);
-  }
-});
+  $('#template-select').on('change', function() {
+    var $selectedTemp = $(this).find('option:selected').attr('name');
+    if ($selectedTemp == 'default') {
+      $('#create-menu-btn').attr('disabled', true);
+    }
+    else {
+      $('#create-menu-btn').attr('disabled', false);
+    }
+  });
 });
 // Disable Create button when no template is selected
+
 
 
 // Create menu
@@ -188,6 +189,7 @@ $(document).on('click', '#create-menu-btn', function(event) {
 // Create menu
 
 
+
 // Cancel menu
 $(document).on('click', '#cancel-menu-btn', function(event) {
   event.preventDefault();
@@ -195,6 +197,7 @@ $(document).on('click', '#cancel-menu-btn', function(event) {
   $('#new-menu-btn-div').show();
 });
 //
+
 
 
 /////////////////// Edit menu /////////////////////////
@@ -330,7 +333,7 @@ $(document).on('click', '.menu-edit-btn', function() {
           $section.find('.add-item-btn-row').before($itemrow);
         });
 
-        // inser add section button
+        // insert add section button
         $('#add-sect-div').before($section);
 
       });
@@ -389,6 +392,7 @@ $(document).on('click', '.menu-publish-btn', function() {
 // Publish menu
 
 
+
 // Get public link
 $(document).on('click', '.get-pub-link-btn', function() {
   var menuid = $(this).parent().siblings('.menu-id-data').text();
@@ -435,6 +439,7 @@ $(document).on('click', '.menu-takedown-btn', function() {
 // Takedown menu
 
 
+
 // Delete menu
 $(document).on('click', '.menu-delete-btn', function() {
   if (confirm('Are you sure you want to delete this menu?')) {
@@ -458,6 +463,7 @@ $(document).on('click', '.menu-delete-btn', function() {
 // Delete menu
 
 
+
 // tooltips
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip();
@@ -465,11 +471,13 @@ $(document).ready(function(){
 //
 
 
+
 // Cycle logo colors
 $(document).on('click', '#rand-logo-color-btn', function(event) {
   event.preventDefault();
   logoColors();
 });
+
 
 
 // Sign out

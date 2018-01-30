@@ -26,4 +26,3 @@ function logoColors() {
   });
 };
 // apply colors to logo
-

@@ -15,19 +15,42 @@
   <!-- JQuery -->
 
 
-  <!-- Reload -->
+  <!--  -->
   <script>
-    function reload() {
-      location.reload(true);
-    }
-    setInterval(reload, 60000);
-  </script>
-  <!-- Reload -->
+    var reloadInterval = 60000;
+    var isModified = false;
+    var lastModified = document.lastModified;
+    lastModified = lastModified.replace("/", " ").replace("/", " ");
+    lastModified = Date.parse(lastModified);
 
-  
+    // Check menu object source for updates
+    // Reload from source if updates exist
+    function updates() {
+      $.ajax({
+        url: location.href,
+        type: 'HEAD',
+        success: function(message,text,resp) {
+          servModified = resp.getResponseHeader('last-modified');
+          servModified = servModified.replace("/", " ")
+                                     .replace("/", " ");
+          servModified = Date.parse(servModified);
+          if (servModified > lastModified) {
+            location.reload(true);
+          }
+        }
+      });
+    };
+
+    setInterval(updates, reloadInterval);
+  </script>
+  <!--  -->
+
+
   <style>
     body {
       background-color: {{ menu["MenuBkgrdColor"] }};
+      background-image: url('{{ menu["MenuBkgrdImage"] }}');
+      background-size: 100% auto;
       color: #fdf6ee;
       font-family: '{{ menu["MenuFont"] }}';
     }
@@ -85,7 +108,6 @@
     #menu-title-div-pt {
       margin-top: 2%;
       width: 100%;
-      border-bottom: 1px solid #ffffff;
     }
     #menu-title-pt {
       width: 100%;

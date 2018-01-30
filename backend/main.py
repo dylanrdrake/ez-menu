@@ -101,7 +101,6 @@ def auth_check(request):
     return claims.get('user_id')
 
 
-
 # Get User
 def getuser(userid):
     user_query = """
@@ -554,7 +553,6 @@ def users():
 
     else:
         return 'Bad request', 400
-
 
 
 

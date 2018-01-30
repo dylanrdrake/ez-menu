@@ -49,6 +49,7 @@ function changeBkgrdColor (input) {
 //
 
 
+
 // Update background image
 function changeBkgrdImage (input) {
   var newbgimage = $(input.target).val();
@@ -56,6 +57,7 @@ function changeBkgrdImage (input) {
                   .css('background-size', '100%');
 }
 // Update background image
+
 
 
 // Update menu editor font
@@ -96,7 +98,7 @@ function changeTextColor (input) {
   $(input.target).css('background-color', newcolor);
   $(input.target).css('color', newcolorinv);
 }
-//
+// Update text input colors
 
 
 
@@ -190,20 +192,16 @@ $(document).on('click', '#editor-save-btn', function() {
       // Iterate through each item row
       $(sect).find('.item-row').each(function(i, item) {
         var itemdict = {};
-
         // Iterate within the item row for item data
         $(item).find('.item-data').each(function(i, itemdata) {
           itemdict[$(itemdata).attr('name')] = $(itemdata).val();
         });
         sectdict['Items'].push(itemdict);
-
       });
       menudict['Sections'].push(sectdict);
 
     });
-
   });
-
 
   // Send array of menu dicts, in this case just one dict
   $.ajax({
@@ -221,9 +219,9 @@ $(document).on('click', '#editor-save-btn', function() {
 
 
 
-// Cancel editor
+// Close editor
 $(document).on('click', '#editor-cancel-btn', function() {
   $('#editor-div').hide("slide", {direction: "up"}, 300);
   home();
 });
-// Cancel editor
+// Close editor
