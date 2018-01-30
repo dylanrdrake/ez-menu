@@ -17,14 +17,37 @@
 
   <!--  -->
   <script>
+    var pages = 0;
+    var pageInterval = 30000;
     var reloadInterval = 60000;
-    var isModified = false;
-    var lastModified = document.lastModified;
-    lastModified = lastModified.replace("/", " ").replace("/", " ");
-    lastModified = Date.parse(lastModified);
+
+    // Assign paging order to sections.
+    // ...Maybe move this logic to Jinja2
+    // ...when rendering menu storage object.
+    $(document).ready(function() {
+      $('.section-div-pt').each(function(s, sectd) {
+        pages = s;
+        if (s > 0) { $(sectd).hide(); }
+        $(sectd).attr('id', s.toString());
+      });
+      setInterval(nextPage, pageInterval);
+      setInterval(updates, reloadInterval);
+    });
+
+    // Show page buttons when mouse movement
+    // ...or scroll movement is detected. 
+    $(document).mousemove(function(event) {
+      clearInterval(updates);
+      $('.page-btn').show();
+    });
+
+    $(document).scroll(function(event) {
+      clearInterval(updates);
+      $('.page-btn').show();
+    });
 
     // Check menu object source for updates
-    // Reload from source if updates exist
+    // ...and reload from source if updates exist.
     function updates() {
       $.ajax({
         url: location.href,
@@ -41,11 +64,38 @@
       });
     };
 
-    setInterval(updates, reloadInterval);
+    // Change to passed section number
+    function changePage(page) {
+      $('.section-div-pt').hide();
+      $('#'+page.toString()).show();
+    };
+
+    // This functionality is pulled out of click event
+    // ...so it can be called during automatic page interval
+    function nextPage() {
+      var nextPage = parseInt($('.section-div-pt:visible')
+            .attr('id')) + 1;
+      if (nextPage > pages) { nextPage = 0; }
+      changePage(nextPage);
+    };
+    // Next page button event handler
+    $(document).on('click', '#next-page-btn', function(event) {
+      event.preventDefault();
+      nextPage();
+    });
+    // Prev page button event handler
+    $(document).on('click', '#prev-page-btn', function(event) {
+      event.preventDefault();
+      var prevPage = parseInt($('.section-div-pt:visible')
+            .attr('id')) - 1;
+      if (prevPage < 0) { prevPage = pages; }
+      changePage(prevPage);
+    });
   </script>
   <!--  -->
 
 
+  <!--  -->
   <style>
     body {
       background-color: {{ menu["MenuBkgrdColor"] }};
@@ -63,7 +113,7 @@
       margin: 0 auto;
     }
     .section-div-pt {
-      margin-top: 5vh;
+      padding-top: 6vh;
     }
     .section-title-div-pt {
       width: 100%;
@@ -106,7 +156,7 @@
       font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*1.5vh);
     }
     #menu-title-div-pt {
-      margin-top: 2%;
+      padding-top: 2%;
       width: 100%;
     }
     #menu-title-pt {
@@ -115,7 +165,19 @@
       color: {{ menu["MenuTitleColor"] }};
       font-size: calc(({{ menu["MenuFontSize"] }}/10.0)*3vh);
     }
+    .page-btn {
+      position: fixed;
+    }
+    #next-page-btn {
+      bottom: 30px;
+      right: 20px;
+    }
+    #prev-page-btn {
+      bottom: 30px;
+      left: 20px;
+    }
   </style>
+  <!--  -->
 
   <title>{{ menu["MenuTitle"] }}</title>
 </head>
@@ -139,10 +201,10 @@
       </div>
 
       <div class="item-list-div-pt">
-    
+
         {% for item in sect["Items"] %}
           <div class="item-div-pt inline-pt">
-            
+
             <div class="item-title-stock-price-div-pt">
               <div class="item-title-div-pt inline-pt"
                     style="color:{{ item['ItemTitleColor'] }};">
@@ -158,19 +220,31 @@
                 {{ item["ItemPrice"] }}
               </div>
             </div>
-            
+
             <div class="item-desc-div-pt inline-pt"
                   style="color:{{ item['ItemDescColor'] }};">
               {{ item["ItemDesc"] }}
             </div>
-          
+
           </div>
         {% endfor %}
 
       </div>
 
     </div>
-  
+
   {% endfor %}
+
+  <a href="#" id="next-page-btn"
+     class="page-btn" hidden>
+    <span class="page-btn-label" id="next-page-btn-label"></span>
+    <img src="https://storage.googleapis.com/ez-menu.appspot.com/templates/assets/right_arrow_white.png" />
+  </a>
+
+  <a href="#" id="prev-page-btn"
+     class="page-btn" hidden>
+    <span class="page-btn-label" id="prev-page-btn-label"></span>
+    <img src="https://storage.googleapis.com/ez-menu.appspot.com/templates/assets/left_arrow_white.png" />
+  </a>
 </body>
 </html>

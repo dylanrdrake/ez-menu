@@ -31,28 +31,44 @@ $(document).ajaxStart(function() {
 // Run loading animation for all AJAX requests
 
 
+// API function
+function server(url, method, data) {
+  $.ajax(backendHostUrl + '/' + url, {
+    headers: {'Authorization': 'Bearer ' + userIdToken},
+    method: method,
+    contentType: 'application/json',
+    data: data,
+    success: function(serverdata) {
+      return serverdata;
+    },
+    error: function(error) {
+      console.log(error);
+      return false;
+    }
+  });
+};
+// API function
+
 
 // home
 function home() {
   $(document).scrollTop(0);
-
-  $.ajax(backendHostUrl + '/menus', {
-    headers: {'Authorization': 'Bearer ' + userIdToken}
-  }).then(function(data) {
-    $('.menu-table-row').remove();
-    // Iterate over user data to display user's notes from database.
-    data.forEach(function(menu) {
-      if (menu.SharedWith != null) {
-        var shared = $('<span class="glyphicon glyphicon-ok green" \
+  $('.menu-table-row').remove();
+  var menudata = server('menus', 'GET', null);
+  console.log(menudata);
+  // Iterate over user data to display user's notes from database.
+  $(menudata).each(function(menu) {
+    if (menu.SharedWith != null) {
+      var shared = $('<span class="glyphicon glyphicon-ok green" \
 aria-hidden="true"></span>');
-      }
-      else {
-        var shared = $('<span class="glyphicon glyphicon-remove red" \
+    }
+    else {
+      var shared = $('<span class="glyphicon glyphicon-remove red" \
 aria-hidden="true"></span>');
-      }
+    }
 
-      if (menu.PublicLink != null) {
-        var published = $('<span class="glyphicon glyphicon-ok \
+    if (menu.PublicLink != null) {
+      var published = $('<span class="glyphicon glyphicon-ok \
 green" aria-hidden="true"></span><button type="button" \
 data-toggle="tooltip" title="Get Link" class="basic-btn \
 btn-lg get-pub-link-btn"><span class="glyphicon \
@@ -60,56 +76,55 @@ glyphicon-link blue"></span></button><button type="button" \
 data-toggle="tooltip" title="Take down" class="basic-btn \
 btn-lg menu-takedown-btn"><span class="glyphicon \
 glyphicon-ban-circle orange"></span></button>');
-      }
-      else {
-        var published = $('<span class="glyphicon glyphicon-remove \
+    }
+    else {
+      var published = $('<span class="glyphicon glyphicon-remove \
 red" aria-hidden="true"></span><button type="button" \
 data-toggle="tooltip" title="Publish" class="basic-btn \
 btn-lg menu-publish-btn"><span class="glyphicon \
 glyphicon-globe blue"></span></button>');
-      }
+    }
 
-      var $menutr = $('<tr>').addClass('menu-table-row');
-      $menutr.append($('<td>')
-             .addClass('menu-table-btn menu-edit-data'));
-      $menutr.append($('<td>')
-             .addClass('menu-table-data menu-id-data'));
-      $menutr.append($('<td>')
-             .addClass('menu-table-data menu-title-data'));
-      $menutr.append($('<td>')
-             .addClass('menu-table-data menu-shared-data'));
-      $menutr.append($('<td>')
-             .addClass('menu-table-data menu-published-data'));
-      $menutr.append($('<td>')
-             .addClass('menu-table-btn menu-delete-data'));
+    var $menutr = $('<tr>').addClass('menu-table-row');
+    $menutr.append($('<td>')
+            .addClass('menu-table-btn menu-edit-data'));
+    $menutr.append($('<td>')
+            .addClass('menu-table-data menu-id-data'));
+    $menutr.append($('<td>')
+            .addClass('menu-table-data menu-title-data'));
+    $menutr.append($('<td>')
+            .addClass('menu-table-data menu-shared-data'));
+    $menutr.append($('<td>')
+            .addClass('menu-table-data menu-published-data'));
+    $menutr.append($('<td>')
+            .addClass('menu-table-btn menu-delete-data'));
 
-      $menutr.find('.menu-edit-data').append($('<button \
+    $menutr.find('.menu-edit-data').append($('<button \
 type="button" data-toggle="tooltip" title="Edit" \
 class="menu-edit-btn btn-lg form-control" aria-label="Left Align">\
 <span class="glyphicon glyphicon-pencil blue" aria-hidden="true">\
 </span></button>'));
-      $menutr.find('.menu-id-data').text(menu.MenuId);
-      $('head').append($('<link>',
-                         {type:'text/css',
-                         rel:'stylesheet',
-                    href:'https://fonts.googleapis.com/css?family='+
-                         menu.MenuFont}));
-      //$menutr.find('.menu-title-data').append($('<img>',
-      //                                         {src:menu.MenuLogo,
-      //                                        style:'height:3vh;',
-      //                                         }));
-      $menutr.find('.menu-title-data').append(menu.MenuTitle)
-             .css('font-family', menu.MenuFont).change();
-      $menutr.find('.menu-shared-data').append(shared);
-      $menutr.find('.menu-published-data').append(published);
-      $menutr.find('.menu-delete-data').append($('<button \
+    $menutr.find('.menu-id-data').text(menu.MenuId);
+    $('head').append($('<link>',
+                        {type:'text/css',
+                        rel:'stylesheet',
+                  href:'https://fonts.googleapis.com/css?family='+
+                        menu.MenuFont}));
+    //$menutr.find('.menu-title-data').append($('<img>',
+    //                                         {src:menu.MenuLogo,
+    //                                        style:'height:3vh;',
+    //                                         }));
+    $menutr.find('.menu-title-data').append(menu.MenuTitle)
+            .css('font-family', menu.MenuFont).change();
+    $menutr.find('.menu-shared-data').append(shared);
+    $menutr.find('.menu-published-data').append(published);
+    $menutr.find('.menu-delete-data').append($('<button \
 type="button" data-toggle="tooltip" title="Delete" \
 class="menu-delete-btn btn-lg form-control"><span class="glyphicon \
 glyphicon-trash red" aria-hidden="true"></span></button>'));
-      //$menutr.css('background-color', menu.MenuBkgrdColor);
-      //$menutr.css('color', menu.MenuTitleColor);
-      $('#menu-table-body').append($menutr);
-    });
+    //$menutr.css('background-color', menu.MenuBkgrdColor);
+    //$menutr.css('color', menu.MenuTitleColor);
+    $('#menu-table-body').append($menutr);
   });
 }
 // home
