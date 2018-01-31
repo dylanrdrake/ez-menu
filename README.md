@@ -77,3 +77,4 @@ https://backend-dot-[PROJECT_ID].appspot.com.
   * Need to refactor backend into separate code files
   * Refactor frontend. Make each button in editor an ajax request instead of the entire editor being a form submission
   * Create 'share' feature to allow users to collaborate on editing
+  * Use an ORM to access database instead of generating custom SQL. (SQLAlchemy looks like best candidate so far)
