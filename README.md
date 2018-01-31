@@ -71,14 +71,3 @@ https://backend-dot-[PROJECT_ID].appspot.com.
 
 
 ## TODO
-  * Add color randomizer button next to logo. Add hex codes on hover.
-  * Create sharing code.
-  * QR Code generator.
-  * Alert me when this menu changes:
-    - Twilio docs in Google Cloud docs or Firebase messaging
-    - link on published menu to app page where user can enter phone number
-    - Take a look a cron jobs and how they could be utilized
-  * What are people posting ticker
-  * Move menu templates to Storage(NON public).
-  * Kiosks: put code on back of pi. Set up local network site on pi that user can enter in wifi password. Have Set up Kiosk feature in web UI.
-  * Load menus via Ajax direct from db instead of hosting on storage? Don't require auth when hitting /menus GET with menuid (Publish column has to be true).
