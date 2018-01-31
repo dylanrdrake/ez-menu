@@ -1,20 +1,10 @@
 # EZ Menu
 [ez-menu.appspot.com](https://ez-menu.appspot.com/)
 
-<<<<<<< HEAD
-# About
-This app started as a restaurant menu creator used to create and publish menus to public links that could then be accessed by customers, embedded in websites and displayed on in-store monitors via a RaspberryPi. It is currently being used as is by 1 restaurant. I am now working on extending it to further use cases. The ability to create standalone objects/sites with their own public links creates a lot of opportunities.
-
-Currently it is simple menu making application that stores User data and menu data in a MySQL database and publishes menus to public objects on Google Storage. These menus include there own javascript and css in-file and can be embedded in other sites or accessed via other devices and behave consistently. Uses Firebase
-=======
-[ez-menu.appspot.com](https://ez-menu.appspot.com/)
-
 # About
 This app started as a restaurant menu creator used to create and publish menus to public links that could then be accessed by customers, embedded in websites and displayed on in-store monitors via a RaspberryPi. It is currently being used as is by 1 restaurant. I am now working on extending it to further use cases. The ability to create standalone objects with their own public links creates a lot of opportunities.  
 
-Currently it is a simple menu making application that stores User data and menu data in a MySQL database and publishes menus to public objects on Google Storage. Uses Firebase
->>>>>>> 036b9ef66be65eac371d8ee772fea1f99619d6c8
-Authentication, Google App Engine, Google Cloud SQL and Google Storage.
+Currently it is a simple menu making application that stores User data and menu data in a MySQL database and publishes menus to public objects on Google Storage. Menus are pages rendered with their own CSS and JS so they can be embedded in other sites or accessed via other devices and behave consistently.  Uses Firebase Authentication, Google App Engine, Google Cloud SQL and Google Storage.
 
 You'll need to have [Python 2.7](https://www.python.org/) and the [Google Cloud SDK](https://cloud.google.com/sdk/?hl=en)
 installed and initialized to an App Engine project before running the code in
