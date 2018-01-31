@@ -3,7 +3,7 @@
 [ez-menu.appspot.com](https://ez-menu.appspot.com/)
 
 # About
-This app started as a restaurant menu creator used to create and publish menus to public links that could then be accessed by customers, embedded in websites and displayed on in-store monitors via a RaspberryPi.  I am now working on extending it to further use cases. The ability to create standalone objects with their own public links creates a lot of opportunities.  
+This app started as a restaurant menu creator used to create and publish menus to public links that could then be accessed by customers, embedded in websites and displayed on in-store monitors via a RaspberryPi. It is currently being used as is by 1 restaurant. I am now working on extending it to further use cases. The ability to create standalone objects with their own public links creates a lot of opportunities.  
 
 Currently it is a simple menu making application that stores User data and menu data in a MySQL database and publishes menus to public objects on Google Storage. Uses Firebase
 Authentication, Google App Engine, Google Cloud SQL and Google Storage.
