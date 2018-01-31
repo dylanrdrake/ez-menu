@@ -1,3 +1,5 @@
+from db import query_db
+
 # Get template
 def gettemplate(tempid):
     temp_query = """

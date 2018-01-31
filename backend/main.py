@@ -2,35 +2,23 @@
 
 # imports
 import logging
-from flask import Flask,request,url_for,redirect,render_template,g,jsonify
+from flask import Flask, g, request, url_for, redirect, jsonify
 import flask_cors
-import google.auth.transport.requests
-import requests_toolbelt.adapters.appengine
 import json
 # CloudSQL
 import os
 import MySQLdb as mysql
 from env_config import creds
-# Storage
-import cloudstorage as gcs
-from google.appengine.api import app_identity
 # /backend
-from user import auth_check, getusermenus
+from auth import auth_check
+from user import getuser, getusermenus,\
+    getmenu, createmenu, updatemenu, deletemenu
 
 
-# Use the App Engine Requests adapter.
-# This makes sure that Requests uses
-# URLFetch.
-requests_toolbelt.adapters.appengine.monkeypatch()
-HTTP_REQUEST = google.auth.transport.requests.Request()
-
+# Initialize app
 app = Flask(__name__)
 # allows Ajax
 flask_cors.CORS(app)
-
-# Get Storage bucket
-bucket = os.environ.get('BUCKET_NAME',
-        app_identity.get_default_gcs_bucket_name())
 
 
 # Create a connection to database before every request
@@ -52,10 +40,10 @@ def db_connect():
                                passwd=creds['dbpass'])
 
 
+# Destroy db connection on request teardown
 @app.teardown_request
 def db_disconnect(exception):
     g.conn.close()
-
 
 
 # API endpoint: /menus
