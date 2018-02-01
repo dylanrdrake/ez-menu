@@ -245,7 +245,7 @@ function populateEditor(menu) {
     .val(menu.MenuFontSize).change();
 
   // iterate through SECTIONS from server
-  var sections = $('#editor-div').find('.sect-row:visible');
+  var sections = $('#editor-div').find('.sect-row.added:visible');
   $(sections).each(function(i, sect) {
     if (menu.Sections[i] === undefined) { $(sect).remove(); }
   });
