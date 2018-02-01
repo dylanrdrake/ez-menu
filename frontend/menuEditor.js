@@ -133,7 +133,7 @@ $(document).on('click', '.delete-item-btn', function() {
   event.preventDefault();
   $(this).parent().parent().parent().find('.item-delete-input')
                                     .val(true);
-  //$(this).parent().parent().parent().hide('slow');
+  $(this).parent().parent().parent().hide('slow');
   sendMenuData();
 });
 // Delete item

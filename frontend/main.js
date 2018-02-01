@@ -245,10 +245,7 @@ function populateEditor(menu) {
     .val(menu.MenuFontSize).change();
 
   // iterate through SECTIONS from server
-  var sections = $('#editor-div').find('.sect-row.added:visible');
-  $(sections).each(function(i, sect) {
-    if (menu.Sections[i] === undefined) { $(sect).remove(); }
-  });
+  var sections = $('#editor-div').find('.sect-row:visible');
   $(menu.Sections).each(function(i, sect) {
     // create section if it doesn't exist
     if (sections[i] === undefined) {
@@ -268,12 +265,13 @@ function populateEditor(menu) {
       .on('changeColor', function(el) {
         changeTextColor(el);
     }).val(sect.SectionTitleColor).change();
+    // remove extras
+    $(sections).each(function(i, sect) {
+      if (menu.Sections[i] === undefined) { $(sect).remove(); }
+    });
 
     // iterate over each ITEM from the server
-    var items = $(newsection).find('.item-row');
-    $(items).each(function(j, item) {
-      if (sect.Items[j] === undefined) { $(item).remove(); }
-    });
+    var items = $(newsection).find('.item-row:visible');
     $(sect.Items).each(function(j, item) {
       // if item doesn't exit in editor, create it
       if (items[j] === undefined) {
@@ -302,6 +300,10 @@ function populateEditor(menu) {
         .on('changeColor', function(el) {
           changeTextColor(el);
       }).val(item.ItemDescColor).change();
+      // remove extras
+      $(items).each(function(j, item) {
+        if (sect.Items[j] === undefined) { $(item).remove(); }
+      });
     });
   });
 };
