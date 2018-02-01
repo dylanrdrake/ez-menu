@@ -196,18 +196,120 @@ $(document).on('click', '#cancel-menu-btn', function(event) {
 //
 
 
+// Populate editor fields
+function populateEditor(menu) {
+  // populate editor id
+  $('#editor-id-input').val(menu.MenuId);
+  // populate template indicator
+  $('#template-indicator').val(menu.TemplateName);
+  // populate editor title
+  $('#editor-title-input').val(menu.MenuTitle);
+  // create editor title color picker
+  $('#menu-title-color-input').colorpicker()
+    .on('changeColor', function(el) {
+      changeTextColor(el);
+    });
+  // populate editor title color
+  $('#menu-title-color-input').val(menu.MenuTitleColor)
+                              .change();
+  // create editor background color picker
+  $('#menu-bkgrd-color-input').colorpicker()
+    .on('changeColor', function(el) {
+      changeBkgrdColor(el);
+      $(el.target).css('color',
+                        invertColor($(el.target).val(), true));
+    });
+  // populate editor background color
+  $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor)
+                              .change();
+  // populate editor background image link
+  $('#menu-bkgrd-img-input')
+    .on('change', function(el) {
+      changeBkgrdImage(el);
+    }).val(menu.MenuBkgrdImage).change();
+  // populate editor logo link
+  $('#menu-logo-input').val(menu.MenuLogo);
+  // populate editor logo size
+  $('#menu-logo-size-input').val(menu.MenuLogoSize);
+  // populate editor font
+  $('#menu-font-input')
+    .on('change', function(el) {
+      changeEditorFont(el);
+    })
+    .val(menu.MenuFont).change();
+  // populate editor font size
+  $('#menu-font-size-input')
+    .on('change', function(el) {
+      changeEditorFontSize(el);
+    })
+    .val(menu.MenuFontSize).change();
 
-/////////////////// Edit menu /////////////////////////
-$(document).on('click', '.menu-edit-btn', function() {
-  // remove added elements from previous editor opens
-  $('.added').remove();
+  // iterate through SECTIONS from server
+  var sections = $('#editor-div').find('.sect-row:visible');
+  $(sections).each(function(i, sect) {
+    if (menu.Sections[i] === undefined) { $(sect).remove(); }
+  });
+  $(menu.Sections).each(function(i, sect) {
+    // create section if it doesn't exist
+    if (sections[i] === undefined) {
+      var newsection = $('#SectionTemplate').clone();
+      $(newsection).find('#ItemTemplate').remove();
+      $(newsection).removeAttr('hidden');
+      $(newsection).addClass('added');
+      $('#add-sect-div').before(newsection);
+    }
+    else { var newsection = sections[i] }
+    // populate section id
+    $(newsection).find('.sect-id-input').val(sect.SectionId);
+    // populate section title
+    $(newsection).find('.sect-title-input').val(sect.SectionTitle);
+    // populate section title font color
+    $(newsection).find('.sect-color-input').colorpicker()
+      .on('changeColor', function(el) {
+        changeTextColor(el);
+    }).val(sect.SectionTitleColor).change();
 
-  // enable save button from previous editor save
-  $('#editor-save-btn').removeAttr('disabled');
+    // iterate over each ITEM from the server
+    var items = $(newsection).find('.item-row');
+    $(items).each(function(j, item) {
+      if (sect.Items[j] === undefined) { $(item).remove(); }
+    });
+    $(sect.Items).each(function(j, item) {
+      // if item doesn't exit in editor, create it
+      if (items[j] === undefined) {
+        var newitem = $('#ItemTemplate').clone();
+        $(newsection).find('.add-item-btn-row').before(newitem);
+      }
+      else { var newitem = items[j] }
+      // populate item id
+      $(newitem).find('.item-id-input').val(item.ItemId);
+      // populate item title
+      $(newitem).find('.item-title-input').val(item.ItemTitle);
+      // populate item title font color
+      $(newitem).find('.item-title-color-input').colorpicker()
+        .on('changeColor', function(el) {
+          changeTextColor(el);
+      }).val(item.ItemTitleColor).change();
+      // populate item stock note
+      $(newitem).find('.item-stock-input').val(item.ItemStock);
+      // populate item price
+      $(newitem).find('.item-price-input').val(item.ItemPrice)
+        .css('color', item.ItemTitleColor);
+      // populate item description
+      $(newitem).find('.item-desc-input').val(item.ItemDesc);
+      // populate item description color
+      $(newitem).find('.item-desc-color-input').colorpicker()
+        .on('changeColor', function(el) {
+          changeTextColor(el);
+      }).val(item.ItemDescColor).change();
+    });
+  });
+};
+// Populate editor fields
 
-  // get menu id from menu-table
-  var menuid = $(this).parent().siblings('.menu-id-data').text();
 
+// Refresh editor data //
+function refreshEditor(menuid) {
   // /users, GET
   $.ajax({
     url: backendHostUrl + '/menus',
@@ -216,136 +318,30 @@ $(document).on('click', '.menu-edit-btn', function() {
     data: {'MenuId': menuid},
     contentType: 'application/json',
     success: function(menu) {
-      // populate editor id
-      $('#editor-id-input').val(menu.MenuId);
-
-      // populate template indicator
-      $('#template-indicator').val(menu.TemplateName);
-
-      // populate editor title
-      $('#editor-title-input').val(menu.MenuTitle);
-
-      // create editor title color picker
-      $('#menu-title-color-input').colorpicker()
-        .on('changeColor', function(el) {
-          changeTextColor(el);
-        });
-      // populate editor title color
-      $('#menu-title-color-input').val(menu.MenuTitleColor)
-                                  .change();
-
-      // create editor background color picker
-      $('#menu-bkgrd-color-input').colorpicker()
-        .on('changeColor', function(el) {
-          changeBkgrdColor(el);
-          $(el.target).css('color',
-                            invertColor($(el.target).val(), true));
-        });
-      // populate editor background color
-      $('#menu-bkgrd-color-input').val(menu.MenuBkgrdColor)
-                                  .change();
-
-      // populate editor background image link
-      $('#menu-bkgrd-img-input')
-        .on('change', function(el) {
-          changeBkgrdImage(el);
-        }).val(menu.MenuBkgrdImage).change();
-
-      // populate editor logo link
-      $('#menu-logo-input').val(menu.MenuLogo);
-
-      // populate editor logo size
-      $('#menu-logo-size-input').val(menu.MenuLogoSize);
-
-      // populate editor font
-      $('#menu-font-input')
-        .on('change', function(el) {
-          changeEditorFont(el);
-        })
-        .val(menu.MenuFont).change();
-
-      // populate editor font size
-      $('#menu-font-size-input')
-        .on('change', function(el) {
-          changeEditorFontSize(el);
-        })
-        .val(menu.MenuFontSize).change();
-
-      // copy section html template
-      var $section_temp = $('#SectionTemplate').clone();
-
-      // copy item html template
-      var $itemrow_temp = $('#ItemTemplate').clone();
-
-      // remove blank item html template
-      $section_temp.find('#ItemTemplate').remove();
-
-      // show section
-      $section_temp.removeAttr('hidden');
-
-      // iterate through sections from server
-      menu.Sections.forEach(function(sect) {
-        // create new editor section from html template
-        var $section = $section_temp.clone();
-        $section.removeAttr('id');
-        // mark as a dynamically added section from server
-        $section.addClass('added');
-        // populate section id
-        $section.find('.sect-id-input').val(sect.SectionId);
-        // populate section title
-        $section.find('.sect-title-input').val(sect.SectionTitle);
-        // populate section title font color
-        $section.find('.sect-color-input').colorpicker()
-          .on('changeColor', function(el) {
-            changeTextColor(el);
-        }).val(sect.SectionTitleColor).change();
-
-        // iterate over each item from the server
-        sect.Items.forEach(function(item) {
-          // create new item from html template
-          var $itemrow = $itemrow_temp.clone();
-          $itemrow.removeAttr('id');
-          // populate item id
-          $itemrow.find('.item-id-input').val(item.ItemId);
-          // populate item title
-          $itemrow.find('.item-title-input').val(item.ItemTitle);
-          // populate item title font color
-          $itemrow.find('.item-title-color-input').colorpicker()
-            .on('changeColor', function(el) {
-              changeTextColor(el);
-          }).val(item.ItemTitleColor).change();
-          // populate item stock note
-          $itemrow.find('.item-stock-input').val(item.ItemStock);
-          // populate item price
-          $itemrow.find('.item-price-input').val(item.ItemPrice)
-            .css('color', item.ItemTitleColor);
-          // populate item description
-          $itemrow.find('.item-desc-input').val(item.ItemDesc);
-          // populate item description color
-          $itemrow.find('.item-desc-color-input').colorpicker()
-            .on('changeColor', function(el) {
-              changeTextColor(el);
-          }).val(item.ItemDescColor).change();
-          // insert add item button
-          $section.find('.add-item-btn-row').before($itemrow);
-        });
-
-        // insert add section button
-        $('#add-sect-div').before($section);
-
-      });
-
+      populateEditor(menu);
     },
     error: function(error) {
       console.log(error);
     }
   });
+};
+// Refresh editor data //
 
+
+/////////////////// Edit menu /////////////////////////
+$(document).on('click', '.menu-edit-btn', function() {
+  // remove added elements from previous editor opens
+  $('.added').remove();
+  // enable save button from previous editor save
+  $('#editor-save-btn').removeAttr('disabled');
+  // get menu id from menu-table
+  var menuid = $(this).parent().siblings('.menu-id-data').text();
+  // populate menu function
+  refreshEditor(menuid);
   // editor show animation
   $("#editor-div").show("slide", {direction:"up"}, 300);
-
 });
-//////////////////// Edit menu ///////////////////////////
+//////////////////// Edit menu /////////////////////////
 
 
 

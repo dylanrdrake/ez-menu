@@ -107,15 +107,11 @@ $(document).on('click', '.add-sect-btn', function() {
   event.preventDefault();
   var newsect = $('#SectionTemplate').clone();
 
-  newsect.find('.sect-color-input').colorpicker()
-    .on('changeColor', function(el) {
-      changeTextColor(el);
-    }).val('#333333').change();
-
   newsect.find('.item-row').remove();
   newsect.removeAttr('hidden');
   newsect.addClass('added');
   $(this).parent().parent().before(newsect);
+  sendMenuData();
 });
 // Add section
 
@@ -125,18 +121,8 @@ $(document).on('click', '.add-sect-btn', function() {
 $(document).on('click', '.add-item-btn', function() {
   event.preventDefault();
   var newitem = $('#ItemTemplate').clone();
-
-  newitem.find('.item-title-color-input').colorpicker()
-    .on('changeColor', function(el) {
-      changeTextColor(el);
-    }).val('#333333').change();
-
-  newitem.find('.item-desc-color-input').colorpicker()
-    .on('changeColor', function(el) {
-      changeTextColor(el);
-    }).val('#333333').change();
-
   $(this).parent().parent().before(newitem);
+  sendMenuData();
 });
 // Add item
 
@@ -147,7 +133,8 @@ $(document).on('click', '.delete-item-btn', function() {
   event.preventDefault();
   $(this).parent().parent().parent().find('.item-delete-input')
                                     .val(true);
-  $(this).parent().parent().parent().hide('slow');
+  //$(this).parent().parent().parent().hide('slow');
+  sendMenuData();
 });
 // Delete item
 
@@ -161,47 +148,44 @@ $(document).on('click', '.delete-sect-btn', function() {
                                       .val(true);
     $(this).parent().parent().parent().parent().hide('slow');
   }
+  sendMenuData();
 });
 // Delete section
 
 
 
-// Save menu
-$(document).on('click', '#editor-save-btn', function() {
-  $('#editor-save-btn').attr('disabled', 'disabled');
-
+// Send editor data //
+function sendMenuData() {
   // Menu data dict
   var menudict = {};
 
   // Menu level data
   $('#editor-div').find('.menu-data').each(function(i ,menudata) {
     menudict[$(menudata).attr('name')] = $(menudata).val();
-
-    // 'Sections': [{}, {}, ...]
-    menudict['Sections'] = [];
-
-    // Iterate through each Section
-    $('#editor-div').find('.sect-row.added').each(function(i, sect) {
-      var sectdict = {};
-
-      $(sect).find('.sect-data').each(function(i, sectdata) {
-        sectdict[$(sectdata).attr('name')] = $(sectdata).val();
-      });
-      sectdict['Items'] = [];
-
-      // Iterate through each item row
-      $(sect).find('.item-row').each(function(i, item) {
-        var itemdict = {};
-        // Iterate within the item row for item data
-        $(item).find('.item-data').each(function(i, itemdata) {
-          itemdict[$(itemdata).attr('name')] = $(itemdata).val();
-        });
-        sectdict['Items'].push(itemdict);
-      });
-      menudict['Sections'].push(sectdict);
-
-    });
   });
+
+  // 'Sections': [{}, {}, ...]
+  menudict['Sections'] = [];
+  // Iterate through each Section
+  $('#editor-div').find('.sect-row.added').each(function(i, sect) {
+    var sectdict = {};
+    $(sect).find('.sect-data').each(function(i, sectdata) {
+      sectdict[$(sectdata).attr('name')] = $(sectdata).val();
+    });
+    sectdict['Items'] = [];
+
+    // Iterate through each item row
+    $(sect).find('.item-row').each(function(i, item) {
+      var itemdict = {};
+      // Iterate within the item row for item data
+      $(item).find('.item-data').each(function(i, itemdata) {
+        itemdict[$(itemdata).attr('name')] = $(itemdata).val();
+      });
+      sectdict['Items'].push(itemdict);
+    });
+    menudict['Sections'].push(sectdict);
+  });
+
 
   // Send array of menu dicts, in this case just one dict
   $.ajax({
@@ -209,11 +193,24 @@ $(document).on('click', '#editor-save-btn', function() {
     headers: {'Authorization': 'Bearer ' + userIdToken},
     method: 'PUT',
     data: JSON.stringify([menudict]),
-    contentType: 'application/json'
-  }).then(function() {
-    $('#editor-save-btn').removeAttr('disabled');
+    contentType: 'application/json',
+    success: function(returndata) {
+      populateEditor(returndata[0]);
+      $('#editor-save-btn').removeAttr('disabled');
+    },
+    error: function(error) {
+      console.log(error);
+    }
   });
+};
+// Send editor data //
 
+
+
+// Save menu
+$(document).on('click', '#editor-save-btn', function() {
+  $('#editor-save-btn').attr('disabled', 'disabled');
+  sendMenuData();
 });
 // Save menu
 

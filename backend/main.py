@@ -46,6 +46,7 @@ def db_disconnect(exception):
     g.conn.close()
 
 
+
 # API endpoint: /menus
 @app.route('/menus', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def menus():
@@ -70,8 +71,8 @@ def menus():
         return 'Menu created', 200
 
     elif request.method == 'PUT':
-        updatemenu(userid, json.loads(request.data))
-        return 'Menu updated', 200
+        returndata = updatemenu(userid, json.loads(request.data))
+        return jsonify(returndata), 200
 
     elif request.method == 'DELETE':
         deletemenu(userid, json.loads(request.data))
