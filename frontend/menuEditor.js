@@ -103,29 +103,41 @@ function changeTextColor (input) {
 
 
 // Add section
+function addSection() {
+  var newsect = $('#SectionTemplate').clone();
+  $(newsect).find('.item-row').remove();
+  $(newsect).removeAttr('hidden');
+  $(newsect).addClass('added');
+  return newsect;
+};
+// Add section
+
+// Add Section button handler
 $(document).on('click', '.add-sect-btn', function() {
   event.preventDefault();
-  var newsect = $('#SectionTemplate').clone();
-
-  newsect.find('.item-row').remove();
-  newsect.removeAttr('hidden');
-  newsect.addClass('added');
+  var newsect = addSection();
   $(this).parent().parent().before(newsect);
   sendMenuData();
 });
-// Add section
-
+// Add Section button handler
 
 
 // Add item
+function addItem() {
+  var newitem = $('#ItemTemplate').clone();
+  $(newitem).addClass('added');
+  return newitem;
+};
+// Add item
+
+// Add item button handler
 $(document).on('click', '.add-item-btn', function() {
   event.preventDefault();
-  var newitem = $('#ItemTemplate').clone();
+  var newitem = addItem();
   $(this).parent().parent().before(newitem);
   sendMenuData();
 });
-// Add item
-
+// Add item button handler
 
 
 // Delete item
@@ -175,7 +187,7 @@ function sendMenuData() {
     sectdict['Items'] = [];
 
     // Iterate through each item row
-    $(sect).find('.item-row').each(function(i, item) {
+    $(sect).find('.item-row.added').each(function(i, item) {
       var itemdict = {};
       // Iterate within the item row for item data
       $(item).find('.item-data').each(function(i, itemdata) {

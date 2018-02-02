@@ -249,10 +249,7 @@ function populateEditor(menu) {
   $(menu.Sections).each(function(i, sect) {
     // create section if it doesn't exist
     if (sections[i] === undefined) {
-      var newsection = $('#SectionTemplate').clone();
-      $(newsection).find('#ItemTemplate').remove();
-      $(newsection).removeAttr('hidden');
-      $(newsection).addClass('added');
+      var newsection = addSection();
       $('#add-sect-div').before(newsection);
     }
     else { var newsection = sections[i] }
@@ -275,7 +272,7 @@ function populateEditor(menu) {
     $(sect.Items).each(function(j, item) {
       // if item doesn't exit in editor, create it
       if (items[j] === undefined) {
-        var newitem = $('#ItemTemplate').clone();
+        var newitem = addItem();
         $(newsection).find('.add-item-btn-row').before(newitem);
       }
       else { var newitem = items[j] }
