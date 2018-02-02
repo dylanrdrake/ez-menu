@@ -18,8 +18,8 @@
   <!--  -->
   <script>
     var pages = 0;
-    var pageInterval = 30000;
-    var reloadInterval = 60000;
+    var pageInterval;
+    var reloadInterval;
 
     // Assign paging order to sections.
     // ...Maybe move this logic to Jinja2
@@ -30,21 +30,21 @@
         if (s > 0) { $(sectd).hide(); }
         $(sectd).attr('id', s.toString());
       });
-      setInterval(nextPage, pageInterval);
-      setInterval(updates, reloadInterval);
+      pageInterval = setInterval(nextPage, 30000);
+      reloadInterval = setInterval(updates, 60000);
     });
 
     // Show page buttons when mouse movement
-    // ...or scroll movement is detected. 
+    // ...or scroll movement is detected.
     $(document).mousemove(function(event) {
-      clearInterval(nextPage);
-      clearInterval(updates);
+      clearInterval(pageInterval);
+      clearInterval(reloadInterval);
       $('.page-btn').show();
     });
 
     $(document).scroll(function(event) {
-      clearInterval(nextPage);
-      clearInterval(updates);
+      clearInterval(pageInterval);
+      clearInterval(reloadInterval);
       $('.page-btn').show();
     });
 
