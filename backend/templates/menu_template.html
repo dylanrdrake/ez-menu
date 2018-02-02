@@ -37,11 +37,13 @@
     // Show page buttons when mouse movement
     // ...or scroll movement is detected. 
     $(document).mousemove(function(event) {
+      clearInterval(nextPage);
       clearInterval(updates);
       $('.page-btn').show();
     });
 
     $(document).scroll(function(event) {
+      clearInterval(nextPage);
       clearInterval(updates);
       $('.page-btn').show();
     });
