@@ -1,5 +1,6 @@
 *.pyc
 *.swp
 env_config.py
+backend/lib/*
 !backend/lib/README.md
 .DS_Store
