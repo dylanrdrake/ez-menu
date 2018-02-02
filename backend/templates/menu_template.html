@@ -208,7 +208,9 @@
             <div class="item-title-stock-price-div-pt">
               <div class="item-title-div-pt inline-pt"
                     style="color:{{ item['ItemTitleColor'] }};">
-                {{ item["ItemTitle"] }}
+                {% if item["ItemTitle"] != None %}
+                  {{ item["ItemTitle"] }}
+                {% endif %}
               </div>
               <div class="item-stock-div-pt inline-pt">
                   {% if item["ItemStock"] != None %}
@@ -217,13 +219,17 @@
               </div>
               <div class="item-price-div-pt inline-pt"
                    style="color:{{ item['ItemTitleColor'] }};">
-                {{ item["ItemPrice"] }}
+                {% if item["ItemPrice"] != None %}
+                  {{ item["ItemPrice"] }}
+                {% endif %}
               </div>
             </div>
 
             <div class="item-desc-div-pt inline-pt"
                   style="color:{{ item['ItemDescColor'] }};">
-              {{ item["ItemDesc"] }}
+              {% if item["ItemDesc"] != None %}
+                {{ item["ItemDesc"] }}
+              {% endif %}
             </div>
 
           </div>
