@@ -262,10 +262,6 @@ function populateEditor(menu) {
       .on('changeColor', function(el) {
         changeTextColor(el);
     }).val(sect.SectionTitleColor).change();
-    // remove extras
-    $(sections).each(function(i, sect) {
-      if (menu.Sections[i] === undefined) { $(sect).remove(); }
-    });
 
     // iterate over each ITEM from the server
     var items = $(newsection).find('.item-row:visible');
@@ -297,10 +293,6 @@ function populateEditor(menu) {
         .on('changeColor', function(el) {
           changeTextColor(el);
       }).val(item.ItemDescColor).change();
-      // remove extras
-      $(items).each(function(j, item) {
-        if (sect.Items[j] === undefined) { $(item).remove(); }
-      });
     });
   });
 };

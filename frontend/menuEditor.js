@@ -181,6 +181,7 @@ function sendMenuData() {
   // Iterate through each Section
   $('#editor-div').find('.sect-row.added').each(function(i, sect) {
     var sectdict = {};
+    // Consume section level data
     $(sect).find('.sect-data').each(function(i, sectdata) {
       sectdict[$(sectdata).attr('name')] = $(sectdata).val();
     });
