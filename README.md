@@ -8,6 +8,9 @@ Currently it is a simple menu making application that stores user data and menu 
 
 RaspberryPis are used to display menus on screens for easily updated menus or kiosks. Currently the Pis' OSs have to be manually setup and code manually installed. Eventually they will be flashed with the same OS image and executables and they will be accessible via a wifi access point to easily connect the Pi to Wifi and select menu to display.
 
+The available menu template is simple and just there for proof of concept. More styled templates will eventually be available. The menu templates populate data with the Jinja2 templating language and data is passed via a Python dictionary. So, some familiarity with Jinja2 and the available data fields should make it easy for more savy users to make their own templates.
+
+
 ## Setup
 You'll need to have [Python 2.7](https://www.python.org/) and the [Google Cloud SDK](https://cloud.google.com/sdk/?hl=en)
 installed and initialized to an App Engine project before running the code in
