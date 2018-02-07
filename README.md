@@ -1,4 +1,4 @@
-# EZ Menu
+# EZ Menu (working name)
 [ez-menu.appspot.com](https://ez-menu.appspot.com/)
 
 # About
@@ -6,11 +6,12 @@ This app started as a restaurant menu creator used to create and publish menus t
 
 Currently it is a simple menu making application that stores user data and menu data in a MySQL database and publishes menus to public objects on Google Storage. Menus are pages rendered with their own CSS and JS so they can be embedded in other sites or accessed via other devices and behave consistently.  Uses Firebase for authentication, Google App Engine to run the backend, Google Cloud SQL to store user data and Google Storage to publish file objects.
 
+RaspberryPis are used to display menus on screens for easily updated menus or kiosks. Currently the Pis' OSs have to be manually setup and code manually installed. Eventually they will be flashed with the same OS image and executables and they will be accessible via a wifi access point to easily connect the Pi to Wifi and select menu to display.
+
+## Setup
 You'll need to have [Python 2.7](https://www.python.org/) and the [Google Cloud SDK](https://cloud.google.com/sdk/?hl=en)
 installed and initialized to an App Engine project before running the code in
 this sample.
-
-## Setup
 
 1. Clone this repo:
 
