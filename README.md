@@ -6,9 +6,9 @@ This app started as a restaurant menu creator used to create and publish menus t
 
 Currently it is a simple menu making application that stores user data and menu data in a MySQL database and publishes menus to public objects on Google Storage. Menus are pages rendered with their own CSS and JS so they can be embedded in other sites or accessed via other devices and behave consistently.  Uses Firebase for authentication, Google App Engine to run the backend, Google Cloud SQL to store user data and Google Storage to publish file objects.
 
-RaspberryPis are used to display menus on screens for easily updated menus or kiosks. Currently the Pis' OSs have to be manually setup and code manually installed. Eventually they will be flashed with the same OS image and executables and they will be accessible via a wifi access point to easily connect the Pi to Wifi and select menu to display.
+RaspberryPis are used to display menus on screens for easily updated menus or kiosks. Currently the Pis' operating systems have to be manually setup and code manually installed. Eventually they will be flashed with the same OS image and executables and they will be accessible via a wifi access point to easily connect the Pi to Wifi and select menu to display.
 
-The available menu template is simple and just there for proof of concept. More styled templates will eventually be available. The menu templates populate data with the Jinja2 templating language and data is passed via a Python dictionary. So, some familiarity with Jinja2 and the available data fields should make it easy for more savy users to make their own templates.
+The available menu template is simple and just there for proof of concept. More styled templates will eventually be available. The menu templates populate data with the Jinja2 templating language and data is passed in via a Python dictionary. So, some familiarity with Jinja2 and the available data fields should make it easy for more savvy users to make their own templates.
 
 
 ## Setup
