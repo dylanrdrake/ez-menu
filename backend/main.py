@@ -11,8 +11,8 @@ import MySQLdb as mysql
 from env_config import creds
 # /backend
 from auth import auth_check
-from user import getuser, getusermenus,\
-    getmenu, createmenu, updatemenu, deletemenu
+from user import getuser, getusermenus, getmenu, createmenu,\
+    updatemenu, deletemenu, isuserowner, ismenupublished
 
 
 # Initialize app
@@ -57,8 +57,16 @@ def menus():
         # with a specific MenuId in the request
         # data to get the specific menu's data
         if request.args:
-            menudata = getmenu(request.args.get('MenuId'))
-            return jsonify(menudata), 200
+            menuid = request.args.get('MenuId')
+            if isuserowner(userid, menuid):
+                menudata = getmenu(menuid)
+                return jsonify(menudata), 200
+            else:
+                if ismenupublished(menuid):
+                    menudata = getmenu(menuid)
+                    return jsonify(menudata), 200
+                else:
+                    return "You are trying to access a menu that is not yours or has not been made public by its owner.", 200
         # if /menus GET request is made without
         # data, the submitting user's menus
         # are returned
@@ -71,12 +79,16 @@ def menus():
         return 'Menu created', 200
 
     elif request.method == 'PUT':
-        returndata = updatemenu(userid, json.loads(request.data))
-        return jsonify(returndata), 200
+        updatedata = json.loads(request.data)
+        if isuserowner(userid, updatedata['MenuId']):
+            returndata = updatemenu(updatedata)
+            return jsonify(returndata), 200
 
     elif request.method == 'DELETE':
-        deletemenu(userid, json.loads(request.data))
-        return 'Menus deleted', 200
+        deletedata = json.loads(request.data)
+        if isuserowner(userid, deletedata['MenuId']):
+            deletemenu(userid, deletedata)
+            return 'Menus deleted', 200
 
     else:
         return 'Bad request', 400

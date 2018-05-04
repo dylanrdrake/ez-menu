@@ -116,176 +116,171 @@ def getusertemplates(userid):
 
 
 # Update item
-def updateitem(sectid, itemdata):
-    for item in itemdata:
-        if item['_DELETE_'] == 'true':
-            deleteitem( [{'ItemId': item['ItemId']}] )
-        else:
-            item = {key: val for key,val in item.iteritems()\
-                    if val != ''}
-            item['SectionId'] = sectid
-            update_item_sql = "INSERT INTO items "
-            fields = [field for field in item.iterkeys()]
-            update_item_sql += "(" + (",").join(fields)+" ) "
-            value_params = [value for key,value in item.iteritems()]
-            placeholders = ["%s" for value in value_params]
-            update_item_sql += "VALUES (" + \
-                               (",").join(placeholders) + ") "
-            update_item_sql += "ON DUPLICATE KEY UPDATE "
-            updates = [field+"=%s" for field in item.iterkeys()]
-            update_item_sql += (",").join(updates)
-            value_params = value_params + value_params
-            query_db(update_item_sql, value_params, True)
+def updateitem(sectid, item):
+    if item['_DELETE_'] == 'true':
+        deleteitem( {'ItemId': item['ItemId']} )
+    else:
+        item = {key: val for key,val in item.iteritems()\
+                if val != ''}
+        item['SectionId'] = sectid
+        update_item_sql = "INSERT INTO items "
+        fields = [field for field in item.iterkeys()]
+        update_item_sql += "(" + (",").join(fields)+" ) "
+        value_params = [value for key,value in item.iteritems()]
+        placeholders = ["%s" for value in value_params]
+        update_item_sql += "VALUES (" + \
+                            (",").join(placeholders) + ") "
+        update_item_sql += "ON DUPLICATE KEY UPDATE "
+        updates = [field+"=%s" for field in item.iterkeys()]
+        update_item_sql += (",").join(updates)
+        value_params = value_params + value_params
+        query_db(update_item_sql, value_params, True)
 
 
 # Update section
-def updatesect(menuid, sectdata):
-    for sect in sectdata:
-        if sect['_DELETE_'] == 'true':
-            deletesect( [{'SectionId': sect['SectionId']}] )
-        else:
-            if 'Items' in sect:
-                items = sect.pop('Items')
-                updateitem(sect['SectionId'], items)
+def updatesect(menuid, sect):
+    if sect['_DELETE_'] == 'true':
+        deletesect( {'SectionId': sect['SectionId']} )
+    else:
+        if 'Items' in sect:
+            for item in sect.pop('Items'):
+                updateitem(sect['SectionId'], item)
 
-            sect = {key: val for key,val in sect.iteritems()\
-                    if val != ''}
-            sect['MenuId'] = menuid
-            update_sect_sql = "INSERT INTO sections "
-            fields = [field for field in sect.iterkeys()]
-            update_sect_sql += "(" + (",").join(fields)+" ) "
-            value_params = [value for key,value in sect.iteritems()]
-            placeholders = ["%s" for value in value_params]
-            update_sect_sql += "VALUES (" + \
-                               (",").join(placeholders) + ") "
-            update_sect_sql += "ON DUPLICATE KEY UPDATE "
-            updates = [field+"=%s" for field in sect.iterkeys()]
-            update_sect_sql += (",").join(updates)
-            value_params = value_params + value_params
-            query_db(update_sect_sql, value_params, True)
+        sect = {key: val for key,val in sect.iteritems()\
+                if val != ''}
+        sect['MenuId'] = menuid
+        update_sect_sql = "INSERT INTO sections "
+        fields = [field for field in sect.iterkeys()]
+        update_sect_sql += "(" + (",").join(fields)+" ) "
+        value_params = [value for key,value in sect.iteritems()]
+        placeholders = ["%s" for value in value_params]
+        update_sect_sql += "VALUES (" + \
+                            (",").join(placeholders) + ") "
+        update_sect_sql += "ON DUPLICATE KEY UPDATE "
+        updates = [field+"=%s" for field in sect.iterkeys()]
+        update_sect_sql += (",").join(updates)
+        value_params = value_params + value_params
+        query_db(update_sect_sql, value_params, True)
 
 
 
 # Update menu
-def updatemenu(userid, menudata):
-    returndata = []
-    for menu in menudata:
-        menuid = menu.pop('MenuId')
-        isowner = isuserowner(userid, menuid)
-        if isowner == False:
-            continue
-        elif isowner == True:
-            dbdata = getmenu(menuid)
+def updatemenu(menu):
+    menuid = menu.pop('MenuId')
+    dbdata = getmenu(menuid)
 
-            # Update sections
-            if 'Sections' in menu:
-                sects = menu.pop('Sections')
-                updatesect(menuid, sects)
+    # Update sections
+    if 'Sections' in menu:
+        for sect in menu.pop('Sections'):
+            updatesect(menuid, sect)
 
-            # Update database
-            if 'Publish' in menu and menu['Publish'] == True:
-                menu['PublicLink'] = 'https://storage.googleapis.com/'\
-                        +bucket+'/menus/'+menuid+'.html'
-                menu['Publish'] = 'true'
-            elif 'Publish' in menu and menu['Publish'] == False:
-                menu['PublicLink'] = None
-                menu['Publish'] = 'false'
-            elif dbdata['Publish'] == 'true':
-                menu['PublicLink'] = 'https://storage.googleapis.com/'\
-                        +bucket+'/menus/'+menuid+'.html'
-                menu['Publish'] = 'true'
+    # Update database
+    if 'Publish' in menu and menu['Publish'] == True:
+        menu['PublicLink'] = 'https://storage.googleapis.com/'\
+                +bucket+'/menus/'+menuid+'.html'
+        menu['Publish'] = 'true'
+    elif 'Publish' in menu and menu['Publish'] == False:
+        menu['PublicLink'] = None
+        menu['Publish'] = 'false'
+    elif dbdata['Publish'] == 'true':
+        menu['PublicLink'] = 'https://storage.googleapis.com/'\
+                +bucket+'/menus/'+menuid+'.html'
+        menu['Publish'] = 'true'
 
-            if len(menu) != 0:
-                update_menu_sql = "UPDATE menus "
-                updates = [field+"=%s" for field in menu.iterkeys()]
-                update_menu_sql += "SET "+(",").join(updates)+" "
-                update_menu_sql += "WHERE MenuId=%s"
-                value_params = [value for key,value in menu.iteritems()]
-                value_params.append(menuid)
-                query_db(update_menu_sql, value_params, True)
+    if len(menu) != 0:
+        update_menu_sql = "UPDATE menus "
+        updates = [field+"=%s" for field in menu.iterkeys()]
+        update_menu_sql += "SET "+(",").join(updates)+" "
+        update_menu_sql += "WHERE MenuId=%s"
+        value_params = [value for key,value in menu.iteritems()]
+        value_params.append(menuid)
+        query_db(update_menu_sql, value_params, True)
 
-            # Update Storage object
-            if 'Publish' in menu and menu['Publish'] == 'true':
-                publiclink = publishmenu(menuid)
-            elif 'Publish' in menu and menu['Publish'] == 'false':
-                takedownmenu(menuid)
-            elif dbdata['Publish'] == 'true':
-                publiclink = publishmenu(menuid)
+    # Update Storage object
+    if 'Publish' in menu and menu['Publish'] == 'true':
+        publiclink = publishmenu(menuid)
+    elif 'Publish' in menu and menu['Publish'] == 'false':
+        takedownmenu(menuid)
+    elif dbdata['Publish'] == 'true':
+        publiclink = publishmenu(menuid)
 
-        returndata.append(getmenu(menuid))
+    returndata = getmenu(menuid)
 
     return returndata
 
 
 # Create menu
-def createmenu(userid, menudata):
-    for menu in menudata:
-        if 'Sections' in menu:
-            sects = menu.pop('Sections')
+def createmenu(userid, menu):
+    if 'Sections' in menu:
+        for sect in menu.pop('Sections'):
+            updatesect(menuid, sect)
 
-        create_menu_sql = "INSERT INTO menus "
-        fields = [field for field in menu.iterkeys()]
-        create_menu_sql += "("+(",").join(fields)+") "
-        values = ["%s"] * len(menu)
-        create_menu_sql += "VALUES ("+(",").join(values)+")"
-        value_params = [value for key,value in menu.iteritems()]
-        menuid = query_db(create_menu_sql, value_params, True)
+    create_menu_sql = "INSERT INTO menus "
+    fields = [field for field in menu.iterkeys()]
+    create_menu_sql += "("+(",").join(fields)+") "
+    values = ["%s"] * len(menu)
+    create_menu_sql += "VALUES ("+(",").join(values)+")"
+    value_params = [value for key,value in menu.iteritems()]
+    menuid = query_db(create_menu_sql, value_params, True)
 
-        if 'sects' in locals():
-            updatesect(menuid, sects)
-
-        user_menu_sql = """
-        INSERT INTO user_menus
-        (UserId, MenuId)
-        VALUES (%s, %s)
-        """
-        user_menu_params = [userid, menuid]
-        query_db(user_menu_sql, user_menu_params, True)
+    user_menu_sql = """
+    INSERT INTO user_menus
+    (UserId, MenuId)
+    VALUES (%s, %s)
+    """
+    user_menu_params = [userid, menuid]
+    query_db(user_menu_sql, user_menu_params, True)
 
 
 
 # Delete menu
-def deletemenu(userid, menudata):
-    for menu in menudata:
-        dbmenudata = getmenu(menu['MenuId'])
-        isowner = isuserowner(userid, menu['MenuId'])
-        if isowner == False:
-            continue
-        elif isowner == True:
-            delete_menu_sql = """
-            DELETE FROM user_menus
-            WHERE UserId=%s
-            AND MenuId=%s
-            """
-            value_params = [userid, menu['MenuId']]
-            query_db(delete_menu_sql, value_params, True)
+def deletemenu(userid, menu):
+    dbmenudata = getmenu(menu['MenuId'])
+    delete_menu_sql = """
+    DELETE FROM user_menus
+    WHERE UserId=%s
+    AND MenuId=%s
+    """
+    value_params = [userid, menu['MenuId']]
+    query_db(delete_menu_sql, value_params, True)
 
-            if dbmenudata['PublicLink'] is not None:
-                deletemenublob(menu['MenuId'])
+    if dbmenudata['PublicLink'] is not None:
+        deletemenublob(menu['MenuId'])
 
 
 # Delete section
-def deletesect(sectdata):
-    for sect in sectdata:
-        delete_sect_sql = """
-        UPDATE sections
-        SET MenuId=NULL
-        WHERE SectionId=%s
-        """
-        value_params = [sect['SectionId']]
-        query_db(delete_sect_sql, value_params, True)
+def deletesect(sect):
+    delete_sect_sql = """
+    UPDATE sections
+    SET MenuId=NULL
+    WHERE SectionId=%s
+    """
+    value_params = [sect['SectionId']]
+    query_db(delete_sect_sql, value_params, True)
 
 
 # Delete item
-def deleteitem(itemdata):
-    for item in itemdata:
-        delete_item_sql = """
-        UPDATE items
-        SET SectionId=NULL
-        WHERE ItemId=%s
-        """
-        value_params = [item['ItemId']]
-        query_db(delete_item_sql, value_params, True)
+def deleteitem(item):
+    delete_item_sql = """
+    UPDATE items
+    SET SectionId=NULL
+    WHERE ItemId=%s
+    """
+    value_params = [item['ItemId']]
+    query_db(delete_item_sql, value_params, True)
+
+
+# Is menu published
+def ismenupublished(menuid):
+    ispub_query = """
+    SELECT Publish FROM menus
+    WHERE MenuId=%s"""
+    value_params = [menuid]
+    ispublished = query_db(ispub_query, value_params, False)[0]
+    if ispublished == 'true':
+        return True
+    else:
+        return False
 
 
 # Get Menu

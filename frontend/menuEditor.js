@@ -112,6 +112,8 @@ function addSection() {
 };
 // Add section
 
+
+
 // Add Section button handler
 $(document).on('click', '.add-sect-btn', function() {
   event.preventDefault();
@@ -122,6 +124,7 @@ $(document).on('click', '.add-sect-btn', function() {
 // Add Section button handler
 
 
+
 // Add item
 function addItem() {
   var newitem = $('#ItemTemplate').clone();
@@ -129,6 +132,8 @@ function addItem() {
   return newitem;
 };
 // Add item
+
+
 
 // Add item button handler
 $(document).on('click', '.add-item-btn', function() {
@@ -138,6 +143,7 @@ $(document).on('click', '.add-item-btn', function() {
   sendMenuData();
 });
 // Add item button handler
+
 
 
 // Delete item
@@ -205,10 +211,10 @@ function sendMenuData() {
     url: backendHostUrl + '/menus',
     headers: {'Authorization': 'Bearer ' + userIdToken},
     method: 'PUT',
-    data: JSON.stringify([menudict]),
+    data: JSON.stringify(menudict),
     contentType: 'application/json',
     success: function(returndata) {
-      populateEditor(returndata[0]);
+      populateEditor(returndata);
       $('#editor-save-btn').removeAttr('disabled');
     },
     error: function(error) {

@@ -66,7 +66,7 @@ body {
   height: 100%;
   padding-top: 10vh;
   color: #3A3A3A;
-  background-color: #e8eee8;
+  background-color: #fff;
 }
 
 #menu-btns-div {
@@ -80,7 +80,7 @@ body {
   margin: 5% auto;
   background-color: #fafbfa;
   border: #bcc7bd solid 1px;
-  box-shadow: 2px 2px 6px #666666;
+  box-shadow: 6px 6px 6px #666666;
   border-radius: 10px;
 }
 

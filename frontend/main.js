@@ -1,8 +1,8 @@
 //local dev backendHostURL:
-var backendHostUrl = 'http://localhost:8081';
+//var backendHostUrl = 'http://localhost:8081';
 
 // production backendHostURL:
-//var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
+var backendHostUrl = 'https://backend-dot-ez-menu.appspot.com';
 
 
 
@@ -15,7 +15,8 @@ $(function() {
 
 
 
-// Run loading animation for all AJAX requests
+// Rotate random colors on logo as a
+// loading animation for all AJAX requests
 $(document).ajaxStart(function() {
   function loadStart() {
     logoColors();
@@ -28,7 +29,8 @@ $(document).ajaxStart(function() {
     logoColors();
   });
 });
-// Run loading animation for all AJAX requests
+// Rotate random colors on logo as a
+// loading animation for all AJAX requests
 
 
 
@@ -169,13 +171,13 @@ $(document).on('click', '#create-menu-btn', function(event) {
       .attr('tempId');
   var $tempName = $('#template-select').find('option:selected')
       .attr('tempName');
-  // /menus, POST, [{}]
+  // /menus, POST, {}
   $.ajax(backendHostUrl + '/menus', {
     headers: {'Authorization': 'Bearer ' + userIdToken},
     method: 'POST',
-    data: JSON.stringify([{'MenuTitle': 'No Title',
-                           'Template': $tempId,
-                           'TemplateName': $tempName}]),
+    data: JSON.stringify({'MenuTitle': 'No Title',
+                          'Template': $tempId,
+                          'TemplateName': $tempName}),
     contentType: 'application/json'
   }).then(function() {
     $('#create-menu-btns-div').hide();
@@ -346,8 +348,8 @@ $(document).on('click', '.menu-publish-btn', function() {
       url: backendHostUrl + '/menus',
       headers: {'Authorization': 'Bearer ' + userIdToken},
       method: 'PUT',
-      data: JSON.stringify([{'MenuId': menuid,
-                            'Publish': true}]),
+      data: JSON.stringify({'MenuId': menuid,
+                            'Publish': true}),
       contentType: 'application/json'
     }).then(function() {
       // /menus, GET
@@ -409,8 +411,8 @@ $(document).on('click', '.menu-takedown-btn', function() {
       url: backendHostUrl + '/menus',
       headers: {'Authorization': 'Bearer ' + userIdToken},
       method: 'PUT',
-      data: JSON.stringify([{'MenuId': menuid,
-                             'Publish': false}]),
+      data: JSON.stringify({'MenuId': menuid,
+                            'Publish': false}),
       contentType: 'application/json'
     }).then(function() {
       home();
@@ -429,12 +431,12 @@ $(document).on('click', '.menu-delete-btn', function() {
   if (confirm('Are you sure you want to delete this menu?')) {
 
     var menuid = $(this).parent().siblings('.menu-id-data').text();
-    // /menus, DELETE, [{}, ...]
+    // /menus, DELETE, {}
     $.ajax({
       url: backendHostUrl + '/menus',
       headers: {'Authorization': 'Bearer ' + userIdToken},
       method: 'DELETE',
-      data: JSON.stringify([{'MenuId': menuid}]),
+      data: JSON.stringify({'MenuId': menuid}),
       contentType: 'application/json'
     }).then(function() {
       home();
