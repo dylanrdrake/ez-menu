@@ -120,8 +120,7 @@ def updateitem(sectid, item):
     if item['_DELETE_'] == 'true':
         deleteitem( {'ItemId': item['ItemId']} )
     else:
-        item = {key: val for key,val in item.iteritems()\
-                if val != ''}
+        item = {key:val for key,val in item.iteritems()}
         item['SectionId'] = sectid
         update_item_sql = "INSERT INTO items "
         fields = [field for field in item.iterkeys()]
@@ -146,7 +145,7 @@ def updatesect(menuid, sect):
             for item in sect.pop('Items'):
                 updateitem(sect['SectionId'], item)
 
-        sect = {key: val for key,val in sect.iteritems()\
+        sect = {key:val for key,val in sect.iteritems()\
                 if val != ''}
         sect['MenuId'] = menuid
         update_sect_sql = "INSERT INTO sections "
