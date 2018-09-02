@@ -120,6 +120,8 @@ def updateitem(sectid, item):
     if item['_DELETE_'] == 'true':
         deleteitem( {'ItemId': item['ItemId']} )
     else:
+        if item['ItemId'] == '':
+            del item['ItemId']
         item = {key:val for key,val in item.iteritems()}
         item['SectionId'] = sectid
         update_item_sql = "INSERT INTO items "
